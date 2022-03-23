@@ -1,0 +1,10 @@
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\bin\Debug\VendorMgmt.Model.dll.config
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\bin\Debug\VendorMgmt.Model.dll
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\bin\Debug\VendorMgmt.Model.pdb
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\bin\Debug\EntityFramework.dll
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\bin\Debug\EntityFramework.xml
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\obj\Debug\VendorMgmt.Model.csproj.AssemblyReference.cache
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\obj\Debug\VendorMgmt.Model.csproj.CoreCompileInputs.cache
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\obj\Debug\VendorMgmt.Model.csproj.CopyComplete
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\obj\Debug\VendorMgmt.Model.dll
+D:\Codes\Corey Project\VendorManagement\VendorManagement\VendorMgmt.Model\obj\Debug\VendorMgmt.Model.pdb

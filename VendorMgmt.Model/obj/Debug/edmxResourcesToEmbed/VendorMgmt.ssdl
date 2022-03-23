@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VendorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="VendorAttachmentInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="FileName" Type="nvarchar" MaxLength="150" />
+    <Property Name="FileType" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorBankingInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="State" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="InstitutionNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TransitNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="BankAccountNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ABA_RoutingNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="Swift_BICCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorBasicInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="VendorName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="AlternateName" Type="nvarchar" MaxLength="100" />
+    <Property Name="SCAC" Type="nvarchar" MaxLength="50" />
+    <Property Name="BusinessAddress" Type="nvarchar" MaxLength="150" />
+    <Property Name="BusinessCity" Type="nvarchar" MaxLength="100" />
+    <Property Name="BusinessState" Type="nvarchar" MaxLength="100" />
+    <Property Name="BusinessZip" Type="nvarchar" MaxLength="15" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+    <Property Name="Phonenumber" Type="nvarchar" MaxLength="15" />
+    <Property Name="Website" Type="nvarchar" MaxLength="150" />
+    <Property Name="PaymentCurrency" Type="nvarchar" MaxLength="10" />
+    <Property Name="GSTApplicable" Type="bit" Nullable="false" />
+    <Property Name="GSTNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="DiversityBusinessCertification" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsCouncilMember" Type="bit" Nullable="false" />
+    <Property Name="CouncilName" Type="nvarchar" MaxLength="150" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorFinancialInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="ContactName" Type="nvarchar" MaxLength="150" />
+    <Property Name="ContactEmail" Type="nvarchar" MaxLength="100" />
+    <Property Name="ContactPhone" Type="nvarchar" MaxLength="15" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BusinessName" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="RegistrationCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorEmail" Type="nvarchar" MaxLength="150" />
+    <Property Name="DofascoEmail" Type="nvarchar" MaxLength="150" />
+    <Property Name="CCEmail" Type="nvarchar" MaxLength="150" />
+    <Property Name="EmailSent" Type="bit" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorPrimarySalesInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="ContactName" Type="nvarchar" MaxLength="150" />
+    <Property Name="ContactEmail" Type="nvarchar" MaxLength="100" />
+    <Property Name="ContactPhone" Type="nvarchar" MaxLength="15" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorPurchasingInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="TradingPartner" Type="bit" Nullable="false" />
+    <Property Name="AccountGroupName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TypeofVendorRequest" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ConflictOfInterest" Type="bit" Nullable="false" />
+    <Property Name="PaymentTerms" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SpendTreelevel1" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SpendTreeLevel2" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SpendTreeLevel3" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SpendTreeLevel4" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorRemittanceInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="MailingAddress" Type="nvarchar" MaxLength="150" />
+    <Property Name="MailingCity" Type="nvarchar" MaxLength="50" />
+    <Property Name="State" Type="nvarchar" MaxLength="50" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="10" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="150" />
+    <Property Name="SpecialPayment" Type="nvarchar" MaxLength="150" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorSubmittedByInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="SubmittedByName" Type="nvarchar" MaxLength="150" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" />
+    <Property Name="DofascoEmail" Type="nvarchar" MaxLength="15" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorTreasuryInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="ActionerName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="VendorNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="Validated" Type="bit" Nullable="false" />
+    <Property Name="ChecklistInfo1" Type="bit" Nullable="false" />
+    <Property Name="ChecklistInfo2" Type="bit" Nullable="false" />
+    <Property Name="Level2ApproverName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Level2ChecklistInfo" Type="bit" Nullable="false" />
+    <Property Name="Level2Comments" Type="nvarchar" MaxLength="2500" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VendorWorkFlowInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorId" Type="int" Nullable="false" />
+    <Property Name="RequestorName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="PurchasingManager" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="VendorNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="PurchaseComments" Type="nvarchar" MaxLength="2500" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <Association Name="FK_VendorAttachmentInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorAttachmentInfo" Type="Self.VendorAttachmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorAttachmentInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorBankingInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorBankingInfo" Type="Self.VendorBankingInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorBankingInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorBasicInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorBasicInfo" Type="Self.VendorBasicInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorBasicInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorFinancialInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorFinancialInfo" Type="Self.VendorFinancialInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorFinancialInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorPrimarySalesInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorPrimarySalesInfo" Type="Self.VendorPrimarySalesInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorPrimarySalesInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorPurchasingInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorPurchasingInfo" Type="Self.VendorPurchasingInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorPurchasingInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorRemittanceInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorRemittanceInfo" Type="Self.VendorRemittanceInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorRemittanceInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorSubmittedByInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorSubmittedByInfo" Type="Self.VendorSubmittedByInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorSubmittedByInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorTreasuryInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorTreasuryInfo" Type="Self.VendorTreasuryInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorTreasuryInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorWorkFlowInfo_VendorMaster">
+    <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+    <End Role="VendorWorkFlowInfo" Type="Self.VendorWorkFlowInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VendorWorkFlowInfo">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="VendorModelStoreContainer">
+    <EntitySet Name="VendorAttachmentInfo" EntityType="Self.VendorAttachmentInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorBankingInfo" EntityType="Self.VendorBankingInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorBasicInfo" EntityType="Self.VendorBasicInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorFinancialInfo" EntityType="Self.VendorFinancialInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorMaster" EntityType="Self.VendorMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorPrimarySalesInfo" EntityType="Self.VendorPrimarySalesInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorPurchasingInfo" EntityType="Self.VendorPurchasingInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorRemittanceInfo" EntityType="Self.VendorRemittanceInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorSubmittedByInfo" EntityType="Self.VendorSubmittedByInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorTreasuryInfo" EntityType="Self.VendorTreasuryInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorWorkFlowInfo" EntityType="Self.VendorWorkFlowInfo" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_VendorAttachmentInfo_VendorMaster" Association="Self.FK_VendorAttachmentInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorAttachmentInfo" EntitySet="VendorAttachmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorBankingInfo_VendorMaster" Association="Self.FK_VendorBankingInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorBankingInfo" EntitySet="VendorBankingInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorBasicInfo_VendorMaster" Association="Self.FK_VendorBasicInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorBasicInfo" EntitySet="VendorBasicInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorFinancialInfo_VendorMaster" Association="Self.FK_VendorFinancialInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorFinancialInfo" EntitySet="VendorFinancialInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorPrimarySalesInfo_VendorMaster" Association="Self.FK_VendorPrimarySalesInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorPrimarySalesInfo" EntitySet="VendorPrimarySalesInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorPurchasingInfo_VendorMaster" Association="Self.FK_VendorPurchasingInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorPurchasingInfo" EntitySet="VendorPurchasingInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorRemittanceInfo_VendorMaster" Association="Self.FK_VendorRemittanceInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorRemittanceInfo" EntitySet="VendorRemittanceInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorSubmittedByInfo_VendorMaster" Association="Self.FK_VendorSubmittedByInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorSubmittedByInfo" EntitySet="VendorSubmittedByInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorTreasuryInfo_VendorMaster" Association="Self.FK_VendorTreasuryInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorTreasuryInfo" EntitySet="VendorTreasuryInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorWorkFlowInfo_VendorMaster" Association="Self.FK_VendorWorkFlowInfo_VendorMaster">
+      <End Role="VendorMaster" EntitySet="VendorMaster" />
+      <End Role="VendorWorkFlowInfo" EntitySet="VendorWorkFlowInfo" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,121 @@
+﻿@model List<VendorMgmt.DataAccess.Model.VendorAttachmentInfo> 
+
+<h3>Upload File(s)</h3>
+<style>
+    .red {
+        color: red;
+    }
+</style>
+<form id="uploader">
+    <div class="row">
+        <div class="col-sm-6">
+            <input id="fileInput" type="file" multiple>
+            <br />            <br />
+
+            <table class="table" id="FilesList" style="visibility:hidden">
+                <tr>
+                    <th>
+                        Attachment(s)
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+                @if (Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr id='@item.Id'>
+                            <td>
+                                @item.FileName
+                            </td>
+                            <td>
+                                <a href='#' onclick="DeleteServerFile('@item.Id');"><span class='red'><i class="fs-20 fa fa-trash mr-10"></i></span></a>
+                            </td>
+                        </tr>
+                    }
+
+                }
+            </table>
+            <input type="button" id="btnupload" value="Upload" style="float:right" />
+
+        </div>
+    </div>
+</form>
+@Scripts.Render("~/bundles/CustomTheme")
+<script>
+
+    var formdata = new FormData(); //FormData object
+    $(document).ready(function () {
+        chkatchtbl();
+        $("#fileInput").on("change", function () {
+            var fileInput = document.getElementById('fileInput');
+            //Iterating through each files selected in fileInput
+            for (i = 0; i < fileInput.files.length; i++) {
+
+                var sfilename = fileInput.files[i].name;
+                let srandomid = Math.random().toString(36).substring(7);
+
+                formdata.append(sfilename, fileInput.files[i]);
+
+                var markup = "<tr id='" + srandomid + "'><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'><span class='red'><i class=\"fs-20 fa fa-trash mr-10\"></i></span></a></td></tr>"; // Binding the file name
+                $("#FilesList tbody").append(markup);
+
+            }
+            chkatchtbl();
+            $('#fileInput').val('');
+        });
+
+        $("#btnupload").click(function () {
+            formdata.append('uploadername', $('#txtuploader').val());
+            $.ajax({
+                url: '/Vendor/UploadFiles',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: formdata,
+                async: false,
+                success: function (result) {
+                    if (result != "") {
+                        alert(result);
+                    }
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        });
+    });
+    function DeleteFile(Fileid, FileName) {
+        formdata.delete(FileName)
+        $("#" + Fileid).remove();
+        chkatchtbl();
+    }
+    function chkatchtbl() {
+        if ($('#FilesList tr').length > 1) {
+            $("#FilesList").css("visibility", "visible");
+        } else {
+            $("#FilesList").css("visibility", "hidden");
+        }
+    }
+    function DeleteServerFile(attachmentid) {
+        $.ajax({
+            url: '/Vendor/RemoveFiles',
+            type: "POST",
+            data: { Id: attachmentid },
+            async: false,
+            success: function (result) {
+                if (result != "") {
+                    alert(result);
+                    $("#" + attachmentid).remove();
+                    chkatchtbl();
+                }
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+       
+     }
+</script>  

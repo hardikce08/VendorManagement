@@ -1,0 +1,151 @@
+﻿@model VendorMgmt.DataAccess.Model.VendorMaster
+@{
+    ViewBag.Title = "Vendor Management";
+    ViewBag.Page = "home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@*@using (Html.BeginForm("Dashboard", "Home", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @id = "frmDashboard" }))
+    {*@
+
+
+<form action="/Home/Dashboard" id="form_id" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+    <style>
+        body {
+            overflow: hidden; /* Hide scrollbars */
+        }
+        .auth-split .auth-right {
+            position: unset !important;
+            width: 50%;
+        }
+
+        .auth-split {
+            display: flex;
+            height: 80vh;
+            background-color: #fff;
+        }
+
+        .fs-22 {
+            font-size: 45px !important;
+        }
+
+        .modal-dialog-center {
+            margin-top: 5vh;
+        }
+    </style>
+    <div class="col-md-12 row">
+        <div class="col-md-6">
+            <div class="auth-split">
+                <div class="auth-right" style="background-image: url('../../Theme/images/auth-split.jpg'); ">
+                    <div class="auth-content">
+                        <div>
+                            <h1>Arcelor Mittal</h1>
+                            <p>Transforming Tomorrow</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card card-hover card-gradient" style="margin-top:30vh;">
+                <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnAddNew" style="cursor:pointer;" data-toggle="modal" data-target="#modal-lg"><span class=""><i class="fs-20 fa fa-plus mr-10"></i>Add New Vendor</span> </button>
+                <!--<div class="card-body flex a-i-center text-whs-nowrap" id="btnAddNew" style="cursor:pointer;" data-toggle="modal" data-target="#modal-lg">
+                    <div>
+                        <span class="d-block fs-22 fw-600 mt-5"><i class="fa fa-plus-square mr-100"></i></span>-->
+                @*<small class="fs-12 text-white">New User</small>*@
+                <!--</div>
+                    <div class="text-capitalize fs-30 text-white">
+                        <span>Add New Vendor</span>
+                    </div>
+                </div>-->
+            </div>
+
+        </div>
+        <!-- Modal Large -->
+        <div class="modal fade modal-dialog-center" id="modal-lg" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Vendor Information</h4>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- card -->
+                        <div class="col-md-12">
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="form-b-1"><strong>Vendor Business Name</strong></label>
+                                            @*<input type="text" class="form-control" id="BusinessName" name="BusinessName" required>*@
+                                            @Html.TextBoxFor(m => m.BusinessName, new { @class = "form-control", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="form-b-2"><strong>Registration Code</strong></label>
+                                            @*<input type="text" class="form-control" id="RegistrationCode" name="RegistrationCode">*@
+                                            @Html.TextBoxFor(m => m.RegistrationCode, new { @class = "form-control", @style = "width:100%;", @readonly = "readonly" })
+
+                                            @*@Html.TextBox("RegistrationCode", (object)Model.RegistrationCode, new { @class = "form-control", @style = "width:100%;", @disabled = "disabled" })*@
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="form-b-3"><strong>Vendor E-Mail Address</strong></label>
+                                            @Html.TextBox("VendorEmail", "", new { @class = "form-control", @style = "width:100%;", @required = "required" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="form-b-4"><strong>Dofasco Contact Email</strong></label>
+                                            @Html.TextBox("DofascoEmail", "", new { @class = "form-control", @style = "width:100%;", @required = "required" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="form-b-5"><strong>CC Email</strong></label>
+                                            @Html.TextBox("CCEmail", "", new { @class = "form-control", @style = "width:100%;" })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-bold btn-pure btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts{
+        <!-- parsley form validator -->
+        <script src="~/Theme/scripts/parsley.min.js"></script>
+        @if (ViewBag.JavaScriptFunction != null)
+        {
+            <script type="text/javascript">
+
+                /**/
+              @Html.Raw(ViewBag.JavaScriptFunction)
+                
+            </script>
+        }
+        <script type="text/javascript">
+            $("#btnAddNew").click(function () {
+                $("input[type=text], textarea").not('#RegistrationCode').val("");
+            });
+        </script>
+    }
+</form>
+
+

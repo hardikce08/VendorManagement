@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="VendorModelStoreContainer" CdmEntityContainer="VendorEntities">
+    <EntitySetMapping Name="VendorMaster">
+      <EntityTypeMapping TypeName="VendorModel.VendorMaster">
+        <MappingFragment StoreEntitySet="VendorMaster">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="EmailSent" ColumnName="EmailSent" />
+          <ScalarProperty Name="CCEmail" ColumnName="CCEmail" />
+          <ScalarProperty Name="DofascoEmail" ColumnName="DofascoEmail" />
+          <ScalarProperty Name="VendorEmail" ColumnName="VendorEmail" />
+          <ScalarProperty Name="RegistrationCode" ColumnName="RegistrationCode" />
+          <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorBankingInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorBankingInfo">
+        <MappingFragment StoreEntitySet="VendorBankingInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Swift_BICCode" ColumnName="Swift_BICCode" />
+          <ScalarProperty Name="ABA_RoutingNumber" ColumnName="ABA_RoutingNumber" />
+          <ScalarProperty Name="BankAccountNo" ColumnName="BankAccountNo" />
+          <ScalarProperty Name="TransitNo" ColumnName="TransitNo" />
+          <ScalarProperty Name="InstitutionNo" ColumnName="InstitutionNo" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorBasicInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorBasicInfo">
+        <MappingFragment StoreEntitySet="VendorBasicInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CouncilName" ColumnName="CouncilName" />
+          <ScalarProperty Name="IsCouncilMember" ColumnName="IsCouncilMember" />
+          <ScalarProperty Name="DiversityBusinessCertification" ColumnName="DiversityBusinessCertification" />
+          <ScalarProperty Name="GSTNumber" ColumnName="GSTNumber" />
+          <ScalarProperty Name="GSTApplicable" ColumnName="GSTApplicable" />
+          <ScalarProperty Name="PaymentCurrency" ColumnName="PaymentCurrency" />
+          <ScalarProperty Name="Website" ColumnName="Website" />
+          <ScalarProperty Name="Phonenumber" ColumnName="Phonenumber" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="BusinessZip" ColumnName="BusinessZip" />
+          <ScalarProperty Name="BusinessState" ColumnName="BusinessState" />
+          <ScalarProperty Name="BusinessCity" ColumnName="BusinessCity" />
+          <ScalarProperty Name="BusinessAddress" ColumnName="BusinessAddress" />
+          <ScalarProperty Name="SCAC" ColumnName="SCAC" />
+          <ScalarProperty Name="AlternateName" ColumnName="AlternateName" />
+          <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorFinancialInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorFinancialInfo">
+        <MappingFragment StoreEntitySet="VendorFinancialInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
+          <ScalarProperty Name="ContactEmail" ColumnName="ContactEmail" />
+          <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorRemittanceInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorRemittanceInfo">
+        <MappingFragment StoreEntitySet="VendorRemittanceInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="SpecialPayment" ColumnName="SpecialPayment" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="MailingCity" ColumnName="MailingCity" />
+          <ScalarProperty Name="MailingAddress" ColumnName="MailingAddress" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorSubmittedByInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorSubmittedByInfo">
+        <MappingFragment StoreEntitySet="VendorSubmittedByInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="DofascoEmail" ColumnName="DofascoEmail" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="SubmittedByName" ColumnName="SubmittedByName" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorTreasuryInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorTreasuryInfo">
+        <MappingFragment StoreEntitySet="VendorTreasuryInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Level2Comments" ColumnName="Level2Comments" />
+          <ScalarProperty Name="Level2ChecklistInfo" ColumnName="Level2ChecklistInfo" />
+          <ScalarProperty Name="Level2ApproverName" ColumnName="Level2ApproverName" />
+          <ScalarProperty Name="ChecklistInfo2" ColumnName="ChecklistInfo2" />
+          <ScalarProperty Name="ChecklistInfo1" ColumnName="ChecklistInfo1" />
+          <ScalarProperty Name="Validated" ColumnName="Validated" />
+          <ScalarProperty Name="VendorNumber" ColumnName="VendorNumber" />
+          <ScalarProperty Name="ActionerName" ColumnName="ActionerName" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorWorkFlowInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorWorkFlowInfo">
+        <MappingFragment StoreEntitySet="VendorWorkFlowInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="PurchaseComments" ColumnName="PurchaseComments" />
+          <ScalarProperty Name="VendorNumber" ColumnName="VendorNumber" />
+          <ScalarProperty Name="PurchasingManager" ColumnName="PurchasingManager" />
+          <ScalarProperty Name="RequestorName" ColumnName="RequestorName" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorPrimarySalesInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorPrimarySalesInfo">
+        <MappingFragment StoreEntitySet="VendorPrimarySalesInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
+          <ScalarProperty Name="ContactEmail" ColumnName="ContactEmail" />
+          <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorAttachmentInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorAttachmentInfo">
+        <MappingFragment StoreEntitySet="VendorAttachmentInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="FileType" ColumnName="FileType" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorPurchasingInfo">
+      <EntityTypeMapping TypeName="VendorModel.VendorPurchasingInfo">
+        <MappingFragment StoreEntitySet="VendorPurchasingInfo">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="SpendTreeLevel4" ColumnName="SpendTreeLevel4" />
+          <ScalarProperty Name="SpendTreeLevel3" ColumnName="SpendTreeLevel3" />
+          <ScalarProperty Name="SpendTreeLevel2" ColumnName="SpendTreeLevel2" />
+          <ScalarProperty Name="SpendTreelevel1" ColumnName="SpendTreelevel1" />
+          <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
+          <ScalarProperty Name="ConflictOfInterest" ColumnName="ConflictOfInterest" />
+          <ScalarProperty Name="TypeofVendorRequest" ColumnName="TypeofVendorRequest" />
+          <ScalarProperty Name="AccountGroupName" ColumnName="AccountGroupName" />
+          <ScalarProperty Name="TradingPartner" ColumnName="TradingPartner" />
+          <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
