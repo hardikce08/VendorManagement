@@ -9,11 +9,12 @@
     {*@
 
 
-<form action="/Home/Dashboard" id="form_id" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+<form action="/Home/Dashboard" id="form_id" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" autocomplete="off" data-parsley-validate>
     <style>
         body {
             overflow: hidden; /* Hide scrollbars */
         }
+
         .auth-split .auth-right {
             position: unset !important;
             width: 50%;
@@ -32,6 +33,21 @@
         .modal-dialog-center {
             margin-top: 5vh;
         }
+
+        .dropdown-menu {
+            min-width: 23rem;
+            margin-top: 0px !important;
+        }
+
+        .dropdown-item {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+            font-size: 13px;
+            padding: 10px 10px;
+        }
+
+        .dropdown-menu li {
+            line-height: 15px;
+        }
     </style>
     <div class="col-md-12 row">
         <div class="col-md-6">
@@ -48,18 +64,11 @@
         </div>
         <div class="col-md-5">
             <div class="card card-hover card-gradient" style="margin-top:30vh;">
-                <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnAddNew" style="cursor:pointer;" data-toggle="modal" data-target="#modal-lg"><span class=""><i class="fs-20 fa fa-plus mr-10"></i>Add New Vendor</span> </button>
-                <!--<div class="card-body flex a-i-center text-whs-nowrap" id="btnAddNew" style="cursor:pointer;" data-toggle="modal" data-target="#modal-lg">
-                    <div>
-                        <span class="d-block fs-22 fw-600 mt-5"><i class="fa fa-plus-square mr-100"></i></span>-->
-                @*<small class="fs-12 text-white">New User</small>*@
-                <!--</div>
-                    <div class="text-capitalize fs-30 text-white">
-                        <span>Add New Vendor</span>
-                    </div>
-                </div>-->
+                <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnReview" style="cursor:pointer;"><span class=""><i class="fs-20 fa fa-search mr-10"></i>Review Submission</span> </button>
             </div>
-
+            <div class="card card-hover card-gradient">
+                <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnAddNew" style="cursor:pointer;" data-toggle="modal" data-target="#modal-lg"><span class=""><i class="fs-20 fa fa-plus mr-10"></i>Add New Vendor</span> </button>
+            </div>
         </div>
         <!-- Modal Large -->
         <div class="modal fade modal-dialog-center" id="modal-lg" tabindex="-1">
@@ -109,9 +118,11 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="form-b-5"><strong>CC Email</strong></label>
-                                            @Html.TextBox("CCEmail", "", new { @class = "form-control", @style = "width:100%;" })
-
+                                            <label class="control control-checkbox">
+                                                <span>nsKnox</span>
+                                                @Html.CheckBox("nsKnox", false, new { @class = "form-control", @style = "width:100%;" })
+                                                <span class="control-icon"></span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -137,14 +148,78 @@
 
                 /**/
               @Html.Raw(ViewBag.JavaScriptFunction)
-                
+
             </script>
         }
+
+
         <script type="text/javascript">
             $("#btnAddNew").click(function () {
+                $.ajax({
+                    url: '/Home/GenerateNewNumber',
+                    type: "POST",
+                    data: {},
+                    async: false,
+                    success: function (result) {
+                        if (result != "") {
+                            // alert(result.RegistrationCode);
+                            $('#RegistrationCode').val(result.RegistrationCode);
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
                 $("input[type=text], textarea").not('#RegistrationCode').val("");
             });
+            $("#btnReview").click(function () {
+                window.open("Vendors", "_self");
+            });
+
+            $("#BusinessName").typeahead({
+                minLength: 1,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Home/GetList",
+                        data: {
+                            "name": request
+                        },
+                        type: "GET",
+                        contentType: "json",
+                        success: function (data) {
+                            items = [];
+                            map = {};
+                            $.each(data, function (i, item) {
+                                /*console.log(item);*/
+                                var id = item.BusinessName;
+                                var name = item.BusinessName;
+                                map[name] = {
+                                    id: id,
+                                    name: name
+                                };
+                                items.push(name);
+                            });
+                            response(items);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                updater: function (item) {
+                    //alert(map[item].id);
+                    //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
+                    $('[id*=BusinessName]').val(map[item].id);
+                    return item;
+                }
+            });
+
         </script>
+
+
     }
 </form>
 

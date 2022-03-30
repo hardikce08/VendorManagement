@@ -19,7 +19,7 @@ namespace VendorMgmt.DataAccess.Model
 
         public string DofascoEmail { get; set; }
 
-        public string CCEmail { get; set; }
+        public bool nsKnox { get; set; }
 
         public bool EmailSent { get; set; }
 
@@ -38,6 +38,9 @@ namespace VendorMgmt.DataAccess.Model
 
         public List<VendorAttachmentInfo> AttachmentInfo { get; set; }
         public VendorPurchasingInfo PurchaseInfo { get; set; }
+        public VendorWorkFlowInfo WorkFlowInfo { get; set; }
+
+        public VendorTreasuryInfo TreasuryInfo { get; set; }
         public string RegistrationCode { get; set; }
         public int VendorId { get; set; }
     }
@@ -222,7 +225,59 @@ namespace VendorMgmt.DataAccess.Model
         public string SpendTreeLevel3 { get; set; }
 
         public string SpendTreeLevel4 { get; set; }
+        public string SAPBusType { get; set; }
+        public DateTime CreatedDate { get; set; }
+    }
+    public class VendorWorkFlowInfo
+    {
+
+        public int Id { get; set; }
+
+        public int VendorId { get; set; }
+
+        public string RequestorName { get; set; }
+
+        public string PurchasingManager { get; set; }
+
+        public string VendorNumber { get; set; }
+
+        public string PurchaseComments { get; set; }
 
         public DateTime CreatedDate { get; set; }
     }
-}
+    public class VendorTreasuryInfo
+    {
+
+        public int Id { get; set; }
+
+        public int VendorId { get; set; }
+
+        public string ActionerName { get; set; }
+
+        public string VendorNumber { get; set; }
+
+        public bool Validated { get; set; }
+
+        public bool ChecklistInfo1 { get; set; }
+
+        public bool ChecklistInfo2 { get; set; }
+
+        public string Level2ApproverName { get; set; }
+
+        public bool Level2ChecklistInfo { get; set; }
+
+        public string Level2Comments { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+    }
+    #region Vendor ListView
+    public class VendorListView
+    {
+        public string VendorName { get; set; }
+        public string RequestorName { get; set; }
+        public string ApplicationStatus { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+    }
+        #endregion
+    }

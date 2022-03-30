@@ -74,7 +74,7 @@
     <Property Name="RegistrationCode" Type="nvarchar" MaxLength="50" />
     <Property Name="VendorEmail" Type="nvarchar" MaxLength="150" />
     <Property Name="DofascoEmail" Type="nvarchar" MaxLength="150" />
-    <Property Name="CCEmail" Type="nvarchar" MaxLength="150" />
+    <Property Name="nsKnox" Type="bit" Nullable="false" />
     <Property Name="EmailSent" Type="bit" Nullable="false" />
     <Property Name="CreatedDate" Type="datetime" Nullable="false" />
   </EntityType>
@@ -104,6 +104,7 @@
     <Property Name="SpendTreeLevel2" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="SpendTreeLevel3" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="SpendTreeLevel4" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SAPBusType" Type="nvarchar" MaxLength="200" />
     <Property Name="CreatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="VendorRemittanceInfo">
@@ -158,7 +159,7 @@
     <Property Name="PurchasingManager" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="VendorNumber" Type="nvarchar" MaxLength="50" />
     <Property Name="PurchaseComments" Type="nvarchar" MaxLength="2500" />
-    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <Association Name="FK_VendorAttachmentInfo_VendorMaster">
     <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />

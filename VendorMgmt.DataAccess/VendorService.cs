@@ -39,7 +39,7 @@ namespace VendorMgmt.DataAccess
                            RegistrationCode = v.RegistrationCode,
                            VendorEmail = v.VendorEmail,
                            DofascoEmail = v.DofascoEmail,
-                           CCEmail = v.CCEmail,
+                           nsKnox = v.nsKnox,
                            EmailSent = v.EmailSent,
                            CreatedDate = v.CreatedDate,
                        };
@@ -56,8 +56,8 @@ namespace VendorMgmt.DataAccess
                     RegistrationCode = v.RegistrationCode,
                     VendorEmail = v.VendorEmail,
                     DofascoEmail = v.DofascoEmail,
-                    CCEmail = v.CCEmail,
-                    EmailSent = v.EmailSent,
+                    nsKnox = v.nsKnox,
+                    EmailSent = true,
                     CreatedDate = DateTime.Now,
                 };
 
@@ -74,7 +74,7 @@ namespace VendorMgmt.DataAccess
                 u.RegistrationCode = v.RegistrationCode;
                 u.VendorEmail = v.VendorEmail;
                 u.DofascoEmail = v.DofascoEmail;
-                u.CCEmail = v.CCEmail;
+                u.nsKnox = v.nsKnox;
                 u.EmailSent = v.EmailSent;
                 u.CreatedDate = v.CreatedDate;
 
@@ -530,6 +530,7 @@ namespace VendorMgmt.DataAccess
                            SpendTreeLevel2 = v.SpendTreeLevel2,
                            SpendTreeLevel3 = v.SpendTreeLevel3,
                            SpendTreeLevel4 = v.SpendTreeLevel4,
+                           SAPBusType=v.SAPBusType,
                            CreatedDate = v.CreatedDate,
                        };
             }
@@ -551,6 +552,7 @@ namespace VendorMgmt.DataAccess
                     SpendTreeLevel2 = v.SpendTreeLevel2,
                     SpendTreeLevel3 = v.SpendTreeLevel3,
                     SpendTreeLevel4 = v.SpendTreeLevel4,
+                    SAPBusType=v.SAPBusType,
                     CreatedDate = DateTime.Now,
                 };
 
@@ -573,6 +575,121 @@ namespace VendorMgmt.DataAccess
                 u.SpendTreeLevel2 = v.SpendTreeLevel2;
                 u.SpendTreeLevel3 = v.SpendTreeLevel3;
                 u.SpendTreeLevel4 = v.SpendTreeLevel4;
+                u.SAPBusType = v.SAPBusType;
+                db.SaveChanges();
+            }
+        }
+        #endregion
+        #region VendorWorkflowInfo
+        public IQueryable<VendorWorkFlowInfo> VendorWorkFlowInfos
+        {
+            get
+            {
+                return from v in db.VendorWorkFlowInfo
+                       select new VendorWorkFlowInfo
+                       {
+                           Id = v.Id,
+                           VendorId = v.VendorId,
+                           RequestorName = v.RequestorName,
+                           PurchasingManager = v.PurchasingManager,
+                           VendorNumber = v.VendorNumber,
+                           PurchaseComments = v.PurchaseComments,
+                           CreatedDate = v.CreatedDate,
+                       };
+            }
+        }
+
+        public void VendorWorkFlowInfo_InsertOrUpdate(VendorWorkFlowInfo v)
+        {
+            if (v.Id == 0)
+            {
+                var i = new EF.VendorWorkFlowInfo
+                {
+                    VendorId = v.VendorId,
+                    RequestorName = v.RequestorName,
+                    PurchasingManager = v.PurchasingManager,
+                    VendorNumber = v.VendorNumber,
+                    PurchaseComments = v.PurchaseComments,
+                    CreatedDate = DateTime.Now,
+                };
+
+                db.VendorWorkFlowInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
+                var u = db.VendorWorkFlowInfo.Where(p => p.Id == v.Id).Single();
+                u.VendorId = v.VendorId;
+                u.RequestorName = v.RequestorName;
+                u.PurchasingManager = v.PurchasingManager;
+                u.VendorNumber = v.VendorNumber;
+                u.PurchaseComments = v.PurchaseComments;
+                db.SaveChanges();
+            }
+        }
+
+        #endregion
+
+        #region VendorTreasuryInformation
+
+        public IQueryable<VendorTreasuryInfo> VendorTreasuryInfos
+        {
+            get
+            {
+                return from v in db.VendorTreasuryInfo
+                       select new VendorTreasuryInfo
+                       {
+                           Id = v.Id,
+                           VendorId = v.VendorId,
+                           ActionerName = v.ActionerName,
+                           VendorNumber = v.VendorNumber,
+                           Validated = v.Validated,
+                           ChecklistInfo1 = v.ChecklistInfo1,
+                           ChecklistInfo2 = v.ChecklistInfo2,
+                           Level2ApproverName = v.Level2ApproverName,
+                           Level2ChecklistInfo = v.Level2ChecklistInfo,
+                           Level2Comments = v.Level2Comments,
+                           CreatedDate = v.CreatedDate,
+                       };
+            }
+        }
+
+        public void VendorTreasuryInfo_InsertOrUpdate(VendorTreasuryInfo v)
+        {
+            if (v.Id == 0)
+            {
+                var i = new EF.VendorTreasuryInfo
+                {
+                    VendorId = v.VendorId,
+                    ActionerName = v.ActionerName,
+                    VendorNumber = v.VendorNumber,
+                    Validated = v.Validated,
+                    ChecklistInfo1 = v.ChecklistInfo1,
+                    ChecklistInfo2 = v.ChecklistInfo2,
+                    Level2ApproverName = v.Level2ApproverName,
+                    Level2ChecklistInfo = v.Level2ChecklistInfo,
+                    Level2Comments = v.Level2Comments,
+                    CreatedDate = DateTime.Now ,
+                };
+                db.VendorTreasuryInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+            else
+            {
+                var u = db.VendorTreasuryInfo.Where(p => p.Id == v.Id).Single();
+                u.VendorId = v.VendorId;
+                u.ActionerName = v.ActionerName;
+                u.VendorNumber = v.VendorNumber;
+                u.Validated = v.Validated;
+                u.ChecklistInfo1 = v.ChecklistInfo1;
+                u.ChecklistInfo2 = v.ChecklistInfo2;
+                u.Level2ApproverName = v.Level2ApproverName;
+                u.Level2ChecklistInfo = v.Level2ChecklistInfo;
+                u.Level2Comments = v.Level2Comments;
                 db.SaveChanges();
             }
         }

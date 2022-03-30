@@ -1,0 +1,82 @@
+﻿@model VendorMgmt.DataAccess.Model.VendorListView
+@{
+    ViewBag.Title = "Vendor Management";
+    ViewBag.Page = "home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<form action="/Home/Vendors" id="form_id" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" autocomplete="off" data-parsley-validate>
+    <style>
+        body {
+            overflow: hidden; /* Hide scrollbars */
+        }
+
+        .auth-split .auth-right {
+            position: unset !important;
+            width: 50%;
+        }
+
+        .auth-split {
+            display: flex;
+            height: 80vh;
+            background-color: #fff;
+        }
+
+        .fs-22 {
+            font-size: 45px !important;
+        }
+
+        .modal-dialog-center {
+            margin-top: 5vh;
+        }
+
+        .dropdown-menu {
+            min-width: 23rem;
+            margin-top: 0px !important;
+        }
+
+        .dropdown-item {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+            font-size: 13px;
+            padding: 10px 10px;
+        }
+
+        .dropdown-menu li {
+            line-height: 15px;
+        }
+    </style>
+    <div class="col-md-12 row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label for="input-placeholder"><strong>Vendor Name</strong></label>
+                @Html.TextBoxFor(m => m.VendorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label for="input-placeholder"><strong>Requestor Name</strong></label>
+                @Html.TextBoxFor(m => m.RequestorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label for="input-placeholder" ><strong>Application Status</strong></label>
+                @Html.TextBoxFor(m => m.ApplicationStatus, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12 row">
+        <div class="col-lg-4">
+            <button type="submit" class="btn btn-bold btn-pure btn-primary">Search</button>
+        </div>
+    </div>
+        @section scripts{
+            <!-- parsley form validator -->
+            <script src="~/Theme/scripts/parsley.min.js"></script>
+            <script type="text/javascript">
+            </script>
+        }
+</form>
+
+

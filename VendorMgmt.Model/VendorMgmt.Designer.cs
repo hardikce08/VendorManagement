@@ -19,16 +19,16 @@ using System.Xml.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
+[assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorAttachmentInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorAttachmentInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorAttachmentInfo), true)]
 [assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorBankingInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorBankingInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorBankingInfo), true)]
 [assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorBasicInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorBasicInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorBasicInfo), true)]
 [assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorFinancialInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorFinancialInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorFinancialInfo), true)]
+[assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorPrimarySalesInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorPrimarySalesInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorPrimarySalesInfo), true)]
+[assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorPurchasingInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorPurchasingInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorPurchasingInfo), true)]
 [assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorRemittanceInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorRemittanceInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorRemittanceInfo), true)]
 [assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorSubmittedByInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorSubmittedByInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorSubmittedByInfo), true)]
 [assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorTreasuryInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorTreasuryInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorTreasuryInfo), true)]
 [assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorWorkFlowInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorWorkFlowInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorWorkFlowInfo), true)]
-[assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorPrimarySalesInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorPrimarySalesInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorPrimarySalesInfo), true)]
-[assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorAttachmentInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorAttachmentInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorAttachmentInfo), true)]
-[assembly: EdmRelationshipAttribute("VendorModel", "FK_VendorPurchasingInfo_VendorMaster", "VendorMaster", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(VendorMgmt.Model.VendorMaster), "VendorPurchasingInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(VendorMgmt.Model.VendorPurchasingInfo), true)]
 
 #endregion
 
@@ -79,22 +79,6 @@ namespace VendorMgmt.Model
         #endregion
     
         #region ObjectSet Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<VendorMaster> VendorMaster
-        {
-            get
-            {
-                if ((_VendorMaster == null))
-                {
-                    _VendorMaster = base.CreateObjectSet<VendorMaster>("VendorMaster");
-                }
-                return _VendorMaster;
-            }
-        }
-        private ObjectSet<VendorMaster> _VendorMaster;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -255,18 +239,26 @@ namespace VendorMgmt.Model
             }
         }
         private ObjectSet<VendorPurchasingInfo> _VendorPurchasingInfo;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<VendorMaster> VendorMaster
+        {
+            get
+            {
+                if ((_VendorMaster == null))
+                {
+                    _VendorMaster = base.CreateObjectSet<VendorMaster>("VendorMaster");
+                }
+                return _VendorMaster;
+            }
+        }
+        private ObjectSet<VendorMaster> _VendorMaster;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the VendorMaster EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToVendorMaster(VendorMaster vendorMaster)
-        {
-            base.AddObject("VendorMaster", vendorMaster);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the VendorBankingInfo EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -346,6 +338,14 @@ namespace VendorMgmt.Model
         public void AddToVendorPurchasingInfo(VendorPurchasingInfo vendorPurchasingInfo)
         {
             base.AddObject("VendorPurchasingInfo", vendorPurchasingInfo);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the VendorMaster EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToVendorMaster(VendorMaster vendorMaster)
+        {
+            base.AddObject("VendorMaster", vendorMaster);
         }
 
         #endregion
@@ -1787,13 +1787,15 @@ namespace VendorMgmt.Model
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="businessName">Initial value of the BusinessName property.</param>
+        /// <param name="nsKnox">Initial value of the nsKnox property.</param>
         /// <param name="emailSent">Initial value of the EmailSent property.</param>
         /// <param name="createdDate">Initial value of the CreatedDate property.</param>
-        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean emailSent, global::System.DateTime createdDate)
+        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate)
         {
             VendorMaster vendorMaster = new VendorMaster();
             vendorMaster.Id = id;
             vendorMaster.BusinessName = businessName;
+            vendorMaster.nsKnox = nsKnox;
             vendorMaster.EmailSent = emailSent;
             vendorMaster.CreatedDate = createdDate;
             return vendorMaster;
@@ -1929,26 +1931,26 @@ namespace VendorMgmt.Model
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String CCEmail
+        public global::System.Boolean nsKnox
         {
             get
             {
-                return _CCEmail;
+                return _nsKnox;
             }
             set
             {
-                OnCCEmailChanging(value);
-                ReportPropertyChanging("CCEmail");
-                _CCEmail = StructuralObject.SetValidValue(value, true, "CCEmail");
-                ReportPropertyChanged("CCEmail");
-                OnCCEmailChanged();
+                OnnsKnoxChanging(value);
+                ReportPropertyChanging("nsKnox");
+                _nsKnox = StructuralObject.SetValidValue(value, "nsKnox");
+                ReportPropertyChanged("nsKnox");
+                OnnsKnoxChanged();
             }
         }
-        private global::System.String _CCEmail;
-        partial void OnCCEmailChanging(global::System.String value);
-        partial void OnCCEmailChanged();
+        private global::System.Boolean _nsKnox;
+        partial void OnnsKnoxChanging(global::System.Boolean value);
+        partial void OnnsKnoxChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2001,6 +2003,28 @@ namespace VendorMgmt.Model
         #endregion
 
         #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("VendorModel", "FK_VendorAttachmentInfo_VendorMaster", "VendorAttachmentInfo")]
+        public EntityCollection<VendorAttachmentInfo> VendorAttachmentInfo
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<VendorAttachmentInfo>("VendorModel.FK_VendorAttachmentInfo_VendorMaster", "VendorAttachmentInfo");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<VendorAttachmentInfo>("VendorModel.FK_VendorAttachmentInfo_VendorMaster", "VendorAttachmentInfo", value);
+                }
+            }
+        }
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2064,6 +2088,50 @@ namespace VendorMgmt.Model
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<VendorFinancialInfo>("VendorModel.FK_VendorFinancialInfo_VendorMaster", "VendorFinancialInfo", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("VendorModel", "FK_VendorPrimarySalesInfo_VendorMaster", "VendorPrimarySalesInfo")]
+        public EntityCollection<VendorPrimarySalesInfo> VendorPrimarySalesInfo
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<VendorPrimarySalesInfo>("VendorModel.FK_VendorPrimarySalesInfo_VendorMaster", "VendorPrimarySalesInfo");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<VendorPrimarySalesInfo>("VendorModel.FK_VendorPrimarySalesInfo_VendorMaster", "VendorPrimarySalesInfo", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("VendorModel", "FK_VendorPurchasingInfo_VendorMaster", "VendorPurchasingInfo")]
+        public EntityCollection<VendorPurchasingInfo> VendorPurchasingInfo
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<VendorPurchasingInfo>("VendorModel.FK_VendorPurchasingInfo_VendorMaster", "VendorPurchasingInfo");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<VendorPurchasingInfo>("VendorModel.FK_VendorPurchasingInfo_VendorMaster", "VendorPurchasingInfo", value);
                 }
             }
         }
@@ -2152,72 +2220,6 @@ namespace VendorMgmt.Model
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<VendorWorkFlowInfo>("VendorModel.FK_VendorWorkFlowInfo_VendorMaster", "VendorWorkFlowInfo", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("VendorModel", "FK_VendorPrimarySalesInfo_VendorMaster", "VendorPrimarySalesInfo")]
-        public EntityCollection<VendorPrimarySalesInfo> VendorPrimarySalesInfo
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<VendorPrimarySalesInfo>("VendorModel.FK_VendorPrimarySalesInfo_VendorMaster", "VendorPrimarySalesInfo");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<VendorPrimarySalesInfo>("VendorModel.FK_VendorPrimarySalesInfo_VendorMaster", "VendorPrimarySalesInfo", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("VendorModel", "FK_VendorAttachmentInfo_VendorMaster", "VendorAttachmentInfo")]
-        public EntityCollection<VendorAttachmentInfo> VendorAttachmentInfo
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<VendorAttachmentInfo>("VendorModel.FK_VendorAttachmentInfo_VendorMaster", "VendorAttachmentInfo");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<VendorAttachmentInfo>("VendorModel.FK_VendorAttachmentInfo_VendorMaster", "VendorAttachmentInfo", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("VendorModel", "FK_VendorPurchasingInfo_VendorMaster", "VendorPurchasingInfo")]
-        public EntityCollection<VendorPurchasingInfo> VendorPurchasingInfo
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<VendorPurchasingInfo>("VendorModel.FK_VendorPurchasingInfo_VendorMaster", "VendorPurchasingInfo");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<VendorPurchasingInfo>("VendorModel.FK_VendorPurchasingInfo_VendorMaster", "VendorPurchasingInfo", value);
                 }
             }
         }
@@ -2785,6 +2787,30 @@ namespace VendorMgmt.Model
         private global::System.DateTime _CreatedDate;
         partial void OnCreatedDateChanging(global::System.DateTime value);
         partial void OnCreatedDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SAPBusType
+        {
+            get
+            {
+                return _SAPBusType;
+            }
+            set
+            {
+                OnSAPBusTypeChanging(value);
+                ReportPropertyChanging("SAPBusType");
+                _SAPBusType = StructuralObject.SetValidValue(value, true, "SAPBusType");
+                ReportPropertyChanged("SAPBusType");
+                OnSAPBusTypeChanged();
+            }
+        }
+        private global::System.String _SAPBusType;
+        partial void OnSAPBusTypeChanging(global::System.String value);
+        partial void OnSAPBusTypeChanged();
 
         #endregion
 
@@ -3745,13 +3771,15 @@ namespace VendorMgmt.Model
         /// <param name="vendorId">Initial value of the VendorId property.</param>
         /// <param name="requestorName">Initial value of the RequestorName property.</param>
         /// <param name="purchasingManager">Initial value of the PurchasingManager property.</param>
-        public static VendorWorkFlowInfo CreateVendorWorkFlowInfo(global::System.Int32 id, global::System.Int32 vendorId, global::System.String requestorName, global::System.String purchasingManager)
+        /// <param name="createdDate">Initial value of the CreatedDate property.</param>
+        public static VendorWorkFlowInfo CreateVendorWorkFlowInfo(global::System.Int32 id, global::System.Int32 vendorId, global::System.String requestorName, global::System.String purchasingManager, global::System.DateTime createdDate)
         {
             VendorWorkFlowInfo vendorWorkFlowInfo = new VendorWorkFlowInfo();
             vendorWorkFlowInfo.Id = id;
             vendorWorkFlowInfo.VendorId = vendorId;
             vendorWorkFlowInfo.RequestorName = requestorName;
             vendorWorkFlowInfo.PurchasingManager = purchasingManager;
+            vendorWorkFlowInfo.CreatedDate = createdDate;
             return vendorWorkFlowInfo;
         }
 
@@ -3909,9 +3937,9 @@ namespace VendorMgmt.Model
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> CreatedDate
+        public global::System.DateTime CreatedDate
         {
             get
             {
@@ -3926,8 +3954,8 @@ namespace VendorMgmt.Model
                 OnCreatedDateChanged();
             }
         }
-        private Nullable<global::System.DateTime> _CreatedDate;
-        partial void OnCreatedDateChanging(Nullable<global::System.DateTime> value);
+        private global::System.DateTime _CreatedDate;
+        partial void OnCreatedDateChanging(global::System.DateTime value);
         partial void OnCreatedDateChanged();
 
         #endregion

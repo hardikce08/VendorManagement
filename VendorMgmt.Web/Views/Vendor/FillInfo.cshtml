@@ -60,17 +60,19 @@
             background-color: #f7f7f7;
             border-radius: 3px;
         }
-
-        .error {
-            width: 100%;
-            height: 0vh;
-            background: none;
-            background: -webkit-linear-gradient(to top, #dbdbdb 30%, #fff 100%);
-        }
+            .wizard > .content > .body {
+                padding-top:1% !important;
+            }
+            .error {
+                width: 100%;
+                height: 0vh;
+                background: none;
+                background: -webkit-linear-gradient(to top, #dbdbdb 30%, #fff 100%);
+            }
 
         .subheader {
             color: white;
-            background-color: #f90a48;
+            background-color: #FF3700;
             font-size: 15px !important;
         }
 
@@ -101,6 +103,12 @@
         .table th, .table td {
             padding: 5px 15px;
             border-top: none;
+        }
+        .customradiotext {
+            padding-left: 15px;
+            margin: -6px;
+            padding-right: 15px;
+            font-size: 17px;
         }
     </style>
 </head>
@@ -593,6 +601,139 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="alert subheader col-lg-12"><strong>Workflow Details</strong> </div>
+                                            </div>
+                                            <div class="row">
+                                                @Html.HiddenFor(m => m.WorkFlowInfo.Id)
+                                                @Html.HiddenFor(m => m.VendorId)
+                                                @Html.HiddenFor(m => m.RegistrationCode)
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Requestor Name</strong></label>
+                                                        @Html.SelectList_YesNoFor(model => model.WorkFlowInfo.RequestorName, new { @class = "form-control form-control-sm" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Purchasing Manager</strong></label>
+                                                        @Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder"><strong>Vendor Number</strong></label>
+                                                        @Html.SelectList_TypeofVendorRequest(m => m.WorkFlowInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @Disabled = "Disabled" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder"><strong>Purchasing Comments</strong></label>
+                                                        @Html.TextAreaFor(m => m.WorkFlowInfo.PurchaseComments, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <h3></h3>
+                                    <div class="section">
+                                        <form id="step5" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+                                            <div class="row">
+                                                <div class="alert subheader col-lg-12"><strong>Treasury Information</strong> </div>
+                                            </div>
+                                            <div class="row">
+                                                @Html.HiddenFor(m => m.TreasuryInfo.Id)
+                                                @Html.HiddenFor(m => m.VendorId)
+                                                @Html.HiddenFor(m => m.RegistrationCode)
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>
+                                                        @Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Vendor Number</strong></label>
+                                                        @Html.SelectList_AccountGroupName(m => m.TreasuryInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="alert subheader col-lg-12"><strong>Treasury Checklist Information</strong> </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-10">
+                                                    <div class="form-group">
+                                                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
+                                                        1. Appropriate documentation was provided to support the change
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <div class="form-group row">
+                                                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", !Model.TreasuryInfo.ChecklistInfo1) <label class="customradiotext"> Yes</label>
+                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", Model.TreasuryInfo.ChecklistInfo1)  <label class="customradiotext"> No</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-10">
+                                                    <div class="form-group">
+                                                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
+                                                        2. If the vendor refused to be validated through nsKnox a Teams video call was initiated to the financial contact to validate the business context and banking instruction that was previously received from the requestor. Otherwise the Vendor was validated through nsKnox.
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <div class="form-group row">
+                                                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+                                                        @Html.RadioButton("ChecklistInfo2", !Model.TreasuryInfo.ChecklistInfo2) <label class="customradiotext"> Yes</label>
+                                                        @Html.RadioButton("ChecklistInfo2", Model.TreasuryInfo.ChecklistInfo2)  <label class="customradiotext"> No</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="alert subheader col-lg-12"><strong>Treasury 2nd Level Approver Details</strong> </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Treasury Second Level Approver</strong></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        @Html.SelectList_YesNoFor(model => model.TreasuryInfo.Level2ApproverName, new { @class = "form-control form-control-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-10">
+                                                    <div class="form-group">
+                                                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
+                                                        The vendor information and/or banking instructions have been entered into SAP accurately
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <div class="form-group row">
+                                                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+                                                        @Html.RadioButtonFor(m => m.TreasuryInfo.Level2ChecklistInfo, Model.TreasuryInfo.Level2ChecklistInfo, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder"><strong>Treasury Comments</strong></label>
+                                                        @Html.TextAreaFor(m => m.TreasuryInfo.Level2Comments, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -654,6 +795,7 @@
     <script>
         var formdata = new FormData(); //FormData object
         $(function () {
+            chkatchtbl();
             $(".wizard-basic").steps({
                 headerTag: "h3",
                 bodyTag: ".section",
@@ -782,7 +924,7 @@
                                     async: false,
                                     type: "POST",
                                     url: "@(Url.Action("SaveTab4"))",
-                                    data: $("#step3").serializeArray(),
+                                    data: $("#step4").serializeArray(),
                                     success: function (data) {
 
                                         if (data.PurchaseInfoId == undefined || data.PurchaseInfoId == 0) {
@@ -805,26 +947,25 @@
                     }
                     if (HasError) { return false; }
                     else { return true; }
-                }
-                @*onFinished: function (event, currentIndex) {
+                },
+                onFinished: function (event, currentIndex) {
                     var HasError = false;
                             var Isvalidated = $("#step5").parsley().validate();
                             if (Isvalidated) {
-
                                 $.ajax({
                                     cache: false,
                                     async: false,
                                     type: "POST",
-                                    url: "@(Url.Action("SaveTab3"))",
-                                    data: $("#step3").serializeArray(),
+                                    url: "@(Url.Action("SaveTab5"))",
+                                    data: $("#step5").serializeArray(),
                                     success: function (data) {
 
-                                        if (data.BankingInfoId == undefined || data.BankingInfoId == 0) {
+                                        if (data.TreasuryInfoId == undefined || data.TreasuryInfoId == 0) {
                                             HasError = true;
                                             errorToast();
                                         }
                                         else {
-                                            $("#BankingInfo_Id").val(data.BankingInfoId);
+                                            $("#TreasuryInfo_Id").val(data.TreasuryInfoId);
                                         }
                                     },
                                     error: function (xhr, ajaxOptions, thrownError) {
@@ -832,43 +973,24 @@
                                         alert('Failed to retrieve detail data.');
                                     }
                                 });
-
-                                formdata.append('uploadername', $('#txtuploader').val());
-                                $.ajax({
-                                    url: '/Vendor/UploadFiles',
-                                    type: "POST",
-                                    contentType: false, // Not to set any content header
-                                    processData: false, // Not to process data
-                                    data: formdata,
-                                    async: false,
-                                    success: function (result) {
-                                        if (result != "") {
-                                            alert(result);
-                                        }
-                                    },
-                                    error: function (err) {
-                                        alert(err.statusText);
-                                    }
-                                });
-
                             }
                             else { return false; }
 
                     if (HasError) { return false; }
                     else { return true; }
-                }*@
+                }
             });
 
 
         $("#fileInput").on("change", function () {
             var fileInput = document.getElementById('fileInput');
-            alert(fileInput.files.length);
+            //alert(fileInput.files.length);
             //Iterating through each files selected in fileInput
             for (i = 0; i < fileInput.files.length; i++) {
 
                 var sfilename = fileInput.files[i].name;
                 let srandomid = Math.random().toString(36).substring(7);
-                alert(formdata);
+                //alert(formdata);
                 formdata.append(sfilename, fileInput.files[i]);
 
                 var markup = "<tr id='" + srandomid + "'><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +

@@ -53,7 +53,13 @@ namespace VendorMgmt.Web.Controllers
 
                 var PurchaseInfo = vs.VendorPurchasingInfos.Where(p => p.VendorId == VendorMst.Id).FirstOrDefault();
                 model.PurchaseInfo = PurchaseInfo == null ? new VendorPurchasingInfo() : PurchaseInfo;
-                 
+
+                var WorkFlowInfo = vs.VendorWorkFlowInfos.Where(p => p.VendorId == VendorMst.Id).FirstOrDefault();
+                model.WorkFlowInfo = WorkFlowInfo == null ? new VendorWorkFlowInfo() : WorkFlowInfo;
+
+                var TreasuryInfo = vs.VendorTreasuryInfos.Where(p => p.VendorId == VendorMst.Id).FirstOrDefault();
+                model.TreasuryInfo = TreasuryInfo == null ? new VendorTreasuryInfo() : TreasuryInfo;
+
                 model.VendorId = VendorMst.Id;
             }
             return View(model);
@@ -153,6 +159,28 @@ namespace VendorMgmt.Web.Controllers
             }
             return Json(new { PurchaseInfoId = 0  }, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult SaveTab5(VendorFillInfo model)
+        {
+            if (model.RegistrationCode == string.Empty)
+            {
+                TempData["Error"] = "No Registration Code Provided";
+            }
+            else
+            {
+                var VendorMst = vs.VendorMasters.Where(p => p.RegistrationCode == model.RegistrationCode).FirstOrDefault();
+                if (VendorMst == null)
+                {
+                    TempData["Error"] = "Invalid Registration Code";
+                }
+                model.TreasuryInfo.VendorId = model.VendorId;
+                vs.VendorTreasuryInfo_InsertOrUpdate(model.TreasuryInfo);
+
+                return Json(new { TreasuryInfoId = model.TreasuryInfo.Id }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { TreasuryInfoId = 0 }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult TestFileUpload()
         {
             List<VendorAttachmentInfo> lst = vs.VendorAttachmentInfos.Where(p => p.VendorId == 1).ToList();
@@ -163,14 +191,24 @@ namespace VendorMgmt.Web.Controllers
         {
             string VendorId = Request["VendorId"];
             //Save Files if its Exist 
+            VendorService vss = new VendorService();
             HttpFileCollectionBase files = Request.Files;
             for (int i = 0; i < files.Count; i++)
             {
-                //// Remove Existing files 
-                //List<VendorAttachmentInfo> LstAttachment = vs.VendorAttachmentInfos.Where(p => p.VendorId == VendorMst.Id).ToList();
-                //int ID = Convert.ToInt32(Id);
-                //var obj = vs.VendorAttachmentInfos.Where(p => p.Id == ID).FirstOrDefault();
-                //vs.VendorAttachmentInfo_Remove(obj);
+                int VendorID = Convert.ToInt32(VendorId);
+                // Remove Existing files 
+                List<VendorAttachmentInfo> LstAttachment = vss.VendorAttachmentInfos.Where(p => p.VendorId == VendorID).ToList();
+                foreach (var item in LstAttachment)
+                {
+                    var obj = vss.VendorAttachmentInfos.Where(p => p.Id == item.Id).FirstOrDefault();
+                    string FilePath = Path.Combine(Server.MapPath("~/Attachments/"), VendorID.ToString() + "_" + obj.FileName);
+                    if (System.IO.File.Exists(FilePath))
+                    {
+                        System.IO.File.Delete(FilePath);
+                    }
+                    vss.VendorAttachmentInfo_Remove(obj);
+                }
+                
 
                 HttpPostedFileBase file = files[i];
                 string fname;

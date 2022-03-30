@@ -61,12 +61,71 @@ namespace VendorMgmt.Web.Controllers
             {
                 VendorService vs = new VendorService();
                 //model.RegistrationCode = Request["RegistrationCode"];
+                //send email function 
+                string Emailbody = "";
+                if (model.nsKnox)
+                {
+                    Emailbody = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplates/nsknox.html"));
+                }
+                else
+                { Emailbody = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplates/normal.html")); }
+
+                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/FillInfo/"+model.RegistrationCode);
+                Emailbody = Emailbody.Replace("{CompanyName}", model.BusinessName);
+                Emailbody = Emailbody.Replace("{RegCode}", model.RegistrationCode);
+                Emailbody = Emailbody.Replace("{DofascoContact}", model.DofascoEmail);
+                Functions.SendEmail("hardikce.08@gmail.com", "New Vendor Added", Emailbody , model.nsKnox);
                 vs.VendorMaster_InsertOrUpdate(model);
                 ViewBag.JavaScriptFunction = "successToast();";
                 model = new VendorMaster();
+               
             }
             model.RegistrationCode = CommonHelper.GetRegistrationCode();
             return View(model);
+        }
+        public ActionResult Vendors()
+        {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                //You get the user's first and last name below:
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+             
+            return View();
+        }
+        [HttpPost]
+        public JsonResult GenerateNewNumber()
+        {
+
+            return Json(new { RegistrationCode = CommonHelper.GetRegistrationCode() }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        //[HttpPost]
+        //public JsonResult SuggestBusinessName(string name)
+        //{
+            
+        //    //Note : you can bind same list from database  
+        //    List<string> ObjList = vs.VendorMasters.Select(p => p.BusinessName).ToList();
+        //    //Searching records from list using LINQ query  
+        //    var Name = (from N in ObjList
+        //                where N.StartsWith(name)
+        //                select new { N });
+        //    return Json(Name.ToList(), JsonRequestBehavior.AllowGet);
+
+        //}
+        public JsonResult GetList(string name)
+        {
+            VendorService vs = new VendorService();
+            var list = vs.VendorMasters.Where(x => x.BusinessName.StartsWith(name)).Take(10).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
         public ActionResult CallBack()
         {
@@ -116,6 +175,17 @@ namespace VendorMgmt.Web.Controllers
             }
 
             return string.Join("&", list);
+        }
+        public static string SiteUrl
+        {
+            get
+            {
+                if (System.Web.HttpContext.Current == null || System.Web.HttpContext.Current.Request == null)
+                    return string.Empty;
+
+                var request = System.Web.HttpContext.Current.Request;
+                return request.Url.Scheme + "://" + request.Url.DnsSafeHost + (request.Url.IsDefaultPort ? "" : ":" + request.Url.Port.ToString());
+            }
         }
     }
 }

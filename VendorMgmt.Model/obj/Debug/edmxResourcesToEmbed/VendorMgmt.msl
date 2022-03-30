@@ -1,20 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="VendorModelStoreContainer" CdmEntityContainer="VendorEntities">
-    <EntitySetMapping Name="VendorMaster">
-      <EntityTypeMapping TypeName="VendorModel.VendorMaster">
-        <MappingFragment StoreEntitySet="VendorMaster">
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="EmailSent" ColumnName="EmailSent" />
-          <ScalarProperty Name="CCEmail" ColumnName="CCEmail" />
-          <ScalarProperty Name="DofascoEmail" ColumnName="DofascoEmail" />
-          <ScalarProperty Name="VendorEmail" ColumnName="VendorEmail" />
-          <ScalarProperty Name="RegistrationCode" ColumnName="RegistrationCode" />
-          <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="VendorBankingInfo">
       <EntityTypeMapping TypeName="VendorModel.VendorBankingInfo">
         <MappingFragment StoreEntitySet="VendorBankingInfo">
@@ -157,6 +143,7 @@
     <EntitySetMapping Name="VendorPurchasingInfo">
       <EntityTypeMapping TypeName="VendorModel.VendorPurchasingInfo">
         <MappingFragment StoreEntitySet="VendorPurchasingInfo">
+          <ScalarProperty Name="SAPBusType" ColumnName="SAPBusType" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="SpendTreeLevel4" ColumnName="SpendTreeLevel4" />
           <ScalarProperty Name="SpendTreeLevel3" ColumnName="SpendTreeLevel3" />
@@ -168,6 +155,20 @@
           <ScalarProperty Name="AccountGroupName" ColumnName="AccountGroupName" />
           <ScalarProperty Name="TradingPartner" ColumnName="TradingPartner" />
           <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorMaster">
+      <EntityTypeMapping TypeName="VendorModel.VendorMaster">
+        <MappingFragment StoreEntitySet="VendorMaster">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="EmailSent" ColumnName="EmailSent" />
+          <ScalarProperty Name="nsKnox" ColumnName="nsKnox" />
+          <ScalarProperty Name="DofascoEmail" ColumnName="DofascoEmail" />
+          <ScalarProperty Name="VendorEmail" ColumnName="VendorEmail" />
+          <ScalarProperty Name="RegistrationCode" ColumnName="RegistrationCode" />
+          <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

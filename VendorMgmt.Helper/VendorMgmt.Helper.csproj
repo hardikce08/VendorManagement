@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="CacheHelper.cs" />
     <Compile Include="CommonHelper.cs" />
+    <Compile Include="Functions.cs" />
     <Compile Include="SelectListHelper.cs" />
     <Compile Include="WebHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

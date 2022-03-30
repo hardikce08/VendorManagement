@@ -187,6 +187,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="EmailTemplates\normal.html" />
+    <Content Include="EmailTemplates\nsknox.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -264,6 +266,7 @@
     <Content Include="Views\Shared\_Layout_Customer.cshtml" />
     <Content Include="Views\Vendor\FillInfo.cshtml" />
     <Content Include="Views\Vendor\TestFileUpload.cshtml" />
+    <Content Include="Views\Home\Vendors.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

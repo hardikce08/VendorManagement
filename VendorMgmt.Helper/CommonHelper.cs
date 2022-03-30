@@ -18,7 +18,7 @@ namespace VendorMgmt.Helper
         public static MvcHtmlString SelectList_YesNoFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            return htmlHelper.SelectList_YesNo(ExpressionHelper.GetExpressionText(expression), metadata.Model.ToString(), htmlAttributes);
+            return htmlHelper.SelectList_YesNo(ExpressionHelper.GetExpressionText(expression), metadata.Model == null ? "True" : metadata.Model.ToString(), htmlAttributes);
         }
         public static MvcHtmlString SelectList_YesNo(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
         {
@@ -61,5 +61,7 @@ namespace VendorMgmt.Helper
             data.Add(6, "Remittance Email Change");
             return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
         }
+
+        
     }
 }
