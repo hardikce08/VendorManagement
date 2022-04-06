@@ -63,7 +63,7 @@ namespace VendorMgmt.Web.Controllers
                 model.VendorId = VendorMst.Id;
 
                 ViewData["SpanTreeLevel1"] = new SelectList(vs.SpanTreeLevels.Where(p => p.LevelId == 1).ToList(), "LevelCode", "LevelDescription");
-
+                vs.SetLinkExpired(VendorMst.Id);
             }
             return View(model);
         }
