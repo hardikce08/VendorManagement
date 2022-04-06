@@ -48,11 +48,18 @@
         .dropdown-menu li {
             line-height: 15px;
         }
+        .auth-split .auth-right {
+            position: unset !important;
+            width: 100%;
+        }
+            .auth-split .auth-right::after {
+                background: none;
+            }
     </style>
     <div class="col-md-12 row">
-        <div class="col-md-6">
+        <div class="col-md-6 no-padding">
             <div class="auth-split">
-                <div class="auth-right" style="background-image: url('../../Theme/images/auth-split.jpg'); ">
+                <div class="auth-right" style="background-image: url('../../Theme/images/dashboard.jpg'); ">
                     <div class="auth-content">
                         <div>
                             <h1>Arcelor Mittal</h1>
@@ -68,6 +75,9 @@
             </div>
             <div class="card card-hover card-gradient">
                 <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnAddNew" style="cursor:pointer;" data-toggle="modal" data-target="#modal-lg"><span class=""><i class="fs-20 fa fa-plus mr-10"></i>Add New Vendor</span> </button>
+            </div>
+            <div class="card card-hover card-gradient">
+                <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnEmailTemplate" style="cursor:pointer;"><span class=""><i class="fs-20 fa fa-envelope mr-10"></i>Manage Email Template</span> </button>
             </div>
         </div>
         <!-- Modal Large -->
@@ -174,6 +184,9 @@
             });
             $("#btnReview").click(function () {
                 window.open("Vendors", "_self");
+            });
+            $("#btnEmailTemplate").click(function () {
+                window.open("/EmailTemplate", "_self");
             });
 
             $("#BusinessName").typeahead({

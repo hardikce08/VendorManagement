@@ -23,10 +23,10 @@ namespace VendorMgmt.Web.Controllers
             else
             {
                 model.RegistrationCode = RegistrationCode;
-                var VendorMst = vs.VendorMasters.Where(p => p.RegistrationCode == RegistrationCode).FirstOrDefault();
+                var VendorMst = vs.VendorMasters.Where(p => p.RegistrationCode == RegistrationCode && p.LinkExpired == false).FirstOrDefault();
                 if (VendorMst == null)
                 {
-                    TempData["Error"] = "Invalid Registration Code";
+                    TempData["Error"] = "Invalid Registration Code or Registration Code Expired";
                     return View(model);
                 }
 
@@ -61,6 +61,9 @@ namespace VendorMgmt.Web.Controllers
                 model.TreasuryInfo = TreasuryInfo == null ? new VendorTreasuryInfo() : TreasuryInfo;
 
                 model.VendorId = VendorMst.Id;
+
+                ViewData["SpanTreeLevel1"] = new SelectList(vs.SpanTreeLevels.Where(p => p.LevelId == 1).ToList(), "LevelCode", "LevelDescription");
+
             }
             return View(model);
         }
@@ -131,7 +134,7 @@ namespace VendorMgmt.Web.Controllers
                 model.BankingInfo.VendorId = model.VendorId;
                 vs.VendorBankingInfo_InsertOrUpdate(model.BankingInfo);
 
-                
+
 
                 return Json(new { BankingInfoId = model.BankingInfo.Id }, JsonRequestBehavior.AllowGet);
             }
@@ -154,10 +157,10 @@ namespace VendorMgmt.Web.Controllers
                 }
                 model.PurchaseInfo.VendorId = model.VendorId;
                 vs.VendorPurchasingInfo_InsertOrUpdate(model.PurchaseInfo);
-                
-                return Json(new { PurchaseInfoId = model.PurchaseInfo.Id   }, JsonRequestBehavior.AllowGet);
+
+                return Json(new { PurchaseInfoId = model.PurchaseInfo.Id }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { PurchaseInfoId = 0  }, JsonRequestBehavior.AllowGet);
+            return Json(new { PurchaseInfoId = 0 }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public JsonResult SaveTab5(VendorFillInfo model)
@@ -208,7 +211,7 @@ namespace VendorMgmt.Web.Controllers
                     }
                     vss.VendorAttachmentInfo_Remove(obj);
                 }
-                
+
 
                 HttpPostedFileBase file = files[i];
                 string fname;
@@ -243,7 +246,12 @@ namespace VendorMgmt.Web.Controllers
             vs.VendorAttachmentInfo_Remove(obj);
             return Content("test");
         }
+        public JsonResult ReturnJSONDataToAJax(string ParentCode,int LevelId) //It will be fired from Jquery ajax call
+        {
 
+            var jsonData = vs.SpanTreeLevels.Where(p => p.LevelId == LevelId && p.ParentLevelText == ParentCode).ToList();
+            return Json(jsonData, JsonRequestBehavior.AllowGet);
+        }
         public List<SelectListItem> PopulateDropdownListValues(List<string> lst, string SelectedValue, bool AddDefaultValue = true)
         {
 

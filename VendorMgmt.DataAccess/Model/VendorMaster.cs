@@ -24,6 +24,8 @@ namespace VendorMgmt.DataAccess.Model
         public bool EmailSent { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public bool LinkExpired { get; set; }
     }
 
     public class VendorFillInfo
@@ -279,5 +281,20 @@ namespace VendorMgmt.DataAccess.Model
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
     }
-        #endregion
+    #endregion
+
+    public class SpanTreeLevel
+    {
+
+        public int Id { get; set; }
+
+        public string LevelCode { get; set; }
+
+        public string LevelDescription { get; set; }
+
+        public int LevelId { get; set; }
+
+        public string ParentLevelText { get; set; }
     }
+
+}

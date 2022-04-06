@@ -255,6 +255,38 @@ namespace VendorMgmt.Model
             }
         }
         private ObjectSet<VendorMaster> _VendorMaster;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<EmailTemplate> EmailTemplate
+        {
+            get
+            {
+                if ((_EmailTemplate == null))
+                {
+                    _EmailTemplate = base.CreateObjectSet<EmailTemplate>("EmailTemplate");
+                }
+                return _EmailTemplate;
+            }
+        }
+        private ObjectSet<EmailTemplate> _EmailTemplate;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SpanTreeLevel> SpanTreeLevel
+        {
+            get
+            {
+                if ((_SpanTreeLevel == null))
+                {
+                    _SpanTreeLevel = base.CreateObjectSet<SpanTreeLevel>("SpanTreeLevel");
+                }
+                return _SpanTreeLevel;
+            }
+        }
+        private ObjectSet<SpanTreeLevel> _SpanTreeLevel;
 
         #endregion
 
@@ -347,6 +379,22 @@ namespace VendorMgmt.Model
         {
             base.AddObject("VendorMaster", vendorMaster);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the EmailTemplate EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToEmailTemplate(EmailTemplate emailTemplate)
+        {
+            base.AddObject("EmailTemplate", emailTemplate);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SpanTreeLevel EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSpanTreeLevel(SpanTreeLevel spanTreeLevel)
+        {
+            base.AddObject("SpanTreeLevel", spanTreeLevel);
+        }
 
         #endregion
 
@@ -355,6 +403,364 @@ namespace VendorMgmt.Model
     #endregion
 
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="VendorModel", Name="EmailTemplate")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class EmailTemplate : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new EmailTemplate object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="name">Initial value of the Name property.</param>
+        /// <param name="createdDate">Initial value of the CreatedDate property.</param>
+        public static EmailTemplate CreateEmailTemplate(global::System.Int32 id, global::System.String name, global::System.DateTime createdDate)
+        {
+            EmailTemplate emailTemplate = new EmailTemplate();
+            emailTemplate.Id = id;
+            emailTemplate.Name = name;
+            emailTemplate.CreatedDate = createdDate;
+            return emailTemplate;
+        }
+
+        #endregion
+
+        #region Simple Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value, "Id");
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, false, "Name");
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SenderName
+        {
+            get
+            {
+                return _SenderName;
+            }
+            set
+            {
+                OnSenderNameChanging(value);
+                ReportPropertyChanging("SenderName");
+                _SenderName = StructuralObject.SetValidValue(value, true, "SenderName");
+                ReportPropertyChanged("SenderName");
+                OnSenderNameChanged();
+            }
+        }
+        private global::System.String _SenderName;
+        partial void OnSenderNameChanging(global::System.String value);
+        partial void OnSenderNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SenderEmail
+        {
+            get
+            {
+                return _SenderEmail;
+            }
+            set
+            {
+                OnSenderEmailChanging(value);
+                ReportPropertyChanging("SenderEmail");
+                _SenderEmail = StructuralObject.SetValidValue(value, true, "SenderEmail");
+                ReportPropertyChanged("SenderEmail");
+                OnSenderEmailChanged();
+            }
+        }
+        private global::System.String _SenderEmail;
+        partial void OnSenderEmailChanging(global::System.String value);
+        partial void OnSenderEmailChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String EmailSubject
+        {
+            get
+            {
+                return _EmailSubject;
+            }
+            set
+            {
+                OnEmailSubjectChanging(value);
+                ReportPropertyChanging("EmailSubject");
+                _EmailSubject = StructuralObject.SetValidValue(value, true, "EmailSubject");
+                ReportPropertyChanged("EmailSubject");
+                OnEmailSubjectChanged();
+            }
+        }
+        private global::System.String _EmailSubject;
+        partial void OnEmailSubjectChanging(global::System.String value);
+        partial void OnEmailSubjectChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String EmailBody
+        {
+            get
+            {
+                return _EmailBody;
+            }
+            set
+            {
+                OnEmailBodyChanging(value);
+                ReportPropertyChanging("EmailBody");
+                _EmailBody = StructuralObject.SetValidValue(value, true, "EmailBody");
+                ReportPropertyChanged("EmailBody");
+                OnEmailBodyChanged();
+            }
+        }
+        private global::System.String _EmailBody;
+        partial void OnEmailBodyChanging(global::System.String value);
+        partial void OnEmailBodyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime CreatedDate
+        {
+            get
+            {
+                return _CreatedDate;
+            }
+            set
+            {
+                OnCreatedDateChanging(value);
+                ReportPropertyChanging("CreatedDate");
+                _CreatedDate = StructuralObject.SetValidValue(value, "CreatedDate");
+                ReportPropertyChanged("CreatedDate");
+                OnCreatedDateChanged();
+            }
+        }
+        private global::System.DateTime _CreatedDate;
+        partial void OnCreatedDateChanging(global::System.DateTime value);
+        partial void OnCreatedDateChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="VendorModel", Name="SpanTreeLevel")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class SpanTreeLevel : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SpanTreeLevel object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="levelId">Initial value of the LevelId property.</param>
+        public static SpanTreeLevel CreateSpanTreeLevel(global::System.Int32 id, global::System.Int32 levelId)
+        {
+            SpanTreeLevel spanTreeLevel = new SpanTreeLevel();
+            spanTreeLevel.Id = id;
+            spanTreeLevel.LevelId = levelId;
+            return spanTreeLevel;
+        }
+
+        #endregion
+
+        #region Simple Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value, "Id");
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LevelCode
+        {
+            get
+            {
+                return _LevelCode;
+            }
+            set
+            {
+                OnLevelCodeChanging(value);
+                ReportPropertyChanging("LevelCode");
+                _LevelCode = StructuralObject.SetValidValue(value, true, "LevelCode");
+                ReportPropertyChanged("LevelCode");
+                OnLevelCodeChanged();
+            }
+        }
+        private global::System.String _LevelCode;
+        partial void OnLevelCodeChanging(global::System.String value);
+        partial void OnLevelCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LevelDescription
+        {
+            get
+            {
+                return _LevelDescription;
+            }
+            set
+            {
+                OnLevelDescriptionChanging(value);
+                ReportPropertyChanging("LevelDescription");
+                _LevelDescription = StructuralObject.SetValidValue(value, true, "LevelDescription");
+                ReportPropertyChanged("LevelDescription");
+                OnLevelDescriptionChanged();
+            }
+        }
+        private global::System.String _LevelDescription;
+        partial void OnLevelDescriptionChanging(global::System.String value);
+        partial void OnLevelDescriptionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 LevelId
+        {
+            get
+            {
+                return _LevelId;
+            }
+            set
+            {
+                OnLevelIdChanging(value);
+                ReportPropertyChanging("LevelId");
+                _LevelId = StructuralObject.SetValidValue(value, "LevelId");
+                ReportPropertyChanged("LevelId");
+                OnLevelIdChanged();
+            }
+        }
+        private global::System.Int32 _LevelId;
+        partial void OnLevelIdChanging(global::System.Int32 value);
+        partial void OnLevelIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ParentLevelText
+        {
+            get
+            {
+                return _ParentLevelText;
+            }
+            set
+            {
+                OnParentLevelTextChanging(value);
+                ReportPropertyChanging("ParentLevelText");
+                _ParentLevelText = StructuralObject.SetValidValue(value, true, "ParentLevelText");
+                ReportPropertyChanged("ParentLevelText");
+                OnParentLevelTextChanged();
+            }
+        }
+        private global::System.String _ParentLevelText;
+        partial void OnParentLevelTextChanging(global::System.String value);
+        partial void OnParentLevelTextChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -1790,7 +2196,8 @@ namespace VendorMgmt.Model
         /// <param name="nsKnox">Initial value of the nsKnox property.</param>
         /// <param name="emailSent">Initial value of the EmailSent property.</param>
         /// <param name="createdDate">Initial value of the CreatedDate property.</param>
-        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate)
+        /// <param name="linkExpired">Initial value of the LinkExpired property.</param>
+        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate, global::System.Boolean linkExpired)
         {
             VendorMaster vendorMaster = new VendorMaster();
             vendorMaster.Id = id;
@@ -1798,6 +2205,7 @@ namespace VendorMgmt.Model
             vendorMaster.nsKnox = nsKnox;
             vendorMaster.EmailSent = emailSent;
             vendorMaster.CreatedDate = createdDate;
+            vendorMaster.LinkExpired = linkExpired;
             return vendorMaster;
         }
 
@@ -1999,6 +2407,30 @@ namespace VendorMgmt.Model
         private global::System.DateTime _CreatedDate;
         partial void OnCreatedDateChanging(global::System.DateTime value);
         partial void OnCreatedDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean LinkExpired
+        {
+            get
+            {
+                return _LinkExpired;
+            }
+            set
+            {
+                OnLinkExpiredChanging(value);
+                ReportPropertyChanging("LinkExpired");
+                _LinkExpired = StructuralObject.SetValidValue(value, "LinkExpired");
+                ReportPropertyChanged("LinkExpired");
+                OnLinkExpiredChanged();
+            }
+        }
+        private global::System.Boolean _LinkExpired;
+        partial void OnLinkExpiredChanging(global::System.Boolean value);
+        partial void OnLinkExpiredChanged();
 
         #endregion
 

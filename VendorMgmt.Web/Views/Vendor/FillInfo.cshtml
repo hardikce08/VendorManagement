@@ -544,19 +544,19 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Trading Partner</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.PurchaseInfo.TradingPartner, new { @class = "form-control form-control-sm" })
+                                                        @Html.SelectList_YesNoFor(model => model.PurchaseInfo.TradingPartner, new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Account Group Name</strong></label>
-                                                        @Html.SelectList_AccountGroupName(m => m.PurchaseInfo.AccountGroupName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @Html.SelectList_AccountGroupName(m => m.PurchaseInfo.AccountGroupName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Type of Vendor Request</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.TypeofVendorRequest, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.TypeofVendorRequest, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
 
@@ -565,19 +565,20 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Conflict of Interest</strong></label>
-                                                        @Html.SelectList_YesNoFor(m => m.PurchaseInfo.ConflictOfInterest, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @Html.SelectList_YesNoFor(m => m.PurchaseInfo.ConflictOfInterest, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Payment Terms</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.PaymentTerms, new { @class = "form-control form-control-sm" })
+                                                        @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.PaymentTerms, new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Spend Tree Level 1</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreelevel1, new { @class = "form-control form-control-sm" })
+                                                        @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreelevel1, new { @class = "form-control form-control-sm" })*@
+                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreelevel1, (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel1"], new { @class = "form-control form-control-sm", @onchange= "FillSpanTree(this,2);", @required = "required" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -585,19 +586,23 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Spend Tree Level 2</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.SpendTreeLevel2, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @*@Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.SpendTreeLevel2, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel2, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,3);", @required = "required" })
+
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Spend Tree Level 3</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreeLevel3, new { @class = "form-control form-control-sm" })
+                                                        @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreeLevel3, new { @class = "form-control form-control-sm" })*@
+                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel3, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,4);", @required = "required" })
+
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Spend Tree Level 4</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreeLevel4, new { @class = "form-control form-control-sm" })
+                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel4, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -611,13 +616,13 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Requestor Name</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.WorkFlowInfo.RequestorName, new { @class = "form-control form-control-sm" })
+                                                        @Html.SelectList_YesNoFor(model => model.WorkFlowInfo.RequestorName, new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Purchasing Manager</strong></label>
-                                                        @Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
@@ -651,13 +656,13 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm" })
+                                                        @Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Vendor Number</strong></label>
-                                                        @Html.SelectList_AccountGroupName(m => m.TreasuryInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @Html.SelectList_AccountGroupName(m => m.TreasuryInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
@@ -1036,6 +1041,35 @@
             });
 
         }
+
+        function FillSpanTree(Spantree, Level) {
+            //alert($(Spantree1).val());
+            $.ajax({
+                url: '/Vendor/ReturnJSONDataToAJax',
+                type: "POST",
+                data: { ParentCode: $(Spantree).val(), LevelId: Level },
+                async: false,
+                success: function (result) {
+                    if (result != "") {
+                        //alert(result);
+                        $('#PurchaseInfo_SpendTreeLevel' + Level.toString()).empty();
+                        var div_data = "<option value=\"\"></option>";
+                        $(div_data).appendTo('#PurchaseInfo_SpendTreeLevel' + Level.toString());
+                        $(result).each(function () {
+                            //console.log(this.LevelCode);
+                            div_data = "<option value=" + this.LevelCode + ">" + this.LevelDescription + "</option>";
+                            //$("#PurchaseInfo_SpendTreeLevel2").append($("<option></option>").val(this.LevelCode).html(this.LevelDescription));
+                            $(div_data).appendTo('#PurchaseInfo_SpendTreeLevel' + Level.toString());
+                        });
+                    }
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+
+        }
+       
     </script>
 </body>
 </html>

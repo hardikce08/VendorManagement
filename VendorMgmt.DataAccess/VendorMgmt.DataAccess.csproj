@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="ConnectionHelper.cs" />
     <Compile Include="DataHelper.cs" />
+    <Compile Include="EmailTemplateService.cs" />
+    <Compile Include="Model\EmailTemplate.cs" />
     <Compile Include="Model\VendorMaster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VendorService.cs" />

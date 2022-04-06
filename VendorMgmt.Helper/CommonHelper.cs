@@ -52,6 +52,7 @@ namespace VendorMgmt.Helper
         }
         public static MvcHtmlString SelectList_TypeofVendorRequest(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
         {
+           
             Dictionary<int, string> data = new Dictionary<int, string>();
             data.Add(1, "New Vendor Activation");
             data.Add(2, "New Vendor Activation - GST# Update");

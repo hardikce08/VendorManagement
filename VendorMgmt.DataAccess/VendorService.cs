@@ -42,10 +42,25 @@ namespace VendorMgmt.DataAccess
                            nsKnox = v.nsKnox,
                            EmailSent = v.EmailSent,
                            CreatedDate = v.CreatedDate,
+                           LinkExpired=v.LinkExpired 
                        };
             }
         }
-
+        public IQueryable<SpanTreeLevel> SpanTreeLevels
+        {
+            get
+            {
+                return from s in db.SpanTreeLevel
+                       select new SpanTreeLevel
+                       {
+                           Id = s.Id,
+                           LevelCode = s.LevelCode,
+                           LevelDescription = s.LevelDescription,
+                           LevelId = s.LevelId,
+                           ParentLevelText = s.ParentLevelText,
+                       };
+            }
+        }
         public void VendorMaster_InsertOrUpdate(VendorMaster v)
         {
             if (v.Id == 0)
@@ -59,6 +74,7 @@ namespace VendorMgmt.DataAccess
                     nsKnox = v.nsKnox,
                     EmailSent = true,
                     CreatedDate = DateTime.Now,
+                    LinkExpired=false
                 };
 
                 db.VendorMaster.AddObject(i);
@@ -80,6 +96,15 @@ namespace VendorMgmt.DataAccess
 
                 db.SaveChanges();
             }
+        }
+
+        public void SetLinkExpired(int Id)
+        {
+
+            var u = db.VendorMaster.Where(p => p.Id == Id).Single();
+            u.LinkExpired = true;
+            db.SaveChanges();
+
         }
         #region VendorBasicInfo
         public IQueryable<VendorBasicInfo> VendorBasicInfos
@@ -530,7 +555,7 @@ namespace VendorMgmt.DataAccess
                            SpendTreeLevel2 = v.SpendTreeLevel2,
                            SpendTreeLevel3 = v.SpendTreeLevel3,
                            SpendTreeLevel4 = v.SpendTreeLevel4,
-                           SAPBusType=v.SAPBusType,
+                           SAPBusType = v.SAPBusType,
                            CreatedDate = v.CreatedDate,
                        };
             }
@@ -552,7 +577,7 @@ namespace VendorMgmt.DataAccess
                     SpendTreeLevel2 = v.SpendTreeLevel2,
                     SpendTreeLevel3 = v.SpendTreeLevel3,
                     SpendTreeLevel4 = v.SpendTreeLevel4,
-                    SAPBusType=v.SAPBusType,
+                    SAPBusType = v.SAPBusType,
                     CreatedDate = DateTime.Now,
                 };
 
@@ -672,7 +697,7 @@ namespace VendorMgmt.DataAccess
                     Level2ApproverName = v.Level2ApproverName,
                     Level2ChecklistInfo = v.Level2ChecklistInfo,
                     Level2Comments = v.Level2Comments,
-                    CreatedDate = DateTime.Now ,
+                    CreatedDate = DateTime.Now,
                 };
                 db.VendorTreasuryInfo.AddObject(i);
                 db.SaveChanges();

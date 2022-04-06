@@ -173,6 +173,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\EmailTemplateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Global.asax.cs">
@@ -208,20 +209,29 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Theme\css\bootstrap.min.css" />
     <Content Include="Theme\css\font-awesome.min.css" />
+    <Content Include="Theme\css\jquery.dataTables.min.css" />
     <Content Include="Theme\css\jquery.steps.min.css" />
     <Content Include="Theme\css\jquery.toast.min.css" />
     <Content Include="Theme\css\main.css" />
     <Content Include="Theme\css\main.min.css" />
     <Content Include="Theme\css\simplebar.min.css" />
+    <Content Include="Theme\css\summernote-bs4.css" />
     <Content Include="Theme\fonts\fa-brands-400.svg" />
     <Content Include="Theme\fonts\fa-regular-400.svg" />
     <Content Include="Theme\fonts\fa-solid-900.svg" />
     <Content Include="Theme\images\apple-touch-icon.png" />
     <Content Include="Theme\images\auth-split.jpg" />
+    <Content Include="Theme\images\dashboard.jpg" />
     <Content Include="Theme\images\favicon.png" />
     <Content Include="Theme\images\logo.png" />
     <Content Include="Theme\images\placeholder.jpg" />
     <Content Include="Theme\images\profile-avatar.jpg" />
+    <Content Include="Theme\images\remove_icon.png" />
+    <Content Include="Theme\images\sort_asc.png" />
+    <Content Include="Theme\images\sort_asc_disabled.png" />
+    <Content Include="Theme\images\sort_both.png" />
+    <Content Include="Theme\images\sort_desc.png" />
+    <Content Include="Theme\images\sort_desc_disabled.png" />
     <Content Include="Theme\images\thumb-1.jpg" />
     <Content Include="Theme\images\thumb-2.jpg" />
     <Content Include="Theme\images\thumb-3.jpg" />
@@ -230,14 +240,17 @@
     <Content Include="Theme\images\user-3.png" />
     <Content Include="Theme\images\user-4.png" />
     <Content Include="Theme\scripts\bootstrap.min.js" />
+    <Content Include="Theme\scripts\dataTables.responsive.min.js" />
     <Content Include="Theme\scripts\inputmask.bundle.min.js" />
     <Content Include="Theme\scripts\jquery-3.2.1.min.js" />
+    <Content Include="Theme\scripts\jquery.dataTables.min.js" />
     <Content Include="Theme\scripts\jquery.steps.min.js" />
     <Content Include="Theme\scripts\jquery.toast.min.js" />
     <Content Include="Theme\scripts\main.js" />
     <Content Include="Theme\scripts\parsley.min.js" />
     <Content Include="Theme\scripts\popper.min.js" />
     <Content Include="Theme\scripts\simplebar.min.js" />
+    <Content Include="Theme\scripts\summernote-bs4.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -267,6 +280,11 @@
     <Content Include="Views\Vendor\FillInfo.cshtml" />
     <Content Include="Views\Vendor\TestFileUpload.cshtml" />
     <Content Include="Views\Home\Vendors.cshtml" />
+    <Content Include="Views\EmailTemplate\Add.cshtml" />
+    <Content Include="Views\EmailTemplate\Index.cshtml" />
+    <Content Include="Theme\fonts\summernote.eot" />
+    <Content Include="Theme\fonts\summernote.ttf" />
+    <Content Include="Theme\fonts\summernote.woff" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

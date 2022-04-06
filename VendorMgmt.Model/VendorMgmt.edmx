@@ -5,6 +5,28 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="VendorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EmailTemplate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="SenderName" Type="nvarchar" MaxLength="100" />
+          <Property Name="SenderEmail" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmailSubject" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmailBody" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SpanTreeLevel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LevelCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="LevelDescription" Type="nvarchar" MaxLength="500" />
+          <Property Name="LevelId" Type="int" Nullable="false" />
+          <Property Name="ParentLevelText" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="VendorAttachmentInfo">
           <Key>
             <PropertyRef Name="Id" />
@@ -82,6 +104,7 @@
           <Property Name="nsKnox" Type="bit" Nullable="false" />
           <Property Name="EmailSent" Type="bit" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="LinkExpired" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="VendorPrimarySalesInfo">
           <Key>
@@ -167,7 +190,9 @@
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_VendorAttachmentInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorAttachmentInfo" Type="Self.VendorAttachmentInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -179,7 +204,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorBankingInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorBankingInfo" Type="Self.VendorBankingInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -191,7 +218,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorBasicInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorBasicInfo" Type="Self.VendorBasicInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -203,7 +232,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorFinancialInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorFinancialInfo" Type="Self.VendorFinancialInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -215,7 +246,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorPrimarySalesInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorPrimarySalesInfo" Type="Self.VendorPrimarySalesInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -227,7 +260,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorPurchasingInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorPurchasingInfo" Type="Self.VendorPurchasingInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -239,7 +274,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorRemittanceInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorRemittanceInfo" Type="Self.VendorRemittanceInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -251,7 +288,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorSubmittedByInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorSubmittedByInfo" Type="Self.VendorSubmittedByInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -263,7 +302,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorTreasuryInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorTreasuryInfo" Type="Self.VendorTreasuryInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -275,7 +316,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VendorWorkFlowInfo_VendorMaster">
-          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1" />
+          <End Role="VendorMaster" Type="Self.VendorMaster" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="VendorWorkFlowInfo" Type="Self.VendorWorkFlowInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VendorMaster">
@@ -287,6 +330,8 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="VendorModelStoreContainer">
+          <EntitySet Name="EmailTemplate" EntityType="Self.EmailTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpanTreeLevel" EntityType="Self.SpanTreeLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorAttachmentInfo" EntityType="Self.VendorAttachmentInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorBankingInfo" EntityType="Self.VendorBankingInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorBasicInfo" EntityType="Self.VendorBasicInfo" Schema="dbo" store:Type="Tables" />
@@ -395,6 +440,8 @@
             <End Role="VendorMaster" EntitySet="VendorMaster" />
             <End Role="VendorWorkFlowInfo" EntitySet="VendorWorkFlowInfo" />
           </AssociationSet>
+          <EntitySet Name="EmailTemplate" EntityType="VendorModel.EmailTemplate" />
+          <EntitySet Name="SpanTreeLevel" EntityType="VendorModel.SpanTreeLevel" />
         </EntityContainer>
         <EntityType Name="VendorBankingInfo">
           <Key>
@@ -576,6 +623,7 @@
           <NavigationProperty Name="VendorSubmittedByInfo" Relationship="VendorModel.FK_VendorSubmittedByInfo_VendorMaster" FromRole="VendorMaster" ToRole="VendorSubmittedByInfo" />
           <NavigationProperty Name="VendorTreasuryInfo" Relationship="VendorModel.FK_VendorTreasuryInfo_VendorMaster" FromRole="VendorMaster" ToRole="VendorTreasuryInfo" />
           <NavigationProperty Name="VendorWorkFlowInfo" Relationship="VendorModel.FK_VendorWorkFlowInfo_VendorMaster" FromRole="VendorMaster" ToRole="VendorWorkFlowInfo" />
+          <Property Name="LinkExpired" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_VendorAttachmentInfo_VendorMaster">
           <End Type="VendorModel.VendorMaster" Role="VendorMaster" Multiplicity="1" />
@@ -697,6 +745,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EmailTemplate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SenderName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SenderEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmailSubject" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmailBody" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="SpanTreeLevel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LevelCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LevelDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LevelId" Type="Int32" Nullable="false" />
+          <Property Name="ParentLevelText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -864,6 +934,7 @@
           <EntitySetMapping Name="VendorMaster">
             <EntityTypeMapping TypeName="VendorModel.VendorMaster">
               <MappingFragment StoreEntitySet="VendorMaster">
+                <ScalarProperty Name="LinkExpired" ColumnName="LinkExpired" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="EmailSent" ColumnName="EmailSent" />
                 <ScalarProperty Name="nsKnox" ColumnName="nsKnox" />
@@ -871,6 +942,30 @@
                 <ScalarProperty Name="VendorEmail" ColumnName="VendorEmail" />
                 <ScalarProperty Name="RegistrationCode" ColumnName="RegistrationCode" />
                 <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailTemplate">
+            <EntityTypeMapping TypeName="VendorModel.EmailTemplate">
+              <MappingFragment StoreEntitySet="EmailTemplate">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="EmailBody" ColumnName="EmailBody" />
+                <ScalarProperty Name="EmailSubject" ColumnName="EmailSubject" />
+                <ScalarProperty Name="SenderEmail" ColumnName="SenderEmail" />
+                <ScalarProperty Name="SenderName" ColumnName="SenderName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpanTreeLevel">
+            <EntityTypeMapping TypeName="VendorModel.SpanTreeLevel">
+              <MappingFragment StoreEntitySet="SpanTreeLevel">
+                <ScalarProperty Name="ParentLevelText" ColumnName="ParentLevelText" />
+                <ScalarProperty Name="LevelId" ColumnName="LevelId" />
+                <ScalarProperty Name="LevelDescription" ColumnName="LevelDescription" />
+                <ScalarProperty Name="LevelCode" ColumnName="LevelCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -919,6 +1014,8 @@
         <AssociationConnector Association="VendorModel.FK_VendorSubmittedByInfo_VendorMaster" />
         <AssociationConnector Association="VendorModel.FK_VendorTreasuryInfo_VendorMaster" />
         <AssociationConnector Association="VendorModel.FK_VendorWorkFlowInfo_VendorMaster" />
+        <EntityTypeShape EntityType="VendorModel.EmailTemplate" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="VendorModel.SpanTreeLevel" Width="1.5" PointX="5.375" PointY="4.75" />
       </Diagram>
     </Diagrams>
   </Designer>

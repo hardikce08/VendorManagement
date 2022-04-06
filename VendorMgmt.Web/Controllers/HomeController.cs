@@ -76,7 +76,7 @@ namespace VendorMgmt.Web.Controllers
                 Emailbody = Emailbody.Replace("{DofascoContact}", model.DofascoEmail);
                 Functions.SendEmail("hardikce.08@gmail.com", "New Vendor Added", Emailbody , model.nsKnox);
                 vs.VendorMaster_InsertOrUpdate(model);
-                ViewBag.JavaScriptFunction = "successToast();";
+                ViewBag.JavaScriptFunction = "successToast('New Vendor Added');";
                 model = new VendorMaster();
                
             }
