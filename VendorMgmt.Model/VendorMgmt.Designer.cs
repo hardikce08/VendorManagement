@@ -2197,7 +2197,9 @@ namespace VendorMgmt.Model
         /// <param name="emailSent">Initial value of the EmailSent property.</param>
         /// <param name="createdDate">Initial value of the CreatedDate property.</param>
         /// <param name="linkExpired">Initial value of the LinkExpired property.</param>
-        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate, global::System.Boolean linkExpired)
+        /// <param name="updatedDate">Initial value of the UpdatedDate property.</param>
+        /// <param name="linkGuid">Initial value of the LinkGuid property.</param>
+        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate, global::System.Boolean linkExpired, global::System.DateTime updatedDate, global::System.String linkGuid)
         {
             VendorMaster vendorMaster = new VendorMaster();
             vendorMaster.Id = id;
@@ -2206,6 +2208,8 @@ namespace VendorMgmt.Model
             vendorMaster.EmailSent = emailSent;
             vendorMaster.CreatedDate = createdDate;
             vendorMaster.LinkExpired = linkExpired;
+            vendorMaster.UpdatedDate = updatedDate;
+            vendorMaster.LinkGuid = linkGuid;
             return vendorMaster;
         }
 
@@ -2431,6 +2435,78 @@ namespace VendorMgmt.Model
         private global::System.Boolean _LinkExpired;
         partial void OnLinkExpiredChanging(global::System.Boolean value);
         partial void OnLinkExpiredChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value, true, "Status");
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.String _Status;
+        partial void OnStatusChanging(global::System.String value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime UpdatedDate
+        {
+            get
+            {
+                return _UpdatedDate;
+            }
+            set
+            {
+                OnUpdatedDateChanging(value);
+                ReportPropertyChanging("UpdatedDate");
+                _UpdatedDate = StructuralObject.SetValidValue(value, "UpdatedDate");
+                ReportPropertyChanged("UpdatedDate");
+                OnUpdatedDateChanged();
+            }
+        }
+        private global::System.DateTime _UpdatedDate;
+        partial void OnUpdatedDateChanging(global::System.DateTime value);
+        partial void OnUpdatedDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LinkGuid
+        {
+            get
+            {
+                return _LinkGuid;
+            }
+            set
+            {
+                OnLinkGuidChanging(value);
+                ReportPropertyChanging("LinkGuid");
+                _LinkGuid = StructuralObject.SetValidValue(value, false, "LinkGuid");
+                ReportPropertyChanged("LinkGuid");
+                OnLinkGuidChanged();
+            }
+        }
+        private global::System.String _LinkGuid;
+        partial void OnLinkGuidChanging(global::System.String value);
+        partial void OnLinkGuidChanged();
 
         #endregion
 

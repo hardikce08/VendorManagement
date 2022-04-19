@@ -12,12 +12,20 @@ namespace VendorMgmt.DataAccess
     public class DataHelper : ConnectionHelper
     {
         const int COMMAND_TIMEOUT = 30 * 20;
-
+        public string constring = "";
         #region Common Methods to Execute Stored Functions
 
-        public DataSet ExecuteStoredProcedure(string procedureName, SqlParameter[] para, CommandType commandType = CommandType.StoredProcedure)
+        public DataSet ExecuteStoredProcedure(string procedureName, SqlParameter[] para, CommandType commandType = CommandType.StoredProcedure, ConnectionType conType=ConnectionType.Admin)
         {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringKey].ConnectionString))
+            if (conType == ConnectionType.Customer)
+            {
+                constring = CustomerConnectionString;
+            }
+            else
+            {
+                constring = ConnectionString;
+            }
+            using (SqlConnection connection = new SqlConnection(constring))
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandTimeout = COMMAND_TIMEOUT;
@@ -38,9 +46,9 @@ namespace VendorMgmt.DataAccess
                 return ds;
             }
         }
-        public DataTable ExecuteStoredProcedureDataTable(string procedureName, SqlParameter[] para, CommandType commandType = CommandType.StoredProcedure)
-        {
-            var ds = ExecuteStoredProcedure(procedureName, para, commandType);
+        public DataTable ExecuteStoredProcedureDataTable(string procedureName, SqlParameter[] para, CommandType commandType = CommandType.StoredProcedure, ConnectionType conType = ConnectionType.Admin)
+        { 
+            var ds = ExecuteStoredProcedure(procedureName, para, commandType, conType);
 
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -50,9 +58,9 @@ namespace VendorMgmt.DataAccess
                 return null;
         }
 
-        public List<T> ExecuteStoredProcedure<T>(string procedureName, SqlParameter[] para, CommandType commandType = CommandType.StoredProcedure)
+        public List<T> ExecuteStoredProcedure<T>(string procedureName, SqlParameter[] para, CommandType commandType = CommandType.StoredProcedure, ConnectionType conType = ConnectionType.Admin)
         {
-            var ds = ExecuteStoredProcedure(procedureName, para, commandType);
+            var ds = ExecuteStoredProcedure(procedureName, para, commandType,conType);
 
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {

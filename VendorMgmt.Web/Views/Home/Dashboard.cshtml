@@ -204,7 +204,7 @@
                             map = {};
                             $.each(data, function (i, item) {
                                 /*console.log(item);*/
-                                var id = item.BusinessName;
+                                var id = item.RegistrationCode;
                                 var name = item.BusinessName;
                                 map[name] = {
                                     id: id,
@@ -225,7 +225,9 @@
                 updater: function (item) {
                     //alert(map[item].id);
                     //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
-                    $('[id*=BusinessName]').val(map[item].id);
+                    $('[id*=BusinessName]').val(map[item].name);
+                    $('[id*=RegistrationCode]').val(map[item].id);
+
                     return item;
                 }
             });

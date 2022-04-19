@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -10,34 +11,36 @@ namespace VendorMgmt.Helper
 {
     public class Functions
     {
-        public static void SendEmail(string receiver, string subject, string EmailMessage,bool IncludeCC)
+        public static void SendEmail(string receiver, string subject, string EmailMessage,bool IncludensKnox)
         {
             try
             {
                 //var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
                 var message = new MailMessage();
                 message.To.Add(new MailAddress(receiver));  // replace with valid value 
-                message.From = new MailAddress("info@loan4payday.org");  // replace with valid value
+                message.From = new MailAddress(ConfigurationManager.AppSettings["FromEmail"]);  // replace with valid value
                 message.Subject = subject;
                 //message.Body = string.Format(body, "Vendor System", "info@vendor.com", "New Registration Added");
                 message.Body = EmailMessage;
                 message.IsBodyHtml = true;
-                if (IncludeCC)
+                if (IncludensKnox)
                 {
-                    message.CC.Add(new MailAddress ("accountvalidation@nsknox.net"));
-                    message.CC.Add(new MailAddress("acctspay.dofasco@arcelormittal.com"));
+                    foreach (string s in ConfigurationManager.AppSettings["nsKnoxEmail"].Split(';'))
+                    {
+                        message.CC.Add(new MailAddress(s));
+                    }
                 }
                 using (var smtp = new SmtpClient())
                 {
                     var credential = new NetworkCredential
                     {
-                        UserName = "info@loan4payday.org",  // replace with valid value
-                        Password = "Hardik@123"  // replace with valid value
+                        UserName = ConfigurationManager.AppSettings["EmailUserName"],  // replace with valid value
+                        Password = ConfigurationManager.AppSettings["EmailPassword"] // replace with valid value
                     };
                     smtp.UseDefaultCredentials = false;
                     smtp.Credentials = credential;
-                    smtp.Host = "webmail.loan4payday.org";
-                    smtp.Port = 25;
+                    smtp.Host = ConfigurationManager.AppSettings["EmailHost"];
+                    smtp.Port = Convert.ToInt32 (ConfigurationManager.AppSettings["Port"]);
                     smtp.EnableSsl = false;
                     smtp.Send(message);
                 }

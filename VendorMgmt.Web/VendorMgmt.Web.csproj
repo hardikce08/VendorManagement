@@ -81,6 +81,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.16.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -182,6 +183,7 @@
     <Compile Include="ProfileHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Worker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -221,6 +223,7 @@
     <Content Include="Theme\fonts\fa-solid-900.svg" />
     <Content Include="Theme\images\apple-touch-icon.png" />
     <Content Include="Theme\images\auth-split.jpg" />
+    <Content Include="Theme\images\Companylogo.png" />
     <Content Include="Theme\images\dashboard.jpg" />
     <Content Include="Theme\images\favicon.png" />
     <Content Include="Theme\images\logo.png" />
@@ -243,6 +246,7 @@
     <Content Include="Theme\scripts\dataTables.responsive.min.js" />
     <Content Include="Theme\scripts\inputmask.bundle.min.js" />
     <Content Include="Theme\scripts\jquery-3.2.1.min.js" />
+    <Content Include="Theme\scripts\jquery-ui-1.13.0.js" />
     <Content Include="Theme\scripts\jquery.dataTables.min.js" />
     <Content Include="Theme\scripts\jquery.steps.min.js" />
     <Content Include="Theme\scripts\jquery.toast.min.js" />
@@ -285,6 +289,7 @@
     <Content Include="Theme\fonts\summernote.eot" />
     <Content Include="Theme\fonts\summernote.ttf" />
     <Content Include="Theme\fonts\summernote.woff" />
+    <Content Include="Views\Vendor\GetDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

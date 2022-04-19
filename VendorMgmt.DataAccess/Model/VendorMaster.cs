@@ -18,13 +18,15 @@ namespace VendorMgmt.DataAccess.Model
         public string VendorEmail { get; set; }
 
         public string DofascoEmail { get; set; }
-
+        public string Status { get; set; }
         public bool nsKnox { get; set; }
 
         public bool EmailSent { get; set; }
 
         public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
 
+        public string LinkGuid { get; set; }
         public bool LinkExpired { get; set; }
     }
 
@@ -45,6 +47,11 @@ namespace VendorMgmt.DataAccess.Model
         public VendorTreasuryInfo TreasuryInfo { get; set; }
         public string RegistrationCode { get; set; }
         public int VendorId { get; set; }
+        public bool isValidated { get; set; }
+        public string Email { get; set; }
+        public string CompanyName { get; set; }
+        public string LinkGuid { get; set; }
+        public string UserRegistrationCode { get; set; }
     }
 
     public class VendorBasicInfo
@@ -278,8 +285,20 @@ namespace VendorMgmt.DataAccess.Model
         public string VendorName { get; set; }
         public string RequestorName { get; set; }
         public string ApplicationStatus { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
+
+        public List<VendorGridData> lstVendors { get; set; }
+    }
+    public class VendorGridData
+    { 
+      public string VendorName { get; set; }
+        public string RegistrationCode { get; set; }
+        public string VendorEmail { get; set; }
+        public int Id { get; set; }
+        public string Status { get; set; }
+
+        public DateTime UpdatedDate { get; set; }
     }
     #endregion
 

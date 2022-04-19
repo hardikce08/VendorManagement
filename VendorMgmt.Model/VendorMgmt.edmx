@@ -101,9 +101,12 @@
           <Property Name="RegistrationCode" Type="nvarchar" MaxLength="50" />
           <Property Name="VendorEmail" Type="nvarchar" MaxLength="150" />
           <Property Name="DofascoEmail" Type="nvarchar" MaxLength="150" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
           <Property Name="nsKnox" Type="bit" Nullable="false" />
           <Property Name="EmailSent" Type="bit" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
+          <Property Name="LinkGuid" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LinkExpired" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="VendorPrimarySalesInfo">
@@ -624,6 +627,9 @@
           <NavigationProperty Name="VendorTreasuryInfo" Relationship="VendorModel.FK_VendorTreasuryInfo_VendorMaster" FromRole="VendorMaster" ToRole="VendorTreasuryInfo" />
           <NavigationProperty Name="VendorWorkFlowInfo" Relationship="VendorModel.FK_VendorWorkFlowInfo_VendorMaster" FromRole="VendorMaster" ToRole="VendorWorkFlowInfo" />
           <Property Name="LinkExpired" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LinkGuid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_VendorAttachmentInfo_VendorMaster">
           <End Type="VendorModel.VendorMaster" Role="VendorMaster" Multiplicity="1" />
@@ -934,6 +940,9 @@
           <EntitySetMapping Name="VendorMaster">
             <EntityTypeMapping TypeName="VendorModel.VendorMaster">
               <MappingFragment StoreEntitySet="VendorMaster">
+                <ScalarProperty Name="LinkGuid" ColumnName="LinkGuid" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="LinkExpired" ColumnName="LinkExpired" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="EmailSent" ColumnName="EmailSent" />

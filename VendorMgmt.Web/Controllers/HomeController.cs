@@ -63,22 +63,35 @@ namespace VendorMgmt.Web.Controllers
                 //model.RegistrationCode = Request["RegistrationCode"];
                 //send email function 
                 string Emailbody = "";
+                EmailTemplateService es = new EmailTemplateService();
                 if (model.nsKnox)
                 {
-                    Emailbody = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplates/nsknox.html"));
+                    Emailbody = es.EmailTemplateById(2).EmailBody;
                 }
                 else
-                { Emailbody = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplates/normal.html")); }
-
-                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/FillInfo/"+model.RegistrationCode);
+                { Emailbody = es.EmailTemplateById(1).EmailBody; }
+                var existingdata = vs.VendorMasters.Where(p => p.RegistrationCode == model.RegistrationCode).FirstOrDefault();
+                if (existingdata != null)
+                {
+                    model.Id = existingdata.Id;
+                    model.LinkExpired = false;
+                    model.Status = "Validation Pending";
+                    model.LinkGuid = Guid.NewGuid().ToString();
+                }
+                if (model.Id == 0)
+                {
+                    model.LinkGuid = Guid.NewGuid().ToString();
+                }
+                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/FillInfo/" + model.LinkGuid);
                 Emailbody = Emailbody.Replace("{CompanyName}", model.BusinessName);
                 Emailbody = Emailbody.Replace("{RegCode}", model.RegistrationCode);
                 Emailbody = Emailbody.Replace("{DofascoContact}", model.DofascoEmail);
-                Functions.SendEmail("hardikce.08@gmail.com", "New Vendor Added", Emailbody , model.nsKnox);
+                Functions.SendEmail("hardikce.08@gmail.com", "New Vendor Added", Emailbody, model.nsKnox);
+
                 vs.VendorMaster_InsertOrUpdate(model);
                 ViewBag.JavaScriptFunction = "successToast('New Vendor Added');";
                 model = new VendorMaster();
-               
+
             }
             model.RegistrationCode = CommonHelper.GetRegistrationCode();
             return View(model);
@@ -97,8 +110,48 @@ namespace VendorMgmt.Web.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-             
-            return View();
+            VendorListView model = new VendorListView();
+            VendorService vs = new VendorService();
+            model.lstVendors = vs.GetVendorGridData();
+            model.FromDate = DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd");
+            model.ToDate = DateTime.Now.ToString("yyyy-MM-dd");
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Vendors(VendorListView model)
+        {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                //You get the user's first and last name below:
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            VendorService vs = new VendorService();
+            model.lstVendors = vs.GetVendorGridData();
+            if (!string.IsNullOrEmpty(model.ApplicationStatus))
+            {
+                model.lstVendors = model.lstVendors.Where(p => p.Status == model.ApplicationStatus).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.RequestorName))
+            {
+                model.lstVendors = model.lstVendors.Where(p => p.VendorName == model.RequestorName).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.VendorName))
+            {
+                model.lstVendors = model.lstVendors.Where(p => p.VendorName == model.VendorName).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.FromDate) && !string.IsNullOrEmpty(model.ToDate))
+            {
+                model.lstVendors = model.lstVendors.Where(p => p.UpdatedDate >= Convert.ToDateTime(model.FromDate) && p.UpdatedDate <= Convert.ToDateTime(model.ToDate)).ToList();
+            }
+            return View(model);
         }
         [HttpPost]
         public JsonResult GenerateNewNumber()
@@ -111,7 +164,7 @@ namespace VendorMgmt.Web.Controllers
         //[HttpPost]
         //public JsonResult SuggestBusinessName(string name)
         //{
-            
+
         //    //Note : you can bind same list from database  
         //    List<string> ObjList = vs.VendorMasters.Select(p => p.BusinessName).ToList();
         //    //Searching records from list using LINQ query  

@@ -14,7 +14,7 @@ namespace VendorMgmt.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
                name: "CustomerFill",
-               url: "FillInfo/{RegistrationCode}",
+               url: "FillInfo/{LinkGuid}",
                defaults: new { controller = "Vendor", action = "FillInfo", RegistrationCode = UrlParameter.Optional }
            );
             routes.MapRoute(

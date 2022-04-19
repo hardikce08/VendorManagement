@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Objects;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,11 @@ namespace VendorMgmt.DataAccess
         EF.VendorEntities db = null;
         public VendorService()
         {
-            db = new EF.VendorEntities(EntityConnectionString);
+                db = new EF.VendorEntities(EntityConnectionString);
+        }
+        public VendorService(string s)
+        {
+            db = new EF.VendorEntities(CustomerEntityConnectionString);
         }
         public VendorService(ObjectContext context)
         {
@@ -42,7 +47,8 @@ namespace VendorMgmt.DataAccess
                            nsKnox = v.nsKnox,
                            EmailSent = v.EmailSent,
                            CreatedDate = v.CreatedDate,
-                           LinkExpired=v.LinkExpired 
+                           LinkExpired=v.LinkExpired ,
+                           LinkGuid=v.LinkGuid 
                        };
             }
         }
@@ -74,7 +80,10 @@ namespace VendorMgmt.DataAccess
                     nsKnox = v.nsKnox,
                     EmailSent = true,
                     CreatedDate = DateTime.Now,
-                    LinkExpired=false
+                    UpdatedDate=DateTime.Now,
+                    LinkExpired=false,
+                    LinkGuid=v.LinkGuid,
+                    Status= "Validation Pending",
                 };
 
                 db.VendorMaster.AddObject(i);
@@ -93,16 +102,54 @@ namespace VendorMgmt.DataAccess
                 u.nsKnox = v.nsKnox;
                 u.EmailSent = v.EmailSent;
                 u.CreatedDate = v.CreatedDate;
-
+                u.UpdatedDate = DateTime.Now;
+                u.LinkGuid = v.LinkGuid;
+                u.Status = v.Status;
                 db.SaveChanges();
             }
         }
+        public void VendorMasterCustomer_InsertOrUpdate(VendorMaster v)
+        {
+            DataHelper ds = new DataHelper();
+            var para = new SqlParameter[]
+              {
+                    new SqlParameter("@Id",v.Id),
+                   new SqlParameter("@BusinessName",v.BusinessName ),
+                    new SqlParameter("@RegistrationCode",v.RegistrationCode),
+                     new SqlParameter("@VendorEmail",v.VendorEmail),
+                      new SqlParameter("@DofascoEmail",v.DofascoEmail),
+                       new SqlParameter("@nsKnox",v.nsKnox),
+                     new SqlParameter("@EmailSent",v.EmailSent),
+                      new SqlParameter("@CreatedDate",v.CreatedDate),
+                       new SqlParameter("@LinkExpired",v.LinkExpired),
+              };
 
+            ds.ExecuteStoredProcedure("proc_InsertVendorMaster", para,System.Data.CommandType.StoredProcedure ,ConnectionType.Customer);
+        }
+        public void DeleteVendorFromCustomer(int VendorId)
+        {
+
+            DataHelper ds = new DataHelper();
+            var para = new SqlParameter[]
+              {
+                    new SqlParameter("@VendorId",VendorId),
+              };
+
+            ds.ExecuteStoredProcedure("proc_DeleteVendorData", para, System.Data.CommandType.StoredProcedure, ConnectionType.Customer);
+
+        }
+        public List<VendorGridData> GetVendorGridData()
+        {
+            DataHelper ds = new DataHelper();
+            var lst = ds.ExecuteStoredProcedure<VendorGridData>("proc_GetVendorGridData", null);
+                return lst;
+        }
         public void SetLinkExpired(int Id)
         {
 
             var u = db.VendorMaster.Where(p => p.Id == Id).Single();
             u.LinkExpired = true;
+            u.LinkGuid = string.Empty;
             db.SaveChanges();
 
         }
@@ -165,7 +212,7 @@ namespace VendorMgmt.DataAccess
                     CreatedBy = "",
                     CreatedDate = DateTime.Now,
                 };
-
+                 
                 db.VendorBasicInfo.AddObject(i);
                 db.SaveChanges();
                 v.Id = i.Id;

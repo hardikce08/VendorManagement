@@ -7,9 +7,7 @@
 }
 <form action="/Home/Vendors" id="form_id" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" autocomplete="off" data-parsley-validate>
     <style>
-        body {
-            overflow: hidden; /* Hide scrollbars */
-        }
+
 
         .auth-split .auth-right {
             position: unset !important;
@@ -44,39 +42,119 @@
         .dropdown-menu li {
             line-height: 15px;
         }
+
+
+
+
+        .dataTable thead {
+            background-color: #FF3700;
+        }
     </style>
     <div class="col-md-12 row">
-        <div class="col-lg-4">
-            <div class="form-group">
-                <label for="input-placeholder"><strong>Vendor Name</strong></label>
-                @Html.TextBoxFor(m => m.VendorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-            </div>
+        <div class="col-md-2 row">
+            <a href=""><i class="fas fa-align-center fa-10x fa-filter" style="color:#ff3700"></i></a>
         </div>
-        <div class="col-lg-4">
-            <div class="form-group">
-                <label for="input-placeholder"><strong>Requestor Name</strong></label>
-                @Html.TextBoxFor(m => m.RequestorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-            </div>
+        <div class="col-md-2 row">
         </div>
-        <div class="col-lg-4">
-            <div class="form-group">
-                <label for="input-placeholder" ><strong>Application Status</strong></label>
-                @Html.TextBoxFor(m => m.ApplicationStatus, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-            </div>
-        </div>
+        <div class="col-md-8 row">
+            <div class="col-md-12 row">
 
-    </div>
-    <div class="col-md-12 row">
-        <div class="col-lg-4">
-            <button type="submit" class="btn btn-bold btn-pure btn-primary">Search</button>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Vendor Name</strong></label>
+                        @Html.TextBoxFor(m => m.VendorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Application Status</strong></label>
+                        @Html.SelectList_ApplicationStatus(m => m.ApplicationStatus, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+                <div class="col-lg-2">
+                    
+                </div>
+            </div>
+            <div class="col-md-12 row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Requestor Name</strong></label>
+                        @Html.TextBoxFor(m => m.RequestorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Updated Date  </strong></label>
+                        <div class="row" style="margin-left:0px;">
+                            @Html.TextBox("FromDate", Model.FromDate, new { @class = "form-control form-control-sm col-md-4", @style = "width:100%;" })
+                            &nbsp;&nbsp;@Html.TextBox("ToDate", Model.ToDate, new { @class = "form-control form-control-sm col-md-4", @style = "width:100%;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button type="submit" class="btn btn-bold btn-pure btn-primary">Search</button>
+                </div>
+                <div class="col-lg-2">
+                </div>
+            </div>
         </div>
     </div>
-        @section scripts{
-            <!-- parsley form validator -->
-            <script src="~/Theme/scripts/parsley.min.js"></script>
-            <script type="text/javascript">
-            </script>
+
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        @if (Model.lstVendors != null)
+        {
+            <table class="table table-bordered dataTable" id="tblGridData">
+                <thead>
+                    <tr>
+                        <th scope="col">Vendor Name</th>
+                        <th scope="col">Requests By</th>
+                        <th scope="col">Treasury Actioner</th>
+                        <th scope="col">Updated Date</th>
+                        <th scope="col">Application Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lstVendors)
+                    {
+
+                        <tr style="" class="showdetail" data-id="@item.Id">
+                            <td>@item.VendorName</td>
+                            <td>Gravelle, Corey</td>
+                            <td>Lageman , Janice</td>
+                            <td>@item.UpdatedDate.ToString("MM/dd/yyyy")</td>
+                            <td>@item.Status</td>
+                            <td><a id="a_@item.Id" href="/Vendor/GetDetails?RegistrationCode=@item.RegistrationCode" target="_self" class="btn btn-primary btn-shadow">Get Details</a></td>
+                        </tr>
+                        @*<tr id="tr_@item.id" style="display:none;">
+                                <td>&nbsp;</td>
+                                <td id="detailsGridData_@item.id" colspan="9"></td>
+                            </tr>*@
+                    }
+                </tbody>
+            </table>
+
         }
+    </div>
+    <div id="dialog" style="display: none">
+    </div>
+
+    @section scripts{
+        <!-- parsley form validator -->
+        <script src="~/Theme/scripts/parsley.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#FromDate").datepicker({ dateFormat: "yy-mm-dd" });
+                $("#ToDate").datepicker({ dateFormat: "yy-mm-dd" });
+            });
+
+        </script>
+    }
 </form>
 
 

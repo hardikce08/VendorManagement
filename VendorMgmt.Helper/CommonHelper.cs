@@ -62,7 +62,58 @@ namespace VendorMgmt.Helper
             data.Add(6, "Remittance Email Change");
             return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
         }
+        public static MvcHtmlString SelectList_ApplicationStatus<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
+        {
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            return htmlHelper.SelectList_ApplicationStatus(ExpressionHelper.GetExpressionText(expression), metadata.Model == null ? "" : metadata.Model.ToString(), htmlAttributes);
+        }
+        public static MvcHtmlString SelectList_ApplicationStatus(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
+        {
+            Dictionary<int, string> data = new Dictionary<int, string>();
+            data.Add(0, "");
+            data.Add(1, "Submitted by Vendor");
+            data.Add(2, "Submitted to Purch Manager");
+            data.Add(3, "Rejected by Purch Manager");
+            data.Add(4, "Submitted to Legal");
+            data.Add(5, "Rejected by Legal");
+            data.Add(6, "Submitted to Treasury");
+            data.Add(7, "Rejected by Treasury");
+            data.Add(8, "Submitted to 2nd Level Approver");
+            data.Add(9, "Validation Pending");
+            data.Add(10, "Process Completed");
+            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Value", "Value", selectedValue), htmlAttributes);
+        }
 
-        
+        public static MvcHtmlString SelectList_DiversityBusinessCertification<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
+        {
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            return htmlHelper.SelectList_DiversityBusinessCertification(ExpressionHelper.GetExpressionText(expression), metadata.Model == null ? "" : metadata.Model.ToString(), htmlAttributes);
+        }
+        public static MvcHtmlString SelectList_DiversityBusinessCertification(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
+        {
+            Dictionary<int, string> data = new Dictionary<int, string>();
+            data.Add(0, "Select Certification");
+            data.Add(1, "MBE - Minority Business Enterprise");
+            data.Add(2, "WBE - Women Business Enterprise");
+            data.Add(3, "VET / VOB - Veteran Owned Enterprise");
+            data.Add(4, "Not Applicable");
+            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Value", "Value", selectedValue), htmlAttributes);
+        }
+        public static MvcHtmlString SelectList_PaymentCurrency<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
+        {
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            return htmlHelper.SelectList_PaymentCurrency(ExpressionHelper.GetExpressionText(expression), metadata.Model == null ? "" : metadata.Model.ToString(), htmlAttributes);
+        }
+        public static MvcHtmlString SelectList_PaymentCurrency(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
+        {
+            Dictionary<int, string> data = new Dictionary<int, string>();
+            data.Add(0, "");
+            data.Add(1, "CAD");
+            data.Add(2, "USD");
+            data.Add(3, "EUR");
+            data.Add(4, "GBP");
+            data.Add(5, "JPY");
+            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Value", "Value", selectedValue), htmlAttributes);
+        }
     }
 }

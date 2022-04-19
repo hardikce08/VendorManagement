@@ -1,0 +1,132 @@
+ 
+/****** Object:  StoredProcedure [dbo].[CRMsp_DCSPreviousMonthToDateSummary]    Script Date: 02-04-2022 11:30:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		Hardik Shah
+-- Create date: Mar 30 2022
+-- Update date: Mar 30 2022
+-- Description:	Year to Date Summary Result
+-- =============================================
+CREATE PROCEDURE [dbo].[CRMsp_DCSPreviousMonthToDateSummary] 
+	-- Add the parameters for the stored procedure here
+@MyStartDate datetime,
+@MyEndDate datetime,
+@MyActive int
+
+AS
+BEGIN
+-- Get first of Cuurent Month summary
+ 
+SET @MyStartDate= DATEADD(month,-1,  @MyStartDate)
+SET @MyEndDate= DATEADD(month,-1,  @MyEndDate)
+print @MyStartDate
+print @MyEndDate
+
+SELECT * INTO #salesman from salesman  
+
+IF @MyActive=0
+BEGIN
+ delete from #salesman WHERE Active=0
+END
+ 
+ select s.id as SalesmanID,
+		   s.region as Region, 
+		   (s.fname + ' ' + s.lname) as Name, 
+		   (select count(leads.id) from leads where s.id = leads.salesman and (scheduled between @MyStartDate and @MyEndDate) and leads.leadresults in('SOLD', 'P & M', 'CONTRACT CANCELLED')) as [TLead], 
+		   (select count(leads.id) from leads where s.id = leads.salesman and (scheduled between @MyStartDate and @MyEndDate) and leads.leadresults in('SOLD')) as [TSold], 
+		   (select sum(leads.contract) from leads where s.id = leads.salesman and (scheduled between @MyStartDate and @MyEndDate) and leads.leadresults in ('SOLD')) as [TContract],
+	       cast(0 as decimal(10,2)) ClosePer,0 as PrevTLead,0 as PrevTSold,CAST(0 as decimal) as PrevTContract,0 as PrevClosePer
+		   into #currdata
+		   from #salesman s where s.id > 1 order by Region, Name;
+		   delete from #currdata where TLead = 0;
+		   update #currdata set TContract = 0 where TContract is null;
+		   update #currdata set ClosePer = iif(TLead = 0, 0, cast(TSold as float) / TLead);
+		  
+
+
+		   select * FROM #currdata
+
+		   DROP Table #currdata
+		
+
+END
+
+
+
+ GO
+/****** Object:  StoredProcedure [dbo].[CRMsp_DCSYearToDateSummary]    Script Date: 02-04-2022 11:30:41 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		Hardik Shah
+-- Create date: Mar 30 2022
+-- Update date: Apr 02 2022
+-- Description:	Year to Date Summary Result
+-- =============================================
+ALTER PROCEDURE [dbo].[CRMsp_DCSYearToDateSummary] 
+	-- Add the parameters for the stored procedure here
+@CurrentYear varchar(10),
+@MyEndDate datetime,
+@MyActive int
+
+AS
+BEGIN
+-- Get first of Cuurent Month summary
+Declare @MyStartDate datetime
+SET @MyStartDate=  CAST(@CurrentYear+'-01'+'-01' as datetime)
+print @MyStartDate
+print @MyEndDate
+
+SELECT * INTO #salesman from salesman  
+
+IF @MyActive=0
+BEGIN
+ delete from #salesman WHERE Active=0
+END
+ 
+ select s.id as SalesmanID,
+		   s.region as Region, 
+		   (s.fname + ' ' + s.lname) as Name, 
+		   (select count(leads.id) from leads where s.id = leads.salesman and (scheduled between @MyStartDate and @MyEndDate) and leads.leadresults in('SOLD', 'P & M', 'CONTRACT CANCELLED')) as [TLead], 
+		   (select count(leads.id) from leads where s.id = leads.salesman and (scheduled between @MyStartDate and @MyEndDate) and leads.leadresults in('SOLD')) as [TSold], 
+		   (select sum(leads.contract) from leads where s.id = leads.salesman and (scheduled between @MyStartDate and @MyEndDate) and leads.leadresults in ('SOLD')) as [TContract],
+	       0.00 ClosePer,0 as PrevTLead,0 as PrevTSold,CAST(0 as decimal) as PrevTContract,0 as PrevClosePer
+		   into #currdata
+		   from #salesman s where s.id > 1 order by Region, Name;
+		   delete from #currdata where TLead = 0;
+		   update #currdata set TContract = 0 where TContract is null;
+		   update #currdata set ClosePer = iif(TLead = 0, 0, cast(TSold as float) / TLead);
+		  
+
+		    select s.id as SalesmanID,
+		   s.region as Region, 
+		   (s.fname + ' ' + s.lname) as Name, 
+		   (select count(leads.id) from leads where s.id = leads.salesman and (scheduled between DateAdd(Year,-1, @MyStartDate) and DateAdd(Year,-1, @MyEndDate)) and leads.leadresults in('SOLD', 'P & M', 'CONTRACT CANCELLED')) as [TLead], 
+		   (select count(leads.id) from leads where s.id = leads.salesman and (scheduled between DateAdd(Year,-1, @MyStartDate) and DateAdd(Year,-1, @MyEndDate)) and leads.leadresults in('SOLD')) as [TSold], 
+		   (select sum(leads.contract) from leads where s.id = leads.salesman and (scheduled between DateAdd(Year,-1, @MyStartDate) and DateAdd(Year,-1, @MyEndDate)) and leads.leadresults in ('SOLD')) as [TContract],
+		   CAST(0 as decimal(10,2)) ClosePer
+		   into #prevdata
+		   from #salesman s where   s.id > 1 order by Region, Name;
+		   --delete from #prevdata where TLead = 0;
+		   update #prevdata set TContract = 0 where TContract is null;
+		    
+		    
+		   update #prevdata set ClosePer = CASE TLead WHEN 0 THEN CAST(0 as decimal(10,2)) ELSE cast(TSold as float) / TLead END
+		    
+		   Update #currdata set PrevTLead=p.TLead,PrevTSold=p.TSold,PrevTcontract=p.TContract,PrevClosePer=p.ClosePer
+		   From #currdata c 
+		   Join #prevdata p on c.SalesmanID=p.SalesmanID
+
+		   select * FROM #currdata
+
+		   DROP Table #currdata
+		   DROP table #prevdata
+
+END

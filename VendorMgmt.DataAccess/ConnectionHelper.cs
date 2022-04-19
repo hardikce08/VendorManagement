@@ -19,6 +19,13 @@ namespace VendorMgmt.DataAccess
                 return ConfigurationManager.ConnectionStrings[DbConnectionStringKey].ConnectionString;
             }
         }
+        public string CustomerConnectionString
+        {
+            get
+            {
+                return ConfigurationManager.ConnectionStrings["CustomerDBConnectionString"].ConnectionString;
+            }
+        }
         static string _entityConnection = null;
         public string EntityConnectionString
         {
@@ -35,5 +42,26 @@ namespace VendorMgmt.DataAccess
                 return _entityConnection;
             }
         }
+        static string _customerentityConnection = null;
+        public string CustomerEntityConnectionString
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_customerentityConnection))
+                {
+                    EntityConnectionStringBuilder entityBuilder = new EntityConnectionStringBuilder();
+                    entityBuilder.Provider = "System.Data.SqlClient";
+                    entityBuilder.ProviderConnectionString = CustomerConnectionString;
+                    entityBuilder.Metadata = @"res://*/VendorMgmt.csdl|res://*/VendorMgmt.ssdl|res://*/VendorMgmt.msl";
+                    _customerentityConnection = entityBuilder.ToString();
+                }
+                return _customerentityConnection;
+            }
+        }
+    }
+    public enum ConnectionType
+    {
+        Admin,
+        Customer
     }
 }
