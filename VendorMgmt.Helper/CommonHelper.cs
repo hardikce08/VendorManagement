@@ -91,13 +91,13 @@ namespace VendorMgmt.Helper
         }
         public static MvcHtmlString SelectList_DiversityBusinessCertification(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
         {
-            Dictionary<int, string> data = new Dictionary<int, string>();
-            data.Add(0, "Select Certification");
-            data.Add(1, "MBE - Minority Business Enterprise");
-            data.Add(2, "WBE - Women Business Enterprise");
-            data.Add(3, "VET / VOB - Veteran Owned Enterprise");
-            data.Add(4, "Not Applicable");
-            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Value", "Value", selectedValue), htmlAttributes);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("", "Select Certification");
+            data.Add("MBE - Minority Business Enterprise", "MBE - Minority Business Enterprise");
+            data.Add("WBE - Women Business Enterprise", "WBE - Women Business Enterprise");
+            data.Add("VET / VOB - Veteran Owned Enterprise", "VET / VOB - Veteran Owned Enterprise");
+            data.Add("Not Applicable", "Not Applicable");
+            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
         }
         public static MvcHtmlString SelectList_PaymentCurrency<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
         {
@@ -114,6 +114,24 @@ namespace VendorMgmt.Helper
             data.Add(4, "GBP");
             data.Add(5, "JPY");
             return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Value", "Value", selectedValue), htmlAttributes);
+        }
+
+
+        public static async Task<MvcHtmlString> SelectList_AzureAdUsers<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
+        {
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            return await htmlHelper.SelectList_AzureAdUsers(ExpressionHelper.GetExpressionText(expression), metadata.Model == null ? "True" : metadata.Model.ToString(), htmlAttributes);
+        }
+        public static async Task<MvcHtmlString> SelectList_AzureAdUsers(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            var lstusers = await MicrosoftGraphClient.GetAllUsers();
+            foreach (var user in lstusers)
+            {
+                data.Add(user.EmailAddress, user.DisplayName);
+            }
+
+            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
         }
     }
 }

@@ -2199,7 +2199,9 @@ namespace VendorMgmt.Model
         /// <param name="linkExpired">Initial value of the LinkExpired property.</param>
         /// <param name="updatedDate">Initial value of the UpdatedDate property.</param>
         /// <param name="linkGuid">Initial value of the LinkGuid property.</param>
-        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate, global::System.Boolean linkExpired, global::System.DateTime updatedDate, global::System.String linkGuid)
+        /// <param name="purchaseManagerApproved">Initial value of the PurchaseManagerApproved property.</param>
+        /// <param name="worldCheckApproved">Initial value of the WorldCheckApproved property.</param>
+        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate, global::System.Boolean linkExpired, global::System.DateTime updatedDate, global::System.String linkGuid, global::System.Boolean purchaseManagerApproved, global::System.Boolean worldCheckApproved)
         {
             VendorMaster vendorMaster = new VendorMaster();
             vendorMaster.Id = id;
@@ -2210,6 +2212,8 @@ namespace VendorMgmt.Model
             vendorMaster.LinkExpired = linkExpired;
             vendorMaster.UpdatedDate = updatedDate;
             vendorMaster.LinkGuid = linkGuid;
+            vendorMaster.PurchaseManagerApproved = purchaseManagerApproved;
+            vendorMaster.WorldCheckApproved = worldCheckApproved;
             return vendorMaster;
         }
 
@@ -2507,6 +2511,54 @@ namespace VendorMgmt.Model
         private global::System.String _LinkGuid;
         partial void OnLinkGuidChanging(global::System.String value);
         partial void OnLinkGuidChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean PurchaseManagerApproved
+        {
+            get
+            {
+                return _PurchaseManagerApproved;
+            }
+            set
+            {
+                OnPurchaseManagerApprovedChanging(value);
+                ReportPropertyChanging("PurchaseManagerApproved");
+                _PurchaseManagerApproved = StructuralObject.SetValidValue(value, "PurchaseManagerApproved");
+                ReportPropertyChanged("PurchaseManagerApproved");
+                OnPurchaseManagerApprovedChanged();
+            }
+        }
+        private global::System.Boolean _PurchaseManagerApproved;
+        partial void OnPurchaseManagerApprovedChanging(global::System.Boolean value);
+        partial void OnPurchaseManagerApprovedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean WorldCheckApproved
+        {
+            get
+            {
+                return _WorldCheckApproved;
+            }
+            set
+            {
+                OnWorldCheckApprovedChanging(value);
+                ReportPropertyChanging("WorldCheckApproved");
+                _WorldCheckApproved = StructuralObject.SetValidValue(value, "WorldCheckApproved");
+                ReportPropertyChanged("WorldCheckApproved");
+                OnWorldCheckApprovedChanged();
+            }
+        }
+        private global::System.Boolean _WorldCheckApproved;
+        partial void OnWorldCheckApprovedChanging(global::System.Boolean value);
+        partial void OnWorldCheckApprovedChanged();
 
         #endregion
 
@@ -4279,14 +4331,16 @@ namespace VendorMgmt.Model
         /// <param name="vendorId">Initial value of the VendorId property.</param>
         /// <param name="requestorName">Initial value of the RequestorName property.</param>
         /// <param name="purchasingManager">Initial value of the PurchasingManager property.</param>
+        /// <param name="purchaseComments">Initial value of the PurchaseComments property.</param>
         /// <param name="createdDate">Initial value of the CreatedDate property.</param>
-        public static VendorWorkFlowInfo CreateVendorWorkFlowInfo(global::System.Int32 id, global::System.Int32 vendorId, global::System.String requestorName, global::System.String purchasingManager, global::System.DateTime createdDate)
+        public static VendorWorkFlowInfo CreateVendorWorkFlowInfo(global::System.Int32 id, global::System.Int32 vendorId, global::System.String requestorName, global::System.String purchasingManager, global::System.String purchaseComments, global::System.DateTime createdDate)
         {
             VendorWorkFlowInfo vendorWorkFlowInfo = new VendorWorkFlowInfo();
             vendorWorkFlowInfo.Id = id;
             vendorWorkFlowInfo.VendorId = vendorId;
             vendorWorkFlowInfo.RequestorName = requestorName;
             vendorWorkFlowInfo.PurchasingManager = purchasingManager;
+            vendorWorkFlowInfo.PurchaseComments = purchaseComments;
             vendorWorkFlowInfo.CreatedDate = createdDate;
             return vendorWorkFlowInfo;
         }
@@ -4421,7 +4475,7 @@ namespace VendorMgmt.Model
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String PurchaseComments
         {
@@ -4433,7 +4487,7 @@ namespace VendorMgmt.Model
             {
                 OnPurchaseCommentsChanging(value);
                 ReportPropertyChanging("PurchaseComments");
-                _PurchaseComments = StructuralObject.SetValidValue(value, true, "PurchaseComments");
+                _PurchaseComments = StructuralObject.SetValidValue(value, false, "PurchaseComments");
                 ReportPropertyChanged("PurchaseComments");
                 OnPurchaseCommentsChanged();
             }
@@ -4465,6 +4519,30 @@ namespace VendorMgmt.Model
         private global::System.DateTime _CreatedDate;
         partial void OnCreatedDateChanging(global::System.DateTime value);
         partial void OnCreatedDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WorldCheckApprover
+        {
+            get
+            {
+                return _WorldCheckApprover;
+            }
+            set
+            {
+                OnWorldCheckApproverChanging(value);
+                ReportPropertyChanging("WorldCheckApprover");
+                _WorldCheckApprover = StructuralObject.SetValidValue(value, true, "WorldCheckApprover");
+                ReportPropertyChanged("WorldCheckApprover");
+                OnWorldCheckApproverChanged();
+            }
+        }
+        private global::System.String _WorldCheckApprover;
+        partial void OnWorldCheckApproverChanging(global::System.String value);
+        partial void OnWorldCheckApproverChanged();
 
         #endregion
 

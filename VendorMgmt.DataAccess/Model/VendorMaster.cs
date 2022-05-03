@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VendorMgmt.Helper;
 
 namespace VendorMgmt.DataAccess.Model
 {
@@ -28,6 +29,8 @@ namespace VendorMgmt.DataAccess.Model
 
         public string LinkGuid { get; set; }
         public bool LinkExpired { get; set; }
+        public bool PurchaseManagerApproved { get; set; }
+        public bool WorldCheckApproved { get; set; }
     }
 
     public class VendorFillInfo
@@ -52,6 +55,13 @@ namespace VendorMgmt.DataAccess.Model
         public string CompanyName { get; set; }
         public string LinkGuid { get; set; }
         public string UserRegistrationCode { get; set; }
+        public string BusinessName { get; set; }
+        public string VendorEmail { get; set; }
+        public string DofascoEmail { get; set; }
+        public string PurchaseApproverEmail { get; set; }
+        public bool IsPurchaseManagerApproved { get; set; }
+        public bool IsWorldCheckApproved { get; set; }
+        public List<AzureUserList> lstUsers { get; set; }
     }
 
     public class VendorBasicInfo
@@ -253,6 +263,7 @@ namespace VendorMgmt.DataAccess.Model
         public string PurchaseComments { get; set; }
 
         public DateTime CreatedDate { get; set; }
+        public string WorldCheckApprover { get; set; }
     }
     public class VendorTreasuryInfo
     {
@@ -315,5 +326,6 @@ namespace VendorMgmt.DataAccess.Model
 
         public string ParentLevelText { get; set; }
     }
+    
 
 }

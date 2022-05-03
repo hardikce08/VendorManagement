@@ -27,7 +27,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label for="input-placeholder" class="require"><strong>Template Name</strong></label>
-                                @Html.TextBoxFor(c => c.Name, new { @class = "form-control form-control-sm", @required = "", @style = "width:100%;" })
+                                @Html.TextBoxFor(c => c.Name, new { @class = "form-control form-control-sm", @required = "", @readonly = "readonly" , @style = "width:100%;" })
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -104,7 +104,8 @@
                     ['fontname', ['fontname']],
                     ['picture', ['picture', 'link', 'table', 'hr']],
                     ['para', ['ul', 'ol', 'paragraph']],
-                    ['height', ['height']]
+                    ['height', ['height']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
                 ]
             });
         });

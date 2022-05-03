@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Graph;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using VendorMgmt.DataAccess;
@@ -52,6 +54,13 @@ namespace VendorMgmt.Web.Controllers
                 ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
                 // The 'preferred_username' claim can be used for showing the username
                 ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+                //EmailTemplateService es = new EmailTemplateService();
+                //var Emailbody = es.EmailTemplateByName("Normal").EmailBody;
+                //Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/FillInfo/" + model.LinkGuid);
+                //Emailbody = Emailbody.Replace("{CompanyName}", model.BusinessName);
+                //Emailbody = Emailbody.Replace("{RegCode}", model.RegistrationCode);
+                //Emailbody = Emailbody.Replace("{DofascoContact}", model.DofascoEmail);
+                //Functions.SendEmailUsingOffice365("hardikce.08@gmail.com", "Fill Information", Emailbody, model.nsKnox);
             }
             else
             {
@@ -66,10 +75,10 @@ namespace VendorMgmt.Web.Controllers
                 EmailTemplateService es = new EmailTemplateService();
                 if (model.nsKnox)
                 {
-                    Emailbody = es.EmailTemplateById(2).EmailBody;
+                    Emailbody = es.EmailTemplateByName("nxKnox").EmailBody;
                 }
                 else
-                { Emailbody = es.EmailTemplateById(1).EmailBody; }
+                { Emailbody = es.EmailTemplateByName("Normal").EmailBody; }
                 var existingdata = vs.VendorMasters.Where(p => p.RegistrationCode == model.RegistrationCode).FirstOrDefault();
                 if (existingdata != null)
                 {
@@ -86,7 +95,7 @@ namespace VendorMgmt.Web.Controllers
                 Emailbody = Emailbody.Replace("{CompanyName}", model.BusinessName);
                 Emailbody = Emailbody.Replace("{RegCode}", model.RegistrationCode);
                 Emailbody = Emailbody.Replace("{DofascoContact}", model.DofascoEmail);
-                Functions.SendEmail("hardikce.08@gmail.com", "New Vendor Added", Emailbody, model.nsKnox);
+                Functions.SendEmail(model.VendorEmail, "Fill Information", Emailbody, model.nsKnox);
 
                 vs.VendorMaster_InsertOrUpdate(model);
                 ViewBag.JavaScriptFunction = "successToast('New Vendor Added');";

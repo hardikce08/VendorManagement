@@ -41,14 +41,23 @@ namespace VendorMgmt.Web
                     vs.VendorAttachmentInfo_InsertOrUpdate(attachment);
                 }
                 var PurchaseInfo = Customervs.VendorPurchasingInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
-                PurchaseInfo.Id = 0;
-                vs.VendorPurchasingInfo_InsertOrUpdate(PurchaseInfo);
+                if (PurchaseInfo != null)
+                {
+                    PurchaseInfo.Id = 0;
+                    vs.VendorPurchasingInfo_InsertOrUpdate(PurchaseInfo);
+                }
                 var WorkFlowInfo = Customervs.VendorWorkFlowInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
-                WorkFlowInfo.Id = 0;
-                vs.VendorWorkFlowInfo_InsertOrUpdate(WorkFlowInfo);
+                if (WorkFlowInfo != null)
+                {
+                    WorkFlowInfo.Id = 0;
+                    vs.VendorWorkFlowInfo_InsertOrUpdate(WorkFlowInfo);
+                }
                 var TreasuryInfo = Customervs.VendorTreasuryInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
-                TreasuryInfo.Id = 0;
-                vs.VendorTreasuryInfo_InsertOrUpdate(TreasuryInfo);
+                if (TreasuryInfo != null)
+                {
+                    TreasuryInfo.Id = 0;
+                    vs.VendorTreasuryInfo_InsertOrUpdate(TreasuryInfo);
+                }
                 vs.DeleteVendorFromCustomer(VendorId);
                 ProcessCancellation();
             }

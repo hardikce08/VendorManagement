@@ -30,8 +30,9 @@
     @*Main Styles*@
     <link href="~/Theme/css/main.css?v=1.0" rel="stylesheet" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link href="~/Theme/css/sweetalert2.min.css" rel="stylesheet" />
     @*@Styles.Render("~/Theme/css")*@
-    <style type="text/css">
+<style type="text/css">
         main .main-header .header-info {
             padding: 5px 30px;
         }
@@ -50,10 +51,23 @@
         main {
             margin-left: 0px;
         }
+
         .header-right {
-            color:#fff;
+            color: #fff;
         }
-    </style>
+
+         #load {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background: #0020ff36;
+            z-index: 9999;
+            background: url('@Url.Content("~/Theme/images/Loader.gif")') 50% 50% no-repeat #0020ff36;
+        }
+
+</style>
 </head>
 <body>
     <div id='load' style="display:none;">
@@ -70,60 +84,60 @@
                 </div>
             </div>-->
         @*<ul class="menu" id="navmenu">
-            <li class="menu-category">MAIN</li>
-                <li class="nav-sub active">
-                    <a href=""><i class="fas fa-desktop nav-icon"></i>Dashboard</a>
-                    <ul class="sub-menu">
-                        <li class="active"><a href="index.html">Dashboard 1</a></li>
-                        <li><a href="dashboard-crypto.html">Crypto Currency</a></li>
-                        <li><a href="dashboard-support.html">Support Center</a></li>
-                    </ul>
-                </li>
-                <li class="nav-sub">
-                    <a href=""><i class="fas fa-align-left nav-icon"></i>Menu Styles</a>
-                    <ul class="sub-menu">
-                        <li><a href="side-menu-light.html">Side Menu Light</a></li>
-                        <li><a href="side-menu-transparent.html">Side Menu Transparent</a></li>
-                    </ul>
-                </li>
-                <li class="menu-category">UI</li>
-                <li class="nav-sub">
-                    <a href=""><i class="fab fa-uikit nav-icon"></i>UI Elements</a>
-                    <ul class="sub-menu">
-                        <li><a href="ui-buttons.html">Buttons</a></li>
-                        <li><a href="ui-typography.html">Typography</a></li>
-                        <li><a href="ui-alert.html">Notifications</a></li>
-                        <li><a href="ui-modal.html">Modals</a></li>
-                        <li><a href="ui-progress.html">Progress Bar</a></li>
-                        <li><a href="ui-tabs.html">Tabs &amp; Accordions</a></li>
-                        <li><a href="ui-navbars.html">Navbars</a></li>
-                        <li><a href="ui-breadcrumbs.html">Breadcrumbs</a></li>
-                        <li><a href="ui-blockquote.html">Blockquotes</a></li>
-                        <li><a href="ui-pagination.html">Pagination</a></li>
-                        <li><a href="ui-badges-labels.html">Badges &amp; Labels</a></li>
-                        <li><a href="ui-timeline.html">Timeline</a></li>
-                        <li><a href="ui-preloaders.html">Preloaders</a></li>
-                        <li><a href="ui-carousel.html">Carousel</a></li>
-                    </ul>
-                </li>
-                <li class="nav-sub">
-                    <a href=""><i class="fa fa-check-circle nav-icon"></i>Forms</a>
-                    <ul class="sub-menu">
-                        <li><a href="form-input.html">Inputs</a></li>
-                        <li><a href="form-controls.html">Controls</a></li>
-                        <li><a href="form-upload.html">Upload</a></li>
-                        <li><a href="form-range-slider.html">Range Slider</a></li>
-                        <li><a href="form-editor.html">Editor</a></li>
-                        <li><a href="form-mask.html">Mask</a></li>
-                        <li><a href="form-validation.html">Validation</a></li>
-                        <li><a href="form-wizard.html">Wizard</a></li>
-                    </ul>
-                </li>
-            <li data-menuPageId="home"><a href="~/DashBoard" title="Dashboard"><i class="fa fa-table nav-icon"></i>Dashboard</a></li>
+                <li class="menu-category">MAIN</li>
+                    <li class="nav-sub active">
+                        <a href=""><i class="fas fa-desktop nav-icon"></i>Dashboard</a>
+                        <ul class="sub-menu">
+                            <li class="active"><a href="index.html">Dashboard 1</a></li>
+                            <li><a href="dashboard-crypto.html">Crypto Currency</a></li>
+                            <li><a href="dashboard-support.html">Support Center</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-sub">
+                        <a href=""><i class="fas fa-align-left nav-icon"></i>Menu Styles</a>
+                        <ul class="sub-menu">
+                            <li><a href="side-menu-light.html">Side Menu Light</a></li>
+                            <li><a href="side-menu-transparent.html">Side Menu Transparent</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-category">UI</li>
+                    <li class="nav-sub">
+                        <a href=""><i class="fab fa-uikit nav-icon"></i>UI Elements</a>
+                        <ul class="sub-menu">
+                            <li><a href="ui-buttons.html">Buttons</a></li>
+                            <li><a href="ui-typography.html">Typography</a></li>
+                            <li><a href="ui-alert.html">Notifications</a></li>
+                            <li><a href="ui-modal.html">Modals</a></li>
+                            <li><a href="ui-progress.html">Progress Bar</a></li>
+                            <li><a href="ui-tabs.html">Tabs &amp; Accordions</a></li>
+                            <li><a href="ui-navbars.html">Navbars</a></li>
+                            <li><a href="ui-breadcrumbs.html">Breadcrumbs</a></li>
+                            <li><a href="ui-blockquote.html">Blockquotes</a></li>
+                            <li><a href="ui-pagination.html">Pagination</a></li>
+                            <li><a href="ui-badges-labels.html">Badges &amp; Labels</a></li>
+                            <li><a href="ui-timeline.html">Timeline</a></li>
+                            <li><a href="ui-preloaders.html">Preloaders</a></li>
+                            <li><a href="ui-carousel.html">Carousel</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-sub">
+                        <a href=""><i class="fa fa-check-circle nav-icon"></i>Forms</a>
+                        <ul class="sub-menu">
+                            <li><a href="form-input.html">Inputs</a></li>
+                            <li><a href="form-controls.html">Controls</a></li>
+                            <li><a href="form-upload.html">Upload</a></li>
+                            <li><a href="form-range-slider.html">Range Slider</a></li>
+                            <li><a href="form-editor.html">Editor</a></li>
+                            <li><a href="form-mask.html">Mask</a></li>
+                            <li><a href="form-validation.html">Validation</a></li>
+                            <li><a href="form-wizard.html">Wizard</a></li>
+                        </ul>
+                    </li>
+                <li data-menuPageId="home"><a href="~/DashBoard" title="Dashboard"><i class="fa fa-table nav-icon"></i>Dashboard</a></li>
 
-        </ul>*@
+            </ul>*@
         <!--</nav>
-    </aside>-->
+        </aside>-->
         <!-- aside nav //. -->
         <!-- header -->
         <header>
@@ -136,9 +150,9 @@
                 </a>
                 <div class="header">
                     <div class="logo">
-                        
-                            <img src="~/Theme/images/Companylogo.png" style="height:65px;margin-right:10px;margin-top:5px;" />
-                         
+
+                        <img src="~/Theme/images/Companylogo.png" style="height:65px;margin-right:10px;margin-top:5px;" />
+
                     </div>
                 </div>
                 <!-- window full screen -->
@@ -168,12 +182,12 @@
         </header><!-- header //. -->
         <main>
             @*<div class="main-header">
-                <div class="header-info">
-                    <h1 class="title">
-                        @ViewBag.Title
-                    </h1>
-                </div>
-            </div>*@
+                    <div class="header-info">
+                        <h1 class="title">
+                            @ViewBag.Title
+                        </h1>
+                    </div>
+                </div>*@
             <div class="content">
                 <div class="card">
                     <div class="card-body">
@@ -213,6 +227,7 @@
     <script src="~/Theme/scripts/dataTables.responsive.min.js"></script>
     <!-- summernote editor -->
     <script src="~/Theme/scripts/summernote-bs4.min.js"></script>
+    <script src="~/Theme/scripts/sweetalert2.min.js"></script>
     <script type="text/javascript">
         $(function () {
 
@@ -274,6 +289,12 @@
         var showLoader = function (form) {
             $("#load").show();
         }
+        $(document).ajaxStart(function () {
+            $("#load").show();
+        });
+        $(document).ajaxStop(function () {
+            $("#load").hide();
+        });
         var successToast = function (message) {
             $.toast({
                 heading: 'Success',

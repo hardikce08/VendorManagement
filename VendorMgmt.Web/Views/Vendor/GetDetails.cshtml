@@ -60,15 +60,17 @@
             background-color: #f7f7f7;
             border-radius: 3px;
         }
+
             .wizard > .content > .body {
-                padding-top:1% !important;
+                padding-top: 1% !important;
             }
-            .error {
-                width: 100%;
-                height: 0vh;
-                background: none;
-                background: -webkit-linear-gradient(to top, #dbdbdb 30%, #fff 100%);
-            }
+
+        .error {
+            width: 100%;
+            height: 0vh;
+            background: none;
+            background: -webkit-linear-gradient(to top, #dbdbdb 30%, #fff 100%);
+        }
 
         .subheader {
             color: white;
@@ -104,6 +106,7 @@
             padding: 5px 15px;
             border-top: none;
         }
+
         .customradiotext {
             padding-left: 15px;
             margin: -6px;
@@ -119,12 +122,12 @@
     <div class="wrapper">
         <main>
             @*<div class="main-header">
-                    <div class="header-info">
-                        <h1 class="title">
-                            @ViewBag.Title
-                        </h1>
-                    </div>
-                </div>*@
+                <div class="header-info">
+                    <h1 class="title">
+                        @ViewBag.Title
+                    </h1>
+                </div>
+            </div>*@
             <div class="content">
                 <div class="document">
                     <!-- wizard basic -->
@@ -542,6 +545,7 @@
                                                 @Html.HiddenFor(m => m.PurchaseInfo.Id)
                                                 @Html.HiddenFor(m => m.VendorId)
                                                 @Html.HiddenFor(m => m.RegistrationCode)
+                                                @Html.HiddenFor(m => m.BusinessName)
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Trading Partner</strong></label>
@@ -588,7 +592,7 @@
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Spend Tree Level 2</strong></label>
                                                         @*@Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.SpendTreeLevel2, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel2, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,3);", @required = "required" })
+                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel2, (ViewData["SpanTreeLevel2"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel2"]), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,3);", @required = "required" })
 
                                                     </div>
                                                 </div>
@@ -596,14 +600,14 @@
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Spend Tree Level 3</strong></label>
                                                         @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreeLevel3, new { @class = "form-control form-control-sm" })*@
-                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel3, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,4);", @required = "required" })
+                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel3, (ViewData["SpanTreeLevel3"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel3"]), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,4);", @required = "required" })
 
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Spend Tree Level 4</strong></label>
-                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel4, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @required = "required" })
+                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel4, (ViewData["SpanTreeLevel4"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel4"]), new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -614,22 +618,34 @@
                                                 @Html.HiddenFor(m => m.WorkFlowInfo.Id)
                                                 @Html.HiddenFor(m => m.VendorId)
                                                 @Html.HiddenFor(m => m.RegistrationCode)
-                                                <div class="col-lg-4">
+                                                @Html.HiddenFor(m => m.PurchaseApproverEmail)
+                                                <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Requestor Name</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.WorkFlowInfo.RequestorName, new { @class = "form-control form-control-sm", @required = "required" })
+                                                        @*@Html.SelectList_AzureAdUsers(model => model.WorkFlowInfo.RequestorName, new { @class = "form-control form-control-sm", @required = "required" })*@
+                                                        @Html.DropDownList("WorkFlowInfo_RequestorName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.RequestorName), new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Purchasing Manager</strong></label>
-                                                        @Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                        @*@Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                                                        @Html.DropDownList("WorkFlowInfo_PurchasingManager", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.PurchasingManager), new { @class = "form-control form-control-sm", @required = "required" })
+
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>World Check Approver</strong></label>
+                                                        @*@Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.WorldCheckApprover, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                                                        @Html.DropDownList("WorkFlowInfo_WorldCheckApprover", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.WorldCheckApprover), new { @class = "form-control form-control-sm", @required = "required" })
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder"><strong>Vendor Number</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(m => m.WorkFlowInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @Disabled = "Disabled" })
+                                                        @Html.TextBoxFor(m => m.WorkFlowInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @Disabled = "Disabled" })
                                                     </div>
                                                 </div>
 
@@ -657,13 +673,15 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm", @required = "required" })
+                                                        @*@Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm", @required = "required" })*@
+                                                        @Html.DropDownList("TreasuryInfo_ActionerName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.ActionerName), new { @class = "form-control form-control-sm", @required = "required" })
+
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Vendor Number</strong></label>
-                                                        @Html.SelectList_AccountGroupName(m => m.TreasuryInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                        @Html.TextBoxFor(m => m.TreasuryInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
@@ -714,7 +732,7 @@
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
-                                                        @Html.SelectList_YesNoFor(model => model.TreasuryInfo.Level2ApproverName, new { @class = "form-control form-control-sm" })
+                                                        @Html.DropDownList("TreasuryInfo_Level2ApproverName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.Level2ApproverName), new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -728,7 +746,8 @@
                                                 <div class="col-lg-2">
                                                     <div class="form-group row">
                                                         @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.RadioButtonFor(m => m.TreasuryInfo.Level2ChecklistInfo, Model.TreasuryInfo.Level2ChecklistInfo, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", !Model.TreasuryInfo.Level2ChecklistInfo) <label class="customradiotext"> Yes</label>
+                                                        @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", Model.TreasuryInfo.Level2ChecklistInfo)  <label class="customradiotext"> No</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -751,6 +770,8 @@
         </main>
         <input type="hidden" id="currentPageId" value="@(ViewBag.Page ?? "home")" />
         <input type="hidden" id="HasError" value="0" />
+        @Html.HiddenFor(m => m.IsPurchaseManagerApproved)
+        @Html.HiddenFor(m => m.IsWorldCheckApproved)
     </div>
     @*</form>*@
     <!-- =========================================================-->
@@ -779,7 +800,7 @@
         var successToast = function () {
             $.toast({
                 heading: 'Success',
-                text: 'New Vendor Added',
+                text: 'Email Sent to Purchase Approval',
                 showHideTransition: 'fade',
                 icon: 'success',
                 loaderBg: 'rgba(255,255,255,.8)',
@@ -812,6 +833,15 @@
                     loading: "Loading ..."
                 },
                 titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>',
+                //onStepChanged: function (event, currentIndex, priorIndex) {
+                //    if (currentIndex == 2) {
+                //        var $input = $('<input type="submit" value="test" />');
+                //        $input.appendTo($('ul[aria-label=Pagination]'));
+                //    }
+                //    else {
+                //        $('ul[aria-label=Pagination] input[value="test"]').remove();
+                //    }
+                //}
                 // Triggered when clicking the Previous/Next buttons
                 onStepChanging: function (e, currentIndex, newIndex) {
                     var HasError = false;
@@ -819,6 +849,107 @@
                     if (newIndex > currentIndex) {
                         if (currentIndex == 0) {
                             var Isvalidated = $("#step1").parsley().validate();
+                            if (Isvalidated) {
+                                SaveStep1();
+                            }
+                            else { return false; }
+                        }
+                        else if (currentIndex == 1) {
+
+                            var Isvalidated = $("#step2").parsley().validate();
+                            if (Isvalidated) {
+                                SaveStep2();
+                            }
+                            else { return false; }
+                        }
+                        else if (currentIndex == 2) {
+                            var Isvalidated = $("#step3").parsley().validate();
+                            if (Isvalidated) {
+                                SaveStep3();
+                            }
+                            else { return false; }
+                        }
+                        else if (currentIndex == 3) {
+                            var Isvalidated = $("#step4").parsley().validate();
+                            if (Isvalidated) {
+                                SaveStep4();
+                            }
+                            else { return false; }
+                        }
+
+                    }
+
+                    if (newIndex == 3) {
+
+                        if (($("#IsPurchaseManagerApproved").val() == "False" || $("#IsWorldCheckApproved").val() == "False")) {
+                            $("ul[aria-label=Pagination] li:eq(2)").remove();
+                        }
+                    }
+                    if (HasError) { return false; }
+                    else { return true; }
+                },
+                onFinished: function (event, currentIndex) {
+                    var HasError = false;
+                            var Isvalidated = $("#step5").parsley().validate();
+                            if (Isvalidated) {
+                                SaveStep5();
+                            }
+                            else { return false; }
+
+                    if (HasError) { return false; }
+                    else { return true; }
+                }
+            });
+
+            var $inputforStep1 = $('<li aria-hidden="false" aria-disabled="false"><button id="btnStep1" class="btn btn-primary btn-shadow">Save</button></li>');
+            //$input.appendTo($('ul[aria-label=Pagination] li:eq(0)'));
+            $("ul[aria-label=Pagination] li:eq(0)").after($inputforStep1);
+
+            $("#btnStep1").on("click", function () {
+                if ($(".wizard-basic").steps("getCurrentIndex") == 0)
+                {
+                    SaveStep1();
+                }
+                else if ($(".wizard-basic").steps("getCurrentIndex") == 1) {
+                    SaveStep2();
+                }
+                else if ($(".wizard-basic").steps("getCurrentIndex") == 2) {
+                    SaveStep3();
+                }
+                else if ($(".wizard-basic").steps("getCurrentIndex") == 3) {
+                    $("#load").show();
+                    SaveStep4();
+                    $("#load").hide();
+                }
+                else if ($(".wizard-basic").steps("getCurrentIndex") == 3) {
+                    SaveStep5();
+                }
+                });
+        $("#fileInput").on("change", function () {
+            var fileInput = document.getElementById('fileInput');
+            //alert(fileInput.files.length);
+            //Iterating through each files selected in fileInput
+            for (i = 0; i < fileInput.files.length; i++) {
+
+                var sfilename = fileInput.files[i].name;
+                let srandomid = Math.random().toString(36).substring(7);
+                //alert(formdata);
+                formdata.append(sfilename, fileInput.files[i]);
+
+                var markup = "<tr id='" + srandomid + "'><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'><span class='red'><i class=\"fs-20 fa fa-trash mr-10\"></i></span></a></td></tr>"; // Binding the file name
+                $("#FilesList tbody").append(markup);
+
+            }
+            chkatchtbl();
+            $('#fileInput').val('');
+        });
+
+
+        });
+        function SaveStep1() {
+
+             var Isvalidated = $("#step1").parsley().validate();
                             if (Isvalidated) {
 
                                 $.ajax({
@@ -835,7 +966,6 @@
                                         else {
                                             $("#BasicInfo_Id").val(data.BasicInfoId);
                                             $("#FinancialInfo_Id").val(data.FinancialInfoId);
-
                                         }
                                     },
                                     error: function (xhr, ajaxOptions, thrownError) {
@@ -843,12 +973,12 @@
                                         alert('Failed to retrieve detail data.');
                                     }
                                 });
-                            }
+            }
                             else { return false; }
-                        }
-                        else if (currentIndex == 1) {
 
-                            var Isvalidated = $("#step2").parsley().validate();
+        }
+        function SaveStep2() {
+              var Isvalidated = $("#step2").parsley().validate();
                             if (Isvalidated) {
 
                                 $.ajax({
@@ -875,146 +1005,111 @@
                                         alert('Failed to retrieve detail data.');
                                     }
                                 });
-                            }
-                            else { return false; }
-                        }
-                        else if (currentIndex == 2) {
-                            var Isvalidated = $("#step3").parsley().validate();
-                            if (Isvalidated) {
-
-                                $.ajax({
-                                    cache: false,
-                                    async: false,
-                                    type: "POST",
-                                    url: "@(Url.Action("SaveTab3Admin"))",
-                                    data: $("#step3").serializeArray(),
-                                    success: function (data) {
-
-                                        if (data.BankingInfoId == undefined || data.BankingInfoId == 0) {
-                                            HasError = true;
-                                            errorToast();
-                                        }
-                                        else {
-                                            $("#BankingInfo_Id").val(data.BankingInfoId);
-                                        }
-                                    },
-                                    error: function (xhr, ajaxOptions, thrownError) {
-                                        $("#divLoader").hide(); // hide loader
-                                        alert('Failed to retrieve detail data.');
-                                    }
-                                });
-                                formdata.delete("VendorId");
-                                formdata.append('VendorId', $('#VendorId').val());
-                                $.ajax({
-                                    url: '/Vendor/UploadFilesAdmin',
-                                    type: "POST",
-                                    contentType: false, // Not to set any content header
-                                    processData: false, // Not to process data
-                                    data: formdata,
-                                    async: false,
-                                    success: function (result) {
-                                        if (result != "") {
-                                            alert(result);
-                                        }
-                                    },
-                                    error: function (err) {
-                                        alert(err.statusText);
-                                    }
-                                });
-
-                            }
-                            else { return false; }
-                        }
-                        else if (currentIndex == 3) {
-                            var Isvalidated = $("#step4").parsley().validate();
-                            if (Isvalidated) {
-
-                                $.ajax({
-                                    cache: false,
-                                    async: false,
-                                    type: "POST",
-                                    url: "@(Url.Action("SaveTab4Admin"))",
-                                    data: $("#step4").serializeArray(),
-                                    success: function (data) {
-
-                                        if (data.PurchaseInfoId == undefined || data.PurchaseInfoId == 0) {
-                                            HasError = true;
-                                            errorToast();
-                                        }
-                                        else {
-                                            $("#PurchaseInfo_Id").val(data.PurchaseInfoId);
-                                        }
-                                    },
-                                    error: function (xhr, ajaxOptions, thrownError) {
-                                        $("#divLoader").hide(); // hide loader
-                                        alert('Failed to retrieve detail data.');
-                                    }
-                                });
-                            }
-                            else { return false; }
-                        }
-
-                    }
-                    if (HasError) { return false; }
-                    else { return true; }
-                },
-                onFinished: function (event, currentIndex) {
-                    var HasError = false;
-                            var Isvalidated = $("#step5").parsley().validate();
-                            if (Isvalidated) {
-                                $.ajax({
-                                    cache: false,
-                                    async: false,
-                                    type: "POST",
-                                    url: "@(Url.Action("SaveTab5Admin"))",
-                                    data: $("#step5").serializeArray(),
-                                    success: function (data) {
-
-                                        if (data.TreasuryInfoId == undefined || data.TreasuryInfoId == 0) {
-                                            HasError = true;
-                                            errorToast();
-                                        }
-                                        else {
-                                            $("#TreasuryInfo_Id").val(data.TreasuryInfoId);
-                                        }
-                                    },
-                                    error: function (xhr, ajaxOptions, thrownError) {
-                                        $("#divLoader").hide(); // hide loader
-                                        alert('Failed to retrieve detail data.');
-                                    }
-                                });
-                            }
-                            else { return false; }
-
-                    if (HasError) { return false; }
-                    else { return true; }
-                }
-            });
-
-
-        $("#fileInput").on("change", function () {
-            var fileInput = document.getElementById('fileInput');
-            //alert(fileInput.files.length);
-            //Iterating through each files selected in fileInput
-            for (i = 0; i < fileInput.files.length; i++) {
-
-                var sfilename = fileInput.files[i].name;
-                let srandomid = Math.random().toString(36).substring(7);
-                //alert(formdata);
-                formdata.append(sfilename, fileInput.files[i]);
-
-                var markup = "<tr id='" + srandomid + "'><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                    "\")'><span class='red'><i class=\"fs-20 fa fa-trash mr-10\"></i></span></a></td></tr>"; // Binding the file name
-                $("#FilesList tbody").append(markup);
-
             }
-            chkatchtbl();
-            $('#fileInput').val('');
-        });
+                            else { return false; }
+        }
 
+        function SaveStep3() {
+            var Isvalidated = $("#step3").parsley().validate();
+            if (Isvalidated) {
+                $.ajax({
+                    cache: false,
+                    async: false,
+                    type: "POST",
+                    url: "@(Url.Action("SaveTab3Admin"))",
+                    data: $("#step3").serializeArray(),
+                    success: function (data) {
 
-        });
+                        if (data.BankingInfoId == undefined || data.BankingInfoId == 0) {
+                            HasError = true;
+                            errorToast();
+                        }
+                        else {
+                            $("#BankingInfo_Id").val(data.BankingInfoId);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $("#divLoader").hide(); // hide loader
+                        alert('Failed to retrieve detail data.');
+                    }
+                });
+                formdata.delete("VendorId");
+                formdata.append('VendorId', $('#VendorId').val());
+                $.ajax({
+                    url: '/Vendor/UploadFilesAdmin',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: formdata,
+                    async: false,
+                    success: function (result) {
+                        if (result != "") {
+                            alert(result);
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            }
+            else { return false; }
+        }
+        function SaveStep4() {
+            var Isvalidated = $("#step4").parsley().validate();
+            if (Isvalidated) {
+                $.ajax({
+                    cache: false,
+                    async: false,
+                    type: "POST",
+                    url: "@(Url.Action("SaveTab4Admin"))",
+                    data: $("#step4").serializeArray(),
+                    success: function (data) {
 
+                        if (data.PurchaseInfoId == undefined || data.PurchaseInfoId == 0) {
+                            HasError = true;
+                            errorToast();
+                        }
+                        else {
+                            $("#PurchaseInfo_Id").val(data.PurchaseInfoId);
+                            successToast();
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $("#divLoader").hide(); // hide loader
+                        alert('Failed to retrieve detail data.');
+                    }
+                });
+            }
+            else { return false; }
+        }
+
+        function SaveStep5() {
+            var Isvalidated = $("#step5").parsley().validate();
+            if (Isvalidated) {
+                $.ajax({
+                    cache: false,
+                    async: false,
+                    type: "POST",
+                    url: "@(Url.Action("SaveTab5Admin"))",
+                    data: $("#step5").serializeArray(),
+                    success: function (data) {
+
+                        if (data.TreasuryInfoId == undefined || data.TreasuryInfoId == 0) {
+                            HasError = true;
+                            errorToast();
+                        }
+                        else {
+                            $("#TreasuryInfo_Id").val(data.TreasuryInfoId);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $("#divLoader").hide(); // hide loader
+                        alert('Failed to retrieve detail data.');
+                    }
+                });
+            }
+            else { return false; }
+        }
         function DeleteFile(Fileid, FileName) {
             formdata.delete(FileName)
             $("#" + Fileid).remove();
@@ -1074,7 +1169,7 @@
             });
 
         }
-       
+
     </script>
 </body>
 </html>

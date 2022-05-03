@@ -128,6 +128,8 @@ namespace VendorMgmt.Helper
             return GetCache.GetCacheNameToGetOnlineUsers();
         }
 
+        
+
     }
 
     class GSSInMemoryCache : IGenericCache

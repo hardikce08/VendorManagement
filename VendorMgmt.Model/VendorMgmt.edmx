@@ -108,6 +108,8 @@
           <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
           <Property Name="LinkGuid" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LinkExpired" Type="bit" Nullable="false" />
+          <Property Name="PurchaseManagerApproved" Type="bit" Nullable="false" />
+          <Property Name="WorldCheckApproved" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="VendorPrimarySalesInfo">
           <Key>
@@ -188,8 +190,9 @@
           <Property Name="VendorId" Type="int" Nullable="false" />
           <Property Name="RequestorName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="PurchasingManager" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="WorldCheckApprover" Type="nvarchar" MaxLength="50" />
           <Property Name="VendorNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="PurchaseComments" Type="nvarchar" MaxLength="2500" />
+          <Property Name="PurchaseComments" Type="nvarchar" MaxLength="2500" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_VendorAttachmentInfo_VendorMaster">
@@ -558,9 +561,10 @@
           <Property Name="RequestorName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PurchasingManager" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="VendorNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PurchaseComments" Type="String" MaxLength="2500" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseComments" Type="String" MaxLength="2500" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" Nullable="false" />
           <NavigationProperty Name="VendorMaster" Relationship="VendorModel.FK_VendorWorkFlowInfo_VendorMaster" FromRole="VendorWorkFlowInfo" ToRole="VendorMaster" />
+          <Property Name="WorldCheckApprover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VendorPrimarySalesInfo">
           <Key>
@@ -630,6 +634,8 @@
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LinkGuid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseManagerApproved" Type="Boolean" Nullable="false" />
+          <Property Name="WorldCheckApproved" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_VendorAttachmentInfo_VendorMaster">
           <End Type="VendorModel.VendorMaster" Role="VendorMaster" Multiplicity="1" />
@@ -885,6 +891,7 @@
           <EntitySetMapping Name="VendorWorkFlowInfo">
             <EntityTypeMapping TypeName="VendorModel.VendorWorkFlowInfo">
               <MappingFragment StoreEntitySet="VendorWorkFlowInfo">
+                <ScalarProperty Name="WorldCheckApprover" ColumnName="WorldCheckApprover" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="PurchaseComments" ColumnName="PurchaseComments" />
                 <ScalarProperty Name="VendorNumber" ColumnName="VendorNumber" />
@@ -940,6 +947,8 @@
           <EntitySetMapping Name="VendorMaster">
             <EntityTypeMapping TypeName="VendorModel.VendorMaster">
               <MappingFragment StoreEntitySet="VendorMaster">
+                <ScalarProperty Name="WorldCheckApproved" ColumnName="WorldCheckApproved" />
+                <ScalarProperty Name="PurchaseManagerApproved" ColumnName="PurchaseManagerApproved" />
                 <ScalarProperty Name="LinkGuid" ColumnName="LinkGuid" />
                 <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
                 <ScalarProperty Name="Status" ColumnName="Status" />

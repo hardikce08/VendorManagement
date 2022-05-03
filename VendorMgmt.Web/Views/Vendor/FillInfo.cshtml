@@ -38,7 +38,7 @@
     <link href="~/Theme/css/main.css?v=1.0" rel="stylesheet" />
 
     @*@Styles.Render("~/Theme/css")*@
-    <style type="text/css">
+<style type="text/css">
         main {
             padding-top: 0px;
             padding-bottom: 20px;
@@ -113,7 +113,17 @@
             padding-right: 15px;
             font-size: 17px;
         }
-    </style>
+         #load {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background: #0020ff36;
+            z-index: 9999;
+            background: url('@Url.Content("~/Theme/images/Loader.gif")') 50% 50% no-repeat #0020ff36;
+        }
+</style>
 </head>
 <body>
     @*<form id="form_id" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);">*@
@@ -237,7 +247,7 @@
 
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>GST Applicable?</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.BasicInfo.GSTApplicable, new { @class = "form-control form-control-sm" })
+                                                        @Html.SelectList_YesNoFor(model => model.BasicInfo.GSTApplicable, new { @class = "form-control form-control-sm", @onchange = "CheckGST(this);" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -245,27 +255,27 @@
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder"><strong>GST Number</strong></label>
-                                                        @Html.TextBoxFor(m => m.BasicInfo.GSTNumber, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @Html.TextBoxFor(m => m.BasicInfo.GSTNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Diversity Business Certification</strong></label>
-                                                        @Html.SelectList_DiversityBusinessCertification(model => model.BasicInfo.DiversityBusinessCertification, new { @class = "form-control form-control-sm" })
+                                                        @Html.SelectList_DiversityBusinessCertification(model => model.BasicInfo.DiversityBusinessCertification, new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
 
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Member of Council?</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.BasicInfo.IsCouncilMember, new { @class = "form-control form-control-sm" })
+                                                        @Html.SelectList_YesNoFor(model => model.BasicInfo.IsCouncilMember, new { @class = "form-control form-control-sm", @onchange = "CheckCouncilMember(this);", })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder"><strong>Council Name</strong></label>
-                                                        @Html.TextBoxFor(m => m.BasicInfo.CouncilName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                        @Html.TextBoxFor(m => m.BasicInfo.CouncilName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -413,7 +423,7 @@
                                     </div>
                                     <h3></h3>
                                     <div class="section">
-                                        <form id="step3" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+                                        <form id="step3" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post"  onsubmit="showLoader(this);" data-parsley-validate>
                                             <div class="row">
                                                 <div class="alert subheader col-lg-12"><strong>Banking Info</strong> </div>
                                             </div>
@@ -421,6 +431,9 @@
                                                 @Html.HiddenFor(m => m.BankingInfo.Id)
                                                 @Html.HiddenFor(m => m.VendorId)
                                                 @Html.HiddenFor(m => m.RegistrationCode)
+                                                @Html.HiddenFor(m => m.VendorEmail)
+                                                @Html.HiddenFor(m => m.DofascoEmail)
+                                                @Html.HiddenFor(m => m.BusinessName)
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Bank Name</strong></label>
@@ -534,217 +547,6 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <h3></h3>
-                                    <div class="section">
-                                        <form id="step4" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
-                                            <div class="row">
-                                                <div class="alert subheader col-lg-12"><strong>Purchasing Information</strong> </div>
-                                            </div>
-                                            <div class="row">
-                                                @Html.HiddenFor(m => m.PurchaseInfo.Id)
-                                                @Html.HiddenFor(m => m.VendorId)
-                                                @Html.HiddenFor(m => m.RegistrationCode)
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Trading Partner</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.PurchaseInfo.TradingPartner, new { @class = "form-control form-control-sm", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Account Group Name</strong></label>
-                                                        @Html.SelectList_AccountGroupName(m => m.PurchaseInfo.AccountGroupName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Type of Vendor Request</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.TypeofVendorRequest, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Conflict of Interest</strong></label>
-                                                        @Html.SelectList_YesNoFor(m => m.PurchaseInfo.ConflictOfInterest, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Payment Terms</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.PaymentTerms, new { @class = "form-control form-control-sm", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Spend Tree Level 1</strong></label>
-                                                        @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreelevel1, new { @class = "form-control form-control-sm" })*@
-                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreelevel1, (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel1"], new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,2);", @required = "required" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Spend Tree Level 2</strong></label>
-                                                        @*@Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.SpendTreeLevel2, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel2, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,3);", @required = "required" })
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Spend Tree Level 3</strong></label>
-                                                        @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreeLevel3, new { @class = "form-control form-control-sm" })*@
-                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel3, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,4);", @required = "required" })
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Spend Tree Level 4</strong></label>
-                                                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel4, new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control form-control-sm", @required = "required" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="alert subheader col-lg-12"><strong>Workflow Details</strong> </div>
-                                            </div>
-                                            <div class="row">
-                                                @Html.HiddenFor(m => m.WorkFlowInfo.Id)
-                                                @Html.HiddenFor(m => m.VendorId)
-                                                @Html.HiddenFor(m => m.RegistrationCode)
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Requestor Name</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.WorkFlowInfo.RequestorName, new { @class = "form-control form-control-sm", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Purchasing Manager</strong></label>
-                                                        @Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder"><strong>Vendor Number</strong></label>
-                                                        @Html.SelectList_TypeofVendorRequest(m => m.WorkFlowInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @Disabled = "Disabled" })
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder"><strong>Purchasing Comments</strong></label>
-                                                        @Html.TextAreaFor(m => m.WorkFlowInfo.PurchaseComments, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <h3></h3>
-                                    <div class="section">
-                                        <form id="step5" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
-                                            <div class="row">
-                                                <div class="alert subheader col-lg-12"><strong>Treasury Information</strong> </div>
-                                            </div>
-                                            <div class="row">
-                                                @Html.HiddenFor(m => m.TreasuryInfo.Id)
-                                                @Html.HiddenFor(m => m.VendorId)
-                                                @Html.HiddenFor(m => m.RegistrationCode)
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>
-                                                        @Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Vendor Number</strong></label>
-                                                        @Html.SelectList_AccountGroupName(m => m.TreasuryInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="alert subheader col-lg-12"><strong>Treasury Checklist Information</strong> </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-10">
-                                                    <div class="form-group">
-                                                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
-                                                        1. Appropriate documentation was provided to support the change
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <div class="form-group row">
-                                                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", !Model.TreasuryInfo.ChecklistInfo1) <label class="customradiotext"> Yes</label>
-                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", Model.TreasuryInfo.ChecklistInfo1)  <label class="customradiotext"> No</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-10">
-                                                    <div class="form-group">
-                                                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
-                                                        2. If the vendor refused to be validated through nsKnox a Teams video call was initiated to the financial contact to validate the business context and banking instruction that was previously received from the requestor. Otherwise the Vendor was validated through nsKnox.
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <div class="form-group row">
-                                                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.RadioButton("ChecklistInfo2", !Model.TreasuryInfo.ChecklistInfo2) <label class="customradiotext"> Yes</label>
-                                                        @Html.RadioButton("ChecklistInfo2", Model.TreasuryInfo.ChecklistInfo2)  <label class="customradiotext"> No</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="alert subheader col-lg-12"><strong>Treasury 2nd Level Approver Details</strong> </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Treasury Second Level Approver</strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        @Html.SelectList_YesNoFor(model => model.TreasuryInfo.Level2ApproverName, new { @class = "form-control form-control-sm" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-10">
-                                                    <div class="form-group">
-                                                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
-                                                        The vendor information and/or banking instructions have been entered into SAP accurately
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <div class="form-group row">
-                                                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.RadioButton("Level2ChecklistInfo", !Model.TreasuryInfo.Level2ChecklistInfo) <label class="customradiotext"> Yes</label>
-                                                        @Html.RadioButton("Level2ChecklistInfo", Model.TreasuryInfo.Level2ChecklistInfo)  <label class="customradiotext"> No</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder"><strong>Treasury Comments</strong></label>
-                                                        @Html.TextAreaFor(m => m.TreasuryInfo.Level2Comments, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
                                 </div>
 
                             </div>
@@ -838,10 +640,18 @@
     <script src="~/Theme/scripts/jquery.steps.min.js"></script>
     <!-- parsley form validator -->
     <script src="~/Theme/scripts/parsley.min.js"></script>
+    <script src="~/Theme/scripts/sweetalert2.min.js"></script>
+    <link href="~/Theme/css/sweetalert2.min.css" rel="stylesheet" />
     <script>
         var showLoader = function (form) {
             $("#load").show();
         }
+        $(document).ajaxStart(function () {
+            $("#load").show();
+        });
+        $(document).ajaxStop(function () {
+            $("#load").hide();
+        });
         var successToast = function () {
             $.toast({
                 heading: 'Success',
@@ -865,6 +675,27 @@
         };
     </script>
     <script>
+        function CheckCouncilMember(chk) {
+            var val = $(chk).val();
+            if (val == 'False') {
+
+                $('#BasicInfo_CouncilName').val('Not Applicable');
+            }
+            else {
+                $('#BasicInfo_CouncilName').val('');
+            }
+        }
+        function CheckGST(chk) {
+            var val = $(chk).val();
+            if (val == 'False') {
+
+                $('#BasicInfo_GSTNumber').val('Not Applicable');
+            }
+            else {
+                $('#BasicInfo_GSTNumber').val('');
+            }
+        }
+
         var formdata = new FormData(); //FormData object
         $(function () {
             chkatchtbl();
@@ -882,7 +713,6 @@
                         if (currentIndex == 0) {
                             var Isvalidated = $("#step1").parsley().validate();
                             if (Isvalidated) {
-
                                 $.ajax({
                                     cache: false,
                                     async: false,
@@ -890,6 +720,7 @@
                                     url: "@(Url.Action("SaveTab1"))",
                                     data: $("#step1").serializeArray(),
                                     success: function (data) {
+                                         
                                         if (data.BasicInfoId == undefined || data.BasicInfoId == 0) {
                                             HasError = true;
                                             errorToast();
@@ -940,10 +771,17 @@
                             }
                             else { return false; }
                         }
-                        else if (currentIndex == 2) {
-                            var Isvalidated = $("#step3").parsley().validate();
-                            if (Isvalidated) {
 
+                    }
+                    if (HasError) { return false; }
+                    else { return true; }
+                },
+                onFinished: function (event, currentIndex) {
+                    
+                    var HasError = false;
+                    var Isvalidated = $("#step3").parsley().validate();
+                    if (Isvalidated) {
+                        
                                 $.ajax({
                                     cache: false,
                                     async: false,
@@ -951,13 +789,27 @@
                                     url: "@(Url.Action("SaveTab3"))",
                                     data: $("#step3").serializeArray(),
                                     success: function (data) {
-
                                         if (data.BankingInfoId == undefined || data.BankingInfoId == 0) {
                                             HasError = true;
                                             errorToast();
                                         }
                                         else {
                                             $("#BankingInfo_Id").val(data.BankingInfoId);
+                                            swal(
+                                                {
+                                                    title: '<b>Thank you for submitting your vendor information</b>',
+                                                    type: 'success',
+                                                    html:'',
+                                                    showCloseButton: false,
+                                                    showCancelButton: false,
+                                                    focusConfirm: false,
+                                                    confirmButtonText: 'OK'
+                                                }
+                                            ).then(function () {
+                                                var url = '@Url.Action("Success", "Vendor")';
+                                                window.location.href = url;
+                                                //location.reload(true);
+                                            });
                                         }
                                     },
                                     error: function (xhr, ajaxOptions, thrownError) {
@@ -965,6 +817,7 @@
                                         alert('Failed to retrieve detail data.');
                                     }
                                 });
+
                                 formdata.delete("VendorId");
                                 formdata.append('VendorId', $('#VendorId').val());
                                 $.ajax({
@@ -981,68 +834,6 @@
                                     },
                                     error: function (err) {
                                         alert(err.statusText);
-                                    }
-                                });
-
-                            }
-                            else { return false; }
-                        }
-                        else if (currentIndex == 3) {
-                            var Isvalidated = $("#step4").parsley().validate();
-                            if (Isvalidated) {
-
-                                $.ajax({
-                                    cache: false,
-                                    async: false,
-                                    type: "POST",
-                                    url: "@(Url.Action("SaveTab4"))",
-                                    data: $("#step4").serializeArray(),
-                                    success: function (data) {
-
-                                        if (data.PurchaseInfoId == undefined || data.PurchaseInfoId == 0) {
-                                            HasError = true;
-                                            errorToast();
-                                        }
-                                        else {
-                                            $("#PurchaseInfo_Id").val(data.PurchaseInfoId);
-                                        }
-                                    },
-                                    error: function (xhr, ajaxOptions, thrownError) {
-                                        $("#divLoader").hide(); // hide loader
-                                        alert('Failed to retrieve detail data.');
-                                    }
-                                });
-                            }
-                            else { return false; }
-                        }
-
-                    }
-                    if (HasError) { return false; }
-                    else { return true; }
-                },
-                onFinished: function (event, currentIndex) {
-                    var HasError = false;
-                            var Isvalidated = $("#step5").parsley().validate();
-                            if (Isvalidated) {
-                                $.ajax({
-                                    cache: false,
-                                    async: false,
-                                    type: "POST",
-                                    url: "@(Url.Action("SaveTab5"))",
-                                    data: $("#step5").serializeArray(),
-                                    success: function (data) {
-
-                                        if (data.TreasuryInfoId == undefined || data.TreasuryInfoId == 0) {
-                                            HasError = true;
-                                            errorToast();
-                                        }
-                                        else {
-                                            $("#TreasuryInfo_Id").val(data.TreasuryInfoId);
-                                        }
-                                    },
-                                    error: function (xhr, ajaxOptions, thrownError) {
-                                        $("#divLoader").hide(); // hide loader
-                                        alert('Failed to retrieve detail data.');
                                     }
                                 });
                             }
@@ -1074,7 +865,8 @@
             $('#fileInput').val('');
         });
 
-
+            CheckGST($('#BasicInfo_GSTApplicable'));
+            CheckCouncilMember($('#BasicInfo_IsCouncilMember'));
         });
         $("#btnValidate").click(function () {
             var Isvalidated = $("#ValidateForm").parsley().validate();
@@ -1163,6 +955,7 @@
             });
 
         }
+
 
     </script>
 </body>

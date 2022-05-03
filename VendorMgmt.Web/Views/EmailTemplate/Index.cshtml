@@ -12,6 +12,10 @@
             <div class="panel-body">
                 @using (Html.BeginForm("Index", "EmailTemplate", FormMethod.Post, new { @class = "form-horizontal form-bordered", onsubmit = "showLoader(this);" }))
                 {
+                    <div>
+                        <a id="btnBack" href="/" target="_self" class="btn btn-primary btn-shadow">Back to Home</a>
+
+                    </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-striped mb-none" id="datatable-default">
                             <thead>

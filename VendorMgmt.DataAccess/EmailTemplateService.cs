@@ -60,6 +60,23 @@ namespace VendorMgmt.DataAccess
                            };
             return template.FirstOrDefault();
         }
+        public EmailTemplate EmailTemplateByName(string Name)
+        {
+
+            var template = from e in db.EmailTemplate
+                           where e.Name == Name
+                           select new EmailTemplate
+                           {
+                               Id = e.Id,
+                               Name = e.Name,
+                               SenderName = e.SenderName,
+                               SenderEmail = e.SenderEmail,
+                               EmailSubject = e.EmailSubject,
+                               EmailBody = e.EmailBody,
+                               CreatedDate = e.CreatedDate,
+                           };
+            return template.FirstOrDefault();
+        }
         public void EmailTemplate_InsertOrUpdate(EmailTemplate e)
         {
             if (e.Id == 0)

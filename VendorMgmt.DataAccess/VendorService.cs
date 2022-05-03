@@ -48,7 +48,9 @@ namespace VendorMgmt.DataAccess
                            EmailSent = v.EmailSent,
                            CreatedDate = v.CreatedDate,
                            LinkExpired=v.LinkExpired ,
-                           LinkGuid=v.LinkGuid 
+                           LinkGuid=v.LinkGuid ,
+                           PurchaseManagerApproved=v.PurchaseManagerApproved,
+                           WorldCheckApproved=v.WorldCheckApproved 
                        };
             }
         }
@@ -80,10 +82,12 @@ namespace VendorMgmt.DataAccess
                     nsKnox = v.nsKnox,
                     EmailSent = true,
                     CreatedDate = DateTime.Now,
-                    UpdatedDate=DateTime.Now,
-                    LinkExpired=false,
-                    LinkGuid=v.LinkGuid,
-                    Status= "Validation Pending",
+                    UpdatedDate = DateTime.Now,
+                    LinkExpired = false,
+                    LinkGuid = v.LinkGuid,
+                    Status = "Validation Pending",
+                    PurchaseManagerApproved = false,
+                    WorldCheckApproved=false 
                 };
 
                 db.VendorMaster.AddObject(i);
@@ -105,6 +109,9 @@ namespace VendorMgmt.DataAccess
                 u.UpdatedDate = DateTime.Now;
                 u.LinkGuid = v.LinkGuid;
                 u.Status = v.Status;
+                u.Status = "Validation Pending";
+                u.PurchaseManagerApproved = false;
+                u.WorldCheckApproved = false;
                 db.SaveChanges();
             }
         }
@@ -137,6 +144,27 @@ namespace VendorMgmt.DataAccess
 
             ds.ExecuteStoredProcedure("proc_DeleteVendorData", para, System.Data.CommandType.StoredProcedure, ConnectionType.Customer);
 
+        }
+        public int UpdatePurchaseApproval(string RegitrationCode,bool IsApprove)
+        {
+            var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
+            objVendorMst.PurchaseManagerApproved = IsApprove; 
+            db.SaveChanges();
+            return objVendorMst.Id;
+        }
+        public int UpdateWorldCheckApproval(string RegitrationCode, bool IsApprove)
+        {
+            var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
+            objVendorMst.WorldCheckApproved = IsApprove;
+            db.SaveChanges();
+            return objVendorMst.Id;
+        }
+        public int UpdateStatus(string RegitrationCode, string Status)
+        {
+            var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
+            objVendorMst.Status= Status;
+            db.SaveChanges();
+            return objVendorMst.Id;
         }
         public List<VendorGridData> GetVendorGridData()
         {
@@ -667,6 +695,7 @@ namespace VendorMgmt.DataAccess
                            VendorNumber = v.VendorNumber,
                            PurchaseComments = v.PurchaseComments,
                            CreatedDate = v.CreatedDate,
+                           WorldCheckApprover=v.WorldCheckApprover 
                        };
             }
         }
@@ -683,6 +712,7 @@ namespace VendorMgmt.DataAccess
                     VendorNumber = v.VendorNumber,
                     PurchaseComments = v.PurchaseComments,
                     CreatedDate = DateTime.Now,
+                    WorldCheckApprover=v.WorldCheckApprover
                 };
 
                 db.VendorWorkFlowInfo.AddObject(i);
@@ -699,6 +729,7 @@ namespace VendorMgmt.DataAccess
                 u.PurchasingManager = v.PurchasingManager;
                 u.VendorNumber = v.VendorNumber;
                 u.PurchaseComments = v.PurchaseComments;
+                u.WorldCheckApprover = v.WorldCheckApprover;
                 db.SaveChanges();
             }
         }

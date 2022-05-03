@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.UI;
 using VendorMgmt.DataAccess;
 using VendorMgmt.DataAccess.Model;
+using VendorMgmt.Helper;
+using CacheItemPriority = System.Web.Caching.CacheItemPriority;
 
 namespace VendorMgmt.Web.Controllers
 {
@@ -35,6 +41,9 @@ namespace VendorMgmt.Web.Controllers
                 }
 
                 model.RegistrationCode = VendorMst.RegistrationCode;
+                model.BusinessName = VendorMst.BusinessName;
+                model.VendorEmail = VendorMst.VendorEmail;
+                model.DofascoEmail = VendorMst.DofascoEmail;
                 model.LinkGuid = LinkGuid;
                 var Basicinfo = Customervs.VendorBasicInfos.Where(p => p.VendorId == VendorMst.Id).FirstOrDefault();
                 model.BasicInfo = Basicinfo == null ? new VendorBasicInfo() : Basicinfo;
@@ -69,7 +78,7 @@ namespace VendorMgmt.Web.Controllers
                 model.VendorId = VendorMst.Id;
 
                 ViewData["SpanTreeLevel1"] = new SelectList(Customervs.SpanTreeLevels.Where(p => p.LevelId == 1).ToList(), "LevelCode", "LevelDescription");
-                vs.SetLinkExpired(VendorMst.Id);
+                //vs.SetLinkExpired(VendorMst.Id);
                 Customervs.VendorMasterCustomer_InsertOrUpdate(VendorMst);
             }
             return View(model);
@@ -79,7 +88,7 @@ namespace VendorMgmt.Web.Controllers
         {
             var VendorMst = vs.VendorMasters.Where(p => p.RegistrationCode == model.RegistrationCode).FirstOrDefault();
 
-            if (model.UserRegistrationCode == VendorMst.RegistrationCode && model.Email.ToLower() == VendorMst.VendorEmail.ToLower() && model.CompanyName.ToLower()==VendorMst.BusinessName.ToLower())
+            if (model.UserRegistrationCode == VendorMst.RegistrationCode && model.Email.ToLower() == VendorMst.VendorEmail.ToLower() && model.CompanyName.ToLower() == VendorMst.BusinessName.ToLower())
             {
                 return Json(new { data = "Success" }, JsonRequestBehavior.AllowGet);
             }
@@ -88,7 +97,7 @@ namespace VendorMgmt.Web.Controllers
                 return Json(new { data = "Authentication Failed" }, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult GetDetails(string RegistrationCode)
+        public async Task<ActionResult> GetDetails(string RegistrationCode)
         {
             VendorFillInfo model = new VendorFillInfo();
             if (RegistrationCode == string.Empty)
@@ -104,7 +113,11 @@ namespace VendorMgmt.Web.Controllers
                     TempData["Error"] = "Invalid Registration Code or Registration Code Expired";
                     return PartialView(model);
                 }
-
+                model.BusinessName = VendorMst.BusinessName;
+                model.VendorEmail = VendorMst.VendorEmail;
+                model.DofascoEmail = VendorMst.DofascoEmail;
+                model.IsPurchaseManagerApproved = VendorMst.PurchaseManagerApproved;
+                model.IsWorldCheckApproved = VendorMst.WorldCheckApproved;
                 var Basicinfo = vs.VendorBasicInfos.Where(p => p.VendorId == VendorMst.Id).FirstOrDefault();
                 model.BasicInfo = Basicinfo == null ? new VendorBasicInfo() : Basicinfo;
 
@@ -136,8 +149,23 @@ namespace VendorMgmt.Web.Controllers
                 model.TreasuryInfo = TreasuryInfo == null ? new VendorTreasuryInfo() : TreasuryInfo;
 
                 model.VendorId = VendorMst.Id;
+                if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+                {
+                    model.lstUsers = await MicrosoftGraphClient.GetAllUsers();
+                    System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", model.lstUsers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+                }
+                else
+                {
+                    model.lstUsers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+                }
+                ViewData["SpanTreeLevel1"] = new SelectList(vs.SpanTreeLevels.Where(p => p.LevelId == 1).ToList(), "LevelCode", "LevelDescription", model.PurchaseInfo != null ? model.PurchaseInfo.SpendTreelevel1 : "#");
+                if (model.PurchaseInfo != null)
+                {
+                    ViewData["SpanTreeLevel2"] = new SelectList(vs.SpanTreeLevels.Where(p => p.LevelId == 2 && p.ParentLevelText == model.PurchaseInfo.SpendTreelevel1).ToList(), "LevelCode", "LevelDescription", model.PurchaseInfo != null ? model.PurchaseInfo.SpendTreeLevel2 : "");
+                    ViewData["SpanTreeLevel3"] = new SelectList(vs.SpanTreeLevels.Where(p => p.LevelId == 3 && p.ParentLevelText == model.PurchaseInfo.SpendTreeLevel2).ToList(), "LevelCode", "LevelDescription", model.PurchaseInfo != null ? model.PurchaseInfo.SpendTreeLevel3 : "");
+                    ViewData["SpanTreeLevel4"] = new SelectList(vs.SpanTreeLevels.Where(p => p.LevelId == 4 && p.ParentLevelText == model.PurchaseInfo.SpendTreeLevel3).ToList(), "LevelCode", "LevelDescription", model.PurchaseInfo != null ? model.PurchaseInfo.SpendTreeLevel4 : "");
 
-                ViewData["SpanTreeLevel1"] = new SelectList(vs.SpanTreeLevels.Where(p => p.LevelId == 1).ToList(), "LevelCode", "LevelDescription");
+                }
 
             }
             return View(model);
@@ -160,7 +188,99 @@ namespace VendorMgmt.Web.Controllers
 
             return sb.ToString();
         }
+        public ActionResult Success()
+        {
+            return View();
+        }
+        public async Task<ActionResult> PurchaseApproverConfirmation()
+        {
+            var action = Functions.Base64Decode(Request.QueryString["Action"]);
+            string RegistrationCode = action.Split('|')[0];
+            int VendorId = vs.UpdatePurchaseApproval(action.Split('|')[0], action.Split('|')[1] == "Approve" ? true : false);
+            var lstUSers = new List<AzureUserList>();
+            if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+            {
+                lstUSers = await MicrosoftGraphClient.GetAllUsers();
+                System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            }
+            else
+            {
+                lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+            }
+            var WorkflowDetails = vs.VendorWorkFlowInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
+            string Emailbody = "";
+            EmailTemplateService es = new EmailTemplateService();
+            if (action.Split('|')[1] == "Approve")
+            {
+                var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
+                vs.UpdateStatus(VendorMst.RegistrationCode, "Submitted to Legal");
+                if (WorkflowDetails != null)
+                {
+                    var WorldCheckApproverEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.WorldCheckApprover).FirstOrDefault().EmailAddress;
+                    Emailbody = es.EmailTemplateByName("WorldCheckApprover").EmailBody;
+                    Emailbody = Emailbody.Replace("@VendorName", VendorMst.BusinessName + " Account");
+                    Emailbody = Emailbody.Replace("@PurchaseComments", WorkflowDetails.PurchaseComments);
+                    Emailbody = Emailbody.Replace("@RequestorName", WorkflowDetails.RequestorName);
+                    Emailbody = Emailbody.Replace("@Date", DateTime.Now.ToString("dddd, MMMM dd, yyyy hh:mm tt"));
+                    Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+                    Emailbody = Emailbody.Replace("@ApproveLink", SiteUrl + "/Vendor/WorldCheckApproverConfirmation?Action=" + Functions.Base64Encode(VendorMst.RegistrationCode + "|Approve"));
+                    Emailbody = Emailbody.Replace("@DenyLink", SiteUrl + "/Vendor/WorldCheckApproverConfirmation?Action=" + Functions.Base64Encode(VendorMst.RegistrationCode + "|Deny"));
+                    Functions.SendEmail(WorldCheckApproverEmail, "New Vendor Actiation - " + VendorMst.BusinessName + " Account", Emailbody, false);
+                }
+            }
+            else
+            {
+                var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
+                vs.UpdateStatus(VendorMst.RegistrationCode, "Rejected by Purch Manager");
+                //Send notification to Requestor in case of Rejection 
+                var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
+                Emailbody = es.EmailTemplateByName("PurchaseRejection").EmailBody;
+                Emailbody = Emailbody.Replace("@RejectedBy", WorkflowDetails.PurchasingManager);
+                Emailbody = Emailbody.Replace("@Comments", WorkflowDetails.PurchaseComments);
+                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+                Functions.SendEmail(RequestorEmail, es.EmailTemplateByName("PurchaseRejection").EmailSubject, Emailbody, false);
 
+
+            }
+            return Content("Sucess");
+        }
+        public async Task<ActionResult> WorldCheckApproverConfirmation()
+        {
+            var action = Functions.Base64Decode(Request.QueryString["Action"]);
+            string RegistrationCode = action.Split('|')[0];
+            int VendorId = vs.UpdateWorldCheckApproval(action.Split('|')[0], action.Split('|')[1] == "Approve" ? true : false);
+            var lstUSers = new List<AzureUserList>();
+            if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+            {
+                lstUSers = await MicrosoftGraphClient.GetAllUsers();
+                System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            }
+            else
+            {
+                lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+            }
+            var WorkflowDetails = vs.VendorWorkFlowInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
+            string Emailbody = "";
+            EmailTemplateService es = new EmailTemplateService();
+
+            if (action.Split('|')[1] == "Approve")
+            {
+                vs.UpdateStatus(RegistrationCode, "Submitted to Treasury");
+            }
+            else
+            {
+                var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
+                vs.UpdateStatus(RegistrationCode, "Rejected by Legal");
+                //Send notification to Requestor in case of Rejection 
+                var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
+                Emailbody = es.EmailTemplateByName("WorldCheckRejection").EmailBody;
+                Emailbody = Emailbody.Replace("@RejectedBy", WorkflowDetails.WorldCheckApprover);
+                Emailbody = Emailbody.Replace("@Comments", WorkflowDetails.PurchaseComments);
+                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+                Functions.SendEmail(RequestorEmail, es.EmailTemplateByName("WorldCheckRejection").EmailSubject, Emailbody, false);
+            }
+            return Content("Sucess");
+        }
         #region Customer Fill Entry form Save requests
         [HttpPost]
         public JsonResult SaveTab1(VendorFillInfo model)
@@ -229,6 +349,25 @@ namespace VendorMgmt.Web.Controllers
                 }
                 model.BankingInfo.VendorId = model.VendorId;
                 Customervs.VendorBankingInfo_InsertOrUpdate(model.BankingInfo);
+
+                //send Email to Vendor for Notification about Complete Form 
+                string Emailbody = "";
+                EmailTemplateService es = new EmailTemplateService();
+                Emailbody = es.EmailTemplateByName("VendorConfirmation").EmailBody;
+                Emailbody = Emailbody.Replace("@VendorName", model.BusinessName);
+                Functions.SendEmail(model.VendorEmail, "Confirmation", Emailbody, false);
+
+                //Send Notification to Dofasco email that User filled form
+                Emailbody = es.EmailTemplateByName("DofascoConfirmation").EmailBody;
+                Emailbody = Emailbody.Replace("@VendorName", model.BusinessName);
+                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + model.RegistrationCode);
+                Functions.SendEmail(model.DofascoEmail, "Confirmation", Emailbody, false);
+                //update Application Status
+                vs.UpdateStatus(model.RegistrationCode, "Submitted by Vendor");
+
+                //Transfer Data from Customer to Admin Portal DB
+                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken => new Worker().StartProcessing(model.VendorId, cancellationToken));
+
                 return Json(new { BankingInfoId = model.BankingInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { BankingInfoId = 0 }, JsonRequestBehavior.AllowGet);
@@ -252,6 +391,7 @@ namespace VendorMgmt.Web.Controllers
                 Customervs.VendorPurchasingInfo_InsertOrUpdate(model.PurchaseInfo);
                 model.WorkFlowInfo.VendorId = model.VendorId;
                 Customervs.VendorWorkFlowInfo_InsertOrUpdate(model.WorkFlowInfo);
+
                 return Json(new { PurchaseInfoId = model.PurchaseInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { PurchaseInfoId = 0 }, JsonRequestBehavior.AllowGet);
@@ -272,8 +412,6 @@ namespace VendorMgmt.Web.Controllers
                 }
                 model.TreasuryInfo.VendorId = model.VendorId;
                 Customervs.VendorTreasuryInfo_InsertOrUpdate(model.TreasuryInfo);
-                //Transfer Data from Customer to Admin Portal DB
-                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken => new Worker().StartProcessing(model.VendorId, cancellationToken));
                 return Json(new { TreasuryInfoId = model.TreasuryInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { TreasuryInfoId = 0 }, JsonRequestBehavior.AllowGet);
@@ -448,7 +586,7 @@ namespace VendorMgmt.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveTab4Admin(VendorFillInfo model)
+        public async Task<JsonResult> SaveTab4Admin(VendorFillInfo model)
         {
             if (model.RegistrationCode == string.Empty)
             {
@@ -464,7 +602,30 @@ namespace VendorMgmt.Web.Controllers
                 model.PurchaseInfo.VendorId = model.VendorId;
                 vs.VendorPurchasingInfo_InsertOrUpdate(model.PurchaseInfo);
                 model.WorkFlowInfo.VendorId = model.VendorId;
+                model.WorkFlowInfo.PurchasingManager = Request.Form["WorkFlowInfo_PurchasingManager"];
+                model.WorkFlowInfo.RequestorName = Request.Form["WorkFlowInfo_RequestorName"];
+                model.WorkFlowInfo.WorldCheckApprover = Request.Form["WorkFlowInfo_WorldCheckApprover"];
                 vs.VendorWorkFlowInfo_InsertOrUpdate(model.WorkFlowInfo);
+                if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+                {
+                    model.lstUsers = await MicrosoftGraphClient.GetAllUsers();
+                    System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", model.lstUsers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+                }
+                else
+                {
+                    model.lstUsers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+                    model.PurchaseApproverEmail = model.lstUsers.Where(p => p.DisplayName == model.WorkFlowInfo.PurchasingManager).FirstOrDefault().EmailAddress;
+                }
+                string Emailbody = "";
+                EmailTemplateService es = new EmailTemplateService();
+                Emailbody = es.EmailTemplateByName("PurchaseApproval").EmailBody;
+                Emailbody = Emailbody.Replace("@VendorName", model.BusinessName);
+                Emailbody = Emailbody.Replace("@PurchaseComments", model.WorkFlowInfo.PurchaseComments);
+                Emailbody = Emailbody.Replace("@RequestorName", model.WorkFlowInfo.RequestorName);
+                Emailbody = Emailbody.Replace("@ApproveLink", SiteUrl + "/Vendor/PurchaseApproverConfirmation?Action=" + Functions.Base64Encode(model.RegistrationCode + "|Approve"));
+                Emailbody = Emailbody.Replace("@DenyLink", SiteUrl + "/Vendor/PurchaseApproverConfirmation?Action=" + Functions.Base64Encode(model.RegistrationCode + "|Deny"));
+                Functions.SendEmail(string.IsNullOrEmpty(model.PurchaseApproverEmail) ? "hardikce.08@gmail.com" : model.PurchaseApproverEmail, "Approval", Emailbody, false);
+                vs.UpdateStatus(VendorMst.RegistrationCode, "Submitted to Purch Manager");
                 return Json(new { PurchaseInfoId = model.PurchaseInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { PurchaseInfoId = 0 }, JsonRequestBehavior.AllowGet);
@@ -546,5 +707,17 @@ namespace VendorMgmt.Web.Controllers
             return Content("test");
         }
         #endregion
+
+        public static string SiteUrl
+        {
+            get
+            {
+                if (System.Web.HttpContext.Current == null || System.Web.HttpContext.Current.Request == null)
+                    return string.Empty;
+
+                var request = System.Web.HttpContext.Current.Request;
+                return request.Url.Scheme + "://" + request.Url.DnsSafeHost + (request.Url.IsDefaultPort ? "" : ":" + request.Url.Port.ToString());
+            }
+        }
     }
 }
