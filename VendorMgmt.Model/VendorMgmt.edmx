@@ -110,6 +110,7 @@
           <Property Name="LinkExpired" Type="bit" Nullable="false" />
           <Property Name="PurchaseManagerApproved" Type="bit" Nullable="false" />
           <Property Name="WorldCheckApproved" Type="bit" Nullable="false" />
+          <Property Name="TreasuryValidated" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="VendorPrimarySalesInfo">
           <Key>
@@ -636,6 +637,7 @@
           <Property Name="LinkGuid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PurchaseManagerApproved" Type="Boolean" Nullable="false" />
           <Property Name="WorldCheckApproved" Type="Boolean" Nullable="false" />
+          <Property Name="TreasuryValidated" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_VendorAttachmentInfo_VendorMaster">
           <End Type="VendorModel.VendorMaster" Role="VendorMaster" Multiplicity="1" />
@@ -947,6 +949,7 @@
           <EntitySetMapping Name="VendorMaster">
             <EntityTypeMapping TypeName="VendorModel.VendorMaster">
               <MappingFragment StoreEntitySet="VendorMaster">
+                <ScalarProperty Name="TreasuryValidated" ColumnName="TreasuryValidated" />
                 <ScalarProperty Name="WorldCheckApproved" ColumnName="WorldCheckApproved" />
                 <ScalarProperty Name="PurchaseManagerApproved" ColumnName="PurchaseManagerApproved" />
                 <ScalarProperty Name="LinkGuid" ColumnName="LinkGuid" />

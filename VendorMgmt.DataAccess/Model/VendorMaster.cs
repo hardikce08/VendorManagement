@@ -31,6 +31,7 @@ namespace VendorMgmt.DataAccess.Model
         public bool LinkExpired { get; set; }
         public bool PurchaseManagerApproved { get; set; }
         public bool WorldCheckApproved { get; set; }
+        public bool TreasuryValidated { get; set; }
     }
 
     public class VendorFillInfo
@@ -61,6 +62,7 @@ namespace VendorMgmt.DataAccess.Model
         public string PurchaseApproverEmail { get; set; }
         public bool IsPurchaseManagerApproved { get; set; }
         public bool IsWorldCheckApproved { get; set; }
+        public bool IsTreasuryValidated { get; set; }
         public List<AzureUserList> lstUsers { get; set; }
     }
 

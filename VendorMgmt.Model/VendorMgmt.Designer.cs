@@ -2201,7 +2201,8 @@ namespace VendorMgmt.Model
         /// <param name="linkGuid">Initial value of the LinkGuid property.</param>
         /// <param name="purchaseManagerApproved">Initial value of the PurchaseManagerApproved property.</param>
         /// <param name="worldCheckApproved">Initial value of the WorldCheckApproved property.</param>
-        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate, global::System.Boolean linkExpired, global::System.DateTime updatedDate, global::System.String linkGuid, global::System.Boolean purchaseManagerApproved, global::System.Boolean worldCheckApproved)
+        /// <param name="treasuryValidated">Initial value of the TreasuryValidated property.</param>
+        public static VendorMaster CreateVendorMaster(global::System.Int32 id, global::System.String businessName, global::System.Boolean nsKnox, global::System.Boolean emailSent, global::System.DateTime createdDate, global::System.Boolean linkExpired, global::System.DateTime updatedDate, global::System.String linkGuid, global::System.Boolean purchaseManagerApproved, global::System.Boolean worldCheckApproved, global::System.Boolean treasuryValidated)
         {
             VendorMaster vendorMaster = new VendorMaster();
             vendorMaster.Id = id;
@@ -2214,6 +2215,7 @@ namespace VendorMgmt.Model
             vendorMaster.LinkGuid = linkGuid;
             vendorMaster.PurchaseManagerApproved = purchaseManagerApproved;
             vendorMaster.WorldCheckApproved = worldCheckApproved;
+            vendorMaster.TreasuryValidated = treasuryValidated;
             return vendorMaster;
         }
 
@@ -2559,6 +2561,30 @@ namespace VendorMgmt.Model
         private global::System.Boolean _WorldCheckApproved;
         partial void OnWorldCheckApprovedChanging(global::System.Boolean value);
         partial void OnWorldCheckApprovedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean TreasuryValidated
+        {
+            get
+            {
+                return _TreasuryValidated;
+            }
+            set
+            {
+                OnTreasuryValidatedChanging(value);
+                ReportPropertyChanging("TreasuryValidated");
+                _TreasuryValidated = StructuralObject.SetValidValue(value, "TreasuryValidated");
+                ReportPropertyChanged("TreasuryValidated");
+                OnTreasuryValidatedChanged();
+            }
+        }
+        private global::System.Boolean _TreasuryValidated;
+        partial void OnTreasuryValidatedChanging(global::System.Boolean value);
+        partial void OnTreasuryValidatedChanged();
 
         #endregion
 

@@ -78,7 +78,7 @@ namespace VendorMgmt.Web.Controllers
                 model.VendorId = VendorMst.Id;
 
                 ViewData["SpanTreeLevel1"] = new SelectList(Customervs.SpanTreeLevels.Where(p => p.LevelId == 1).ToList(), "LevelCode", "LevelDescription");
-                //vs.SetLinkExpired(VendorMst.Id);
+                vs.SetLinkExpired(VendorMst.Id);
                 Customervs.VendorMasterCustomer_InsertOrUpdate(VendorMst);
             }
             return View(model);
@@ -118,6 +118,7 @@ namespace VendorMgmt.Web.Controllers
                 model.DofascoEmail = VendorMst.DofascoEmail;
                 model.IsPurchaseManagerApproved = VendorMst.PurchaseManagerApproved;
                 model.IsWorldCheckApproved = VendorMst.WorldCheckApproved;
+                model.IsTreasuryValidated = VendorMst.TreasuryValidated;
                 var Basicinfo = vs.VendorBasicInfos.Where(p => p.VendorId == VendorMst.Id).FirstOrDefault();
                 model.BasicInfo = Basicinfo == null ? new VendorBasicInfo() : Basicinfo;
 
@@ -208,15 +209,44 @@ namespace VendorMgmt.Web.Controllers
                 lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
             }
             var WorkflowDetails = vs.VendorWorkFlowInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
+            var PurchaseInfoDetails = vs.VendorPurchasingInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
             string Emailbody = "";
+            var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
+            var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
+            var TreasuryInfo = vs.VendorTreasuryInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
             EmailTemplateService es = new EmailTemplateService();
             if (action.Split('|')[1] == "Approve")
             {
-                var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
-                vs.UpdateStatus(VendorMst.RegistrationCode, "Submitted to Legal");
-                if (WorkflowDetails != null)
+
+                //Send Approved Email to Requestor
+                Emailbody = es.EmailTemplateByName("Managementapproval").EmailBody;
+                Emailbody = Emailbody.Replace("@ApprovedBy", WorkflowDetails.PurchasingManager);
+                Emailbody = Emailbody.Replace("@ApprovedComments", WorkflowDetails.PurchaseComments);
+                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+                Functions.SendEmail(RequestorEmail, "New Vendor Actiation - " + VendorMst.BusinessName + " Account", Emailbody, false);
+
+                var WorldCheckApproverEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.WorldCheckApprover).FirstOrDefault().EmailAddress;
+
+                if (PurchaseInfoDetails.TypeofVendorRequest == "New Vendor Activation")
                 {
-                    var WorldCheckApproverEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.WorldCheckApprover).FirstOrDefault().EmailAddress;
+                    //Update Status
+                    vs.UpdateStatus(VendorMst.RegistrationCode, "Submitted to Legal");
+                    if (WorkflowDetails != null)
+                    {
+                        Emailbody = es.EmailTemplateByName("WorldCheckApprover").EmailBody;
+                        Emailbody = Emailbody.Replace("@VendorName", VendorMst.BusinessName + " Account");
+                        Emailbody = Emailbody.Replace("@PurchaseComments", WorkflowDetails.PurchaseComments);
+                        Emailbody = Emailbody.Replace("@RequestorName", WorkflowDetails.RequestorName);
+                        Emailbody = Emailbody.Replace("@Date", DateTime.Now.ToString("dddd, MMMM dd, yyyy hh:mm tt"));
+                        Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+                        Emailbody = Emailbody.Replace("@ApproveLink", SiteUrl + "/Vendor/WorldCheckApproverConfirmation?Action=" + Functions.Base64Encode(VendorMst.RegistrationCode + "|Approve"));
+                        Emailbody = Emailbody.Replace("@DenyLink", SiteUrl + "/Vendor/WorldCheckApproverConfirmation?Action=" + Functions.Base64Encode(VendorMst.RegistrationCode + "|Deny"));
+                        Functions.SendEmail(WorldCheckApproverEmail, "New Vendor Actiation - " + VendorMst.BusinessName + " Account", Emailbody, false);
+                    }
+                }
+                else if (PurchaseInfoDetails.TypeofVendorRequest == "New Vendor Activation - GST# Update")
+                {
+                    vs.UpdateStatus(VendorMst.RegistrationCode, "Submitted to Legal");
                     Emailbody = es.EmailTemplateByName("WorldCheckApprover").EmailBody;
                     Emailbody = Emailbody.Replace("@VendorName", VendorMst.BusinessName + " Account");
                     Emailbody = Emailbody.Replace("@PurchaseComments", WorkflowDetails.PurchaseComments);
@@ -226,14 +256,40 @@ namespace VendorMgmt.Web.Controllers
                     Emailbody = Emailbody.Replace("@ApproveLink", SiteUrl + "/Vendor/WorldCheckApproverConfirmation?Action=" + Functions.Base64Encode(VendorMst.RegistrationCode + "|Approve"));
                     Emailbody = Emailbody.Replace("@DenyLink", SiteUrl + "/Vendor/WorldCheckApproverConfirmation?Action=" + Functions.Base64Encode(VendorMst.RegistrationCode + "|Deny"));
                     Functions.SendEmail(WorldCheckApproverEmail, "New Vendor Actiation - " + VendorMst.BusinessName + " Account", Emailbody, false);
+
                 }
+                else
+                {
+                    vs.UpdateStatus(VendorMst.RegistrationCode, "Submitted to Treasury");
+                    if (TreasuryInfo != null)
+                    {
+                        var BasicInfo = vs.VendorBasicInfos.Where(p => p.Id == VendorId).FirstOrDefault();
+                        var TreasuryApproverEmail = lstUSers.Where(p => p.DisplayName == TreasuryInfo.ActionerName).FirstOrDefault().EmailAddress;
+                        //Send Email to ApproverTreasury
+                        Emailbody = es.EmailTemplateByName("taxationdetails").EmailBody;
+                        Emailbody = Emailbody.Replace("@DisplayName", WorkflowDetails.RequestorName);
+                        Emailbody = Emailbody.Replace("@TypeofVendorReq", PurchaseInfoDetails.TypeofVendorRequest);
+                        Emailbody = Emailbody.Replace("@VendorName", BasicInfo.VendorName);
+                        Emailbody = Emailbody.Replace("@VendorName2", BasicInfo.AlternateName);
+                        Emailbody = Emailbody.Replace("@VendorAddress", BasicInfo.BusinessAddress);
+                        Emailbody = Emailbody.Replace("@VendorCity", BasicInfo.BusinessCity);
+                        Emailbody = Emailbody.Replace("@VendorState", BasicInfo.BusinessState);
+                        Emailbody = Emailbody.Replace("@VendorPostalCode", BasicInfo.BusinessZip);
+                        Emailbody = Emailbody.Replace("@VendorCountry", BasicInfo.Country);
+                        Emailbody = Emailbody.Replace("@RemiInfoCurrency", BasicInfo.PaymentCurrency);
+                        Emailbody = Emailbody.Replace("@VendorGST_Applicable", BasicInfo.GSTApplicable == true ? "Yes" : "No");
+                        Emailbody = Emailbody.Replace("@VendorGSTRegistration_No", BasicInfo.GSTNumber);
+                        Emailbody = Emailbody.Replace("@VendorPFDEmail", VendorMst.VendorEmail);
+                        Emailbody = Emailbody.Replace("@VendorPFDPhone_Number", BasicInfo.Phonenumber);
+                        Functions.SendEmail(TreasuryApproverEmail, "New Vendor Actiation - " + VendorMst.BusinessName + " Account", Emailbody, false);
+                    }
+                }
+
             }
             else
             {
-                var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
-                vs.UpdateStatus(VendorMst.RegistrationCode, "Rejected by Purch Manager");
-                //Send notification to Requestor in case of Rejection 
-                var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
+                vs.UpdateStatus(VendorMst.RegistrationCode, "Rejected by Purchasing Manager");
+                //Send notification to Requestor in case of Rejection by Purchasing Manager
                 Emailbody = es.EmailTemplateByName("PurchaseRejection").EmailBody;
                 Emailbody = Emailbody.Replace("@RejectedBy", WorkflowDetails.PurchasingManager);
                 Emailbody = Emailbody.Replace("@Comments", WorkflowDetails.PurchaseComments);
@@ -262,22 +318,116 @@ namespace VendorMgmt.Web.Controllers
             var WorkflowDetails = vs.VendorWorkFlowInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
             string Emailbody = "";
             EmailTemplateService es = new EmailTemplateService();
-
+            var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
+            var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
+            var PurchaseInfoDetails = vs.VendorPurchasingInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
+            var BasicInfo = vs.VendorBasicInfos.Where(p => p.Id == VendorId).FirstOrDefault();
             if (action.Split('|')[1] == "Approve")
             {
                 vs.UpdateStatus(RegistrationCode, "Submitted to Treasury");
+                //Send Legal Approved Email to Requestor
+                Emailbody = es.EmailTemplateByName("Managementapproval").EmailBody;
+                Emailbody = Emailbody.Replace("@ApprovedBy", WorkflowDetails.PurchasingManager);
+                Emailbody = Emailbody.Replace("@ApprovedComments", WorkflowDetails.PurchaseComments);
+                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+                Functions.SendEmail(RequestorEmail, "New Vendor Actiation - " + VendorMst.BusinessName + " Account", Emailbody, false);
+                //Send Email to Tax Department
+                Emailbody = es.EmailTemplateByName("taxationdetails").EmailBody;
+                Emailbody = Emailbody.Replace("@DisplayName", WorkflowDetails.RequestorName);
+                Emailbody = Emailbody.Replace("@TypeofVendorReq", PurchaseInfoDetails.TypeofVendorRequest);
+                Emailbody = Emailbody.Replace("@VendorName", BasicInfo.VendorName);
+                Emailbody = Emailbody.Replace("@VendorName2", BasicInfo.AlternateName);
+                Emailbody = Emailbody.Replace("@VendorAddress", BasicInfo.BusinessAddress);
+                Emailbody = Emailbody.Replace("@VendorCity", BasicInfo.BusinessCity);
+                Emailbody = Emailbody.Replace("@VendorState", BasicInfo.BusinessState);
+                Emailbody = Emailbody.Replace("@VendorPostalCode", BasicInfo.BusinessZip);
+                Emailbody = Emailbody.Replace("@VendorCountry", BasicInfo.Country);
+                Emailbody = Emailbody.Replace("@RemiInfoCurrency", BasicInfo.PaymentCurrency);
+                Emailbody = Emailbody.Replace("@VendorGST_Applicable", BasicInfo.GSTApplicable == true ? "Yes" : "No");
+                Emailbody = Emailbody.Replace("@VendorGSTRegistration_No", BasicInfo.GSTNumber);
+                Emailbody = Emailbody.Replace("@VendorPFDEmail", VendorMst.VendorEmail);
+                Emailbody = Emailbody.Replace("@VendorPFDPhone_Number", BasicInfo.Phonenumber);
+                Functions.SendEmail("heather.mcclure@arcelormittal.com;olga.chernobab@arcelormittal.com", "New Vendor Actiation - " + VendorMst.BusinessName + " Account", Emailbody, false);
+
+                if (PurchaseInfoDetails.TypeofVendorRequest == "New Vendor Activation")
+                {
+                }
+                else if (PurchaseInfoDetails.TypeofVendorRequest == "New Vendor Activation - GST# Update")
+                {
+                }
+                else
+                {
+
+                }
             }
             else
             {
-                var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
+
                 vs.UpdateStatus(RegistrationCode, "Rejected by Legal");
                 //Send notification to Requestor in case of Rejection 
-                var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
                 Emailbody = es.EmailTemplateByName("WorldCheckRejection").EmailBody;
-                Emailbody = Emailbody.Replace("@RejectedBy", WorkflowDetails.WorldCheckApprover);
+                Emailbody = Emailbody.Replace("@RejectedBy", WorkflowDetails.WorldCheckApprover + ". This Vendor creation process will end.");
                 Emailbody = Emailbody.Replace("@Comments", WorkflowDetails.PurchaseComments);
                 Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
                 Functions.SendEmail(RequestorEmail, es.EmailTemplateByName("WorldCheckRejection").EmailSubject, Emailbody, false);
+                vs.AssignedBackToRequestor(RegistrationCode);
+            }
+            return Content("Sucess");
+        }
+
+        public async Task<ActionResult> TreasuryActionerConfirmation()
+        {
+            var action = Functions.Base64Decode(Request.QueryString["Action"]);
+            string RegistrationCode = action.Split('|')[0];
+            int VendorId = vs.UpdateWorldCheckApproval(action.Split('|')[0], action.Split('|')[1] == "Approve" ? true : false);
+            var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
+            var PurchaseInfoDetails = vs.VendorPurchasingInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
+            var lstUSers = new List<AzureUserList>();
+            if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+            {
+                lstUSers = await MicrosoftGraphClient.GetAllUsers();
+                System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            }
+            else
+            {
+                lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+            }
+            var WorkflowDetails = vs.VendorWorkFlowInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
+            var TreasuryInfo = vs.VendorTreasuryInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
+            string Emailbody = "";
+            EmailTemplateService es = new EmailTemplateService();
+            var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
+
+            var TreasuryActionerEmail = lstUSers.Where(p => p.DisplayName == TreasuryInfo.ActionerName).FirstOrDefault().EmailAddress;
+            var TreasuryActioner2Email = lstUSers.Where(p => p.DisplayName == TreasuryInfo.Level2ApproverName).FirstOrDefault().EmailAddress;
+
+
+
+            if (action.Split('|')[1] == "Approve")
+            {
+                vs.UpdateStatus(RegistrationCode, "Submitted to 2nd Level Approver");
+                //Send notification email to TreasuryActioner
+                Emailbody = es.EmailTemplateByName("NotificationTreasuryActioner").EmailBody;
+                Functions.SendEmail(TreasuryActionerEmail, es.EmailTemplateByName("NotificationTreasuryActioner").EmailSubject, Emailbody, false);
+                //Email Treasury Approver 2 with Vendor Details
+                Emailbody = es.EmailTemplateByName("secondlevelapprovaltreasury").EmailBody;
+                Emailbody = Emailbody.Replace("@RequestorName", WorkflowDetails.RequestorName);
+                Emailbody = Emailbody.Replace("@TypeofVendorReq", PurchaseInfoDetails.TypeofVendorRequest);
+                Emailbody = Emailbody.Replace("@VendorName", VendorMst.BusinessName);
+                Emailbody = Emailbody.Replace("@TreasuryActioner", TreasuryInfo.ActionerName);
+                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+
+                Functions.SendEmail(TreasuryActioner2Email, es.EmailTemplateByName("secondlevelapprovaltreasury").EmailSubject, Emailbody, false);
+
+            }
+            else
+            {
+                vs.UpdateStatus(RegistrationCode, "Rejected by Treasury");
+                //Treasury Rejection Email to Requestor
+                Emailbody = es.EmailTemplateByName("TreasuryRejectionToRequestor").EmailBody;
+                Functions.SendEmail(RequestorEmail, es.EmailTemplateByName("TreasuryRejectionToRequestor").EmailSubject, Emailbody, false);
+                
+
             }
             return Content("Sucess");
         }
@@ -616,22 +766,25 @@ namespace VendorMgmt.Web.Controllers
                     model.lstUsers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
                     model.PurchaseApproverEmail = model.lstUsers.Where(p => p.DisplayName == model.WorkFlowInfo.PurchasingManager).FirstOrDefault().EmailAddress;
                 }
-                string Emailbody = "";
-                EmailTemplateService es = new EmailTemplateService();
-                Emailbody = es.EmailTemplateByName("PurchaseApproval").EmailBody;
-                Emailbody = Emailbody.Replace("@VendorName", model.BusinessName);
-                Emailbody = Emailbody.Replace("@PurchaseComments", model.WorkFlowInfo.PurchaseComments);
-                Emailbody = Emailbody.Replace("@RequestorName", model.WorkFlowInfo.RequestorName);
-                Emailbody = Emailbody.Replace("@ApproveLink", SiteUrl + "/Vendor/PurchaseApproverConfirmation?Action=" + Functions.Base64Encode(model.RegistrationCode + "|Approve"));
-                Emailbody = Emailbody.Replace("@DenyLink", SiteUrl + "/Vendor/PurchaseApproverConfirmation?Action=" + Functions.Base64Encode(model.RegistrationCode + "|Deny"));
-                Functions.SendEmail(string.IsNullOrEmpty(model.PurchaseApproverEmail) ? "hardikce.08@gmail.com" : model.PurchaseApproverEmail, "Approval", Emailbody, false);
-                vs.UpdateStatus(VendorMst.RegistrationCode, "Submitted to Purch Manager");
+                if (VendorMst.PurchaseManagerApproved == false && VendorMst.WorldCheckApproved == false)
+                {
+                    string Emailbody = "";
+                    EmailTemplateService es = new EmailTemplateService();
+                    Emailbody = es.EmailTemplateByName("PurchaseApproval").EmailBody;
+                    Emailbody = Emailbody.Replace("@VendorName", model.BusinessName);
+                    Emailbody = Emailbody.Replace("@PurchaseComments", model.WorkFlowInfo.PurchaseComments);
+                    Emailbody = Emailbody.Replace("@RequestorName", model.WorkFlowInfo.RequestorName);
+                    Emailbody = Emailbody.Replace("@ApproveLink", SiteUrl + "/Vendor/PurchaseApproverConfirmation?Action=" + Functions.Base64Encode(model.RegistrationCode + "|Approve"));
+                    Emailbody = Emailbody.Replace("@DenyLink", SiteUrl + "/Vendor/PurchaseApproverConfirmation?Action=" + Functions.Base64Encode(model.RegistrationCode + "|Deny"));
+                    Functions.SendEmail(string.IsNullOrEmpty(model.PurchaseApproverEmail) ? "hardikce.08@gmail.com" : model.PurchaseApproverEmail, "Approval", Emailbody, false);
+                    vs.UpdateStatus(VendorMst.RegistrationCode, "Submitted to Purch Manager");
+                }
                 return Json(new { PurchaseInfoId = model.PurchaseInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { PurchaseInfoId = 0 }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult SaveTab5Admin(VendorFillInfo model)
+        public async Task<JsonResult> SaveTab5Admin(VendorFillInfo model)
         {
             if (model.RegistrationCode == string.Empty)
             {
@@ -645,13 +798,77 @@ namespace VendorMgmt.Web.Controllers
                     TempData["Error"] = "Invalid Registration Code";
                 }
                 model.TreasuryInfo.VendorId = model.VendorId;
+                model.TreasuryInfo.ActionerName = Request.Form["TreasuryInfo_ActionerName"];
+                model.TreasuryInfo.ChecklistInfo1 = Convert.ToBoolean(Request.Form["TreasuryInfo_ChecklistInfo1"]);
+                model.TreasuryInfo.ChecklistInfo2 = Convert.ToBoolean(Request.Form["TreasuryInfo_ChecklistInfo2"]);
+                model.TreasuryInfo.Level2ApproverName= Request.Form["TreasuryInfo_Level2ApproverName"];
+                model.TreasuryInfo.Level2ChecklistInfo = Convert.ToBoolean(Request.Form["TreasuryInfo_Level2ChecklistInfo"]);
+                EmailTemplateService es = new EmailTemplateService();
+                var lstUSers = new List<AzureUserList>();
+                if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+                {
+                    lstUSers = await MicrosoftGraphClient.GetAllUsers();
+                    System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+                }
+                else
+                {
+                    lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+                }
+                var PurchaseInfoDetails = vs.VendorPurchasingInfos.Where(p => p.VendorId == model.VendorId).FirstOrDefault();
+                var WorkflowDetails = vs.VendorWorkFlowInfos.Where(p => p.VendorId == model.VendorId).FirstOrDefault();
+                var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
+                var TreasuryActionerEmail = lstUSers.Where(p => p.DisplayName == model.TreasuryInfo.ActionerName).FirstOrDefault().EmailAddress;
+                var TreasuryActioner2Email = lstUSers.Where(p => p.DisplayName == model.TreasuryInfo.Level2ApproverName).FirstOrDefault().EmailAddress;
+
                 vs.VendorTreasuryInfo_InsertOrUpdate(model.TreasuryInfo);
+                if (model.IsTreasuryValidated == false)
+                {
+                    //Update status to Validation Pending
+                    vs.UpdateStatus(VendorMst.RegistrationCode, "Validation Pending");
+                    vs.UpdateTreasuryvlidated(VendorMst.RegistrationCode, true);
+                    // send Pending Validation Email to Requestor
+                    var Emailbody = es.EmailTemplateByName("pendingvalidationnotification").EmailBody;
+                    Emailbody = Emailbody.Replace("@TreasuryActioner", model.TreasuryInfo.ActionerName);
+                    Emailbody = Emailbody.Replace("@TypeofVendorReq", PurchaseInfoDetails.TypeofVendorRequest);
+                    Emailbody = Emailbody.Replace("@VendorName", VendorMst.BusinessName);
+                    Emailbody = Emailbody.Replace("@VendorNo", model.TreasuryInfo.VendorNumber);
+                    Functions.SendEmail(RequestorEmail, es.EmailTemplateByName("pendingvalidationnotification").EmailSubject, Emailbody, false);
+                    // send email to Treasury Actioner for Pending notification
+                    Emailbody = es.EmailTemplateByName("PendingTreasuryActionerNotification").EmailBody;
+                    Functions.SendEmail(TreasuryActionerEmail, es.EmailTemplateByName("PendingTreasuryActionerNotification").EmailSubject, Emailbody, false);
+
+
+                    //send email to Treasury Approval
+                    Emailbody = es.EmailTemplateByName("WorldCheckApprover").EmailBody;
+                    Emailbody = Emailbody.Replace("@VendorName", VendorMst.BusinessName + " Account");
+                    Emailbody = Emailbody.Replace("@PurchaseComments", WorkflowDetails.PurchaseComments);
+                    Emailbody = Emailbody.Replace("@RequestorName", WorkflowDetails.RequestorName);
+                    Emailbody = Emailbody.Replace("@Date", DateTime.Now.ToString("dddd, MMMM dd, yyyy hh:mm tt"));
+                    Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+                    Emailbody = Emailbody.Replace("@ApproveLink", SiteUrl + "/Vendor/TreasuryActionerConfirmation?Action=" + Functions.Base64Encode(VendorMst.RegistrationCode + "|Approve"));
+                    Emailbody = Emailbody.Replace("@DenyLink", SiteUrl + "/Vendor/TreasuryActionerConfirmation?Action=" + Functions.Base64Encode(VendorMst.RegistrationCode + "|Deny"));
+                    Functions.SendEmail(TreasuryActionerEmail, "New Vendor Actiation - " + VendorMst.BusinessName + " Account", Emailbody, false);
+                }
+                if (model.IsTreasuryValidated == true)
+                {
+                    //Update status to Process Complete
+                    vs.UpdateStatus(VendorMst.RegistrationCode, "Process Completed");
+                    var Emailbody = es.EmailTemplateByName("pendingvalidationnotification").EmailBody;
+                    Emailbody = Emailbody.Replace("@TreasuryActioner", model.TreasuryInfo.ActionerName);
+                    Emailbody = Emailbody.Replace("@TypeofVendorReq", PurchaseInfoDetails.TypeofVendorRequest);
+                    Emailbody = Emailbody.Replace("@VendorName", VendorMst.BusinessName);
+                    Emailbody = Emailbody.Replace("@VendorNo", model.TreasuryInfo.VendorNumber);
+                    Functions.SendEmail(RequestorEmail, "Vendor Activation Process Complete", Emailbody, false);
+                    Functions.SendEmail(TreasuryActionerEmail, "Vendor Activation Process Complete", Emailbody, false);
+                    Functions.SendEmail(TreasuryActioner2Email, "Vendor Activation Process Complete", Emailbody, false);
+
+                }
                 return Json(new { TreasuryInfoId = model.TreasuryInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { TreasuryInfoId = 0 }, JsonRequestBehavior.AllowGet);
         }
-
-        public ActionResult UploadFilesAdmin()
+ 
+            public ActionResult UploadFilesAdmin()
         {
             string VendorId = Request["VendorId"];
             //Save Files if its Exist 

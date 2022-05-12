@@ -57,6 +57,10 @@ namespace VendorMgmt.Helper
             {
                 //var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
                 var message = new MailMessage();
+                //foreach (string s in receiver.Split(';'))
+                //{
+                //    message.To.Add(new MailAddress(s));
+                //}
                 message.To.Add(new MailAddress("hardikce.08@gmail.com"));  // replace with valid value 
                 message.From = new MailAddress(ConfigurationManager.AppSettings["FromEmail"], ConfigurationManager.AppSettings["FromEmailDisplayName"]);  // replace with valid value
                 message.Subject = subject;

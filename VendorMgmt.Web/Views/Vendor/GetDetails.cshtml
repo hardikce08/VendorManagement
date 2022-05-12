@@ -701,8 +701,8 @@
                                                 <div class="col-lg-2">
                                                     <div class="form-group row">
                                                         @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", !Model.TreasuryInfo.ChecklistInfo1) <label class="customradiotext"> Yes</label>
-                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", Model.TreasuryInfo.ChecklistInfo1)  <label class="customradiotext"> No</label>
+                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", "true", Model.TreasuryInfo.ChecklistInfo1 == true ? true : false) <label class="customradiotext"> Yes</label>
+                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", "false", Model.TreasuryInfo.ChecklistInfo1 == true ? false : true)  <label class="customradiotext"> No</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -716,10 +716,13 @@
                                                 <div class="col-lg-2">
                                                     <div class="form-group row">
                                                         @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.RadioButton("ChecklistInfo2", !Model.TreasuryInfo.ChecklistInfo2) <label class="customradiotext"> Yes</label>
-                                                        @Html.RadioButton("ChecklistInfo2", Model.TreasuryInfo.ChecklistInfo2)  <label class="customradiotext"> No</label>
+                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo2", "true", Model.TreasuryInfo.ChecklistInfo2 == true ? true : false) <label class="customradiotext"> Yes</label>
+                                                        @Html.RadioButton("TreasuryInfo_ChecklistInfo2", "false", Model.TreasuryInfo.ChecklistInfo2 == true ? false : true)  <label class="customradiotext"> No</label>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="row" style="margin-left:50%;">
+                                                <input type="button"  id="btnValidate" onclick="btnValidateClick();" value="Validate" class="btn btn-behance btn-shadow"/>
                                             </div>
                                             <div class="row">
                                                 <div class="alert subheader col-lg-12"><strong>Treasury 2nd Level Approver Details</strong> </div>
@@ -746,8 +749,8 @@
                                                 <div class="col-lg-2">
                                                     <div class="form-group row">
                                                         @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                        @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", !Model.TreasuryInfo.Level2ChecklistInfo) <label class="customradiotext"> Yes</label>
-                                                        @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", Model.TreasuryInfo.Level2ChecklistInfo)  <label class="customradiotext"> No</label>
+                                                        @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", "true", Model.TreasuryInfo.Level2ChecklistInfo == true ? true : false) <label class="customradiotext"> Yes</label>
+                                                        @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", "false", Model.TreasuryInfo.Level2ChecklistInfo == true ? false : true)  <label class="customradiotext"> No</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -772,6 +775,7 @@
         <input type="hidden" id="HasError" value="0" />
         @Html.HiddenFor(m => m.IsPurchaseManagerApproved)
         @Html.HiddenFor(m => m.IsWorldCheckApproved)
+        @Html.HiddenFor(m => m.IsTreasuryValidated)
     </div>
     @*</form>*@
     <!-- =========================================================-->
@@ -883,6 +887,18 @@
 
                         if (($("#IsPurchaseManagerApproved").val() == "False" || $("#IsWorldCheckApproved").val() == "False")) {
                             $("ul[aria-label=Pagination] li:eq(2)").remove();
+                        }
+                    }
+                    if (newIndex == 4) {
+                        if ($("#IsTreasuryValidated").val() == "False") {
+                            $("#btnValidate").prop('disabled', false);
+                            $("ul[aria-label=Pagination] li:eq(1)").remove();
+                            $("ul[aria-label=Pagination] li:eq(2)").remove();
+                        }
+                        else {
+                            $("#btnValidate").prop('disabled', true);
+                            $("ul[aria-label=Pagination] li:eq(1)").remove();
+                            $("ul[aria-label=Pagination] li:eq(2) a").text('Complete');
                         }
                     }
                     if (HasError) { return false; }
@@ -1100,6 +1116,8 @@
                         }
                         else {
                             $("#TreasuryInfo_Id").val(data.TreasuryInfoId);
+                            var url = '@Url.Action("Success", "Vendor")';
+                                                window.location.href = url;
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -1109,6 +1127,36 @@
                 });
             }
             else { return false; }
+        }
+
+        function btnValidateClick() {
+             var Isvalidated = $("#step5").parsley().validate();
+            if (Isvalidated) {
+                $.ajax({
+                    cache: false,
+                    async: false,
+                    type: "POST",
+                    url: "@(Url.Action("SaveTab5Admin"))",
+                    data: $("#step5").serializeArray(),
+                    success: function (data) {
+
+                        if (data.TreasuryInfoId == undefined || data.TreasuryInfoId == 0) {
+                            HasError = true;
+                            errorToast();
+                        }
+                        else {
+                            $("#TreasuryInfo_Id").val(data.TreasuryInfoId);
+                            $("#btnValidate").prop('disabled', true);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $("#divLoader").hide(); // hide loader
+                        alert('Failed to retrieve detail data.');
+                    }
+                });
+            }
+            else { return false; }
+
         }
         function DeleteFile(Fileid, FileName) {
             formdata.delete(FileName)

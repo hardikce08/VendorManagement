@@ -72,8 +72,8 @@ namespace VendorMgmt.Helper
             Dictionary<int, string> data = new Dictionary<int, string>();
             data.Add(0, "");
             data.Add(1, "Submitted by Vendor");
-            data.Add(2, "Submitted to Purch Manager");
-            data.Add(3, "Rejected by Purch Manager");
+            data.Add(2, "Submitted to Purchasing Manager");
+            data.Add(3, "Rejected by Purchasing Manager");
             data.Add(4, "Submitted to Legal");
             data.Add(5, "Rejected by Legal");
             data.Add(6, "Submitted to Treasury");
@@ -133,5 +133,7 @@ namespace VendorMgmt.Helper
 
             return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
         }
+
+       
     }
 }

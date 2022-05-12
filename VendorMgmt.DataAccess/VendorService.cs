@@ -50,7 +50,8 @@ namespace VendorMgmt.DataAccess
                            LinkExpired=v.LinkExpired ,
                            LinkGuid=v.LinkGuid ,
                            PurchaseManagerApproved=v.PurchaseManagerApproved,
-                           WorldCheckApproved=v.WorldCheckApproved 
+                           WorldCheckApproved=v.WorldCheckApproved ,
+                           TreasuryValidated=v.TreasuryValidated
                        };
             }
         }
@@ -87,7 +88,8 @@ namespace VendorMgmt.DataAccess
                     LinkGuid = v.LinkGuid,
                     Status = "Validation Pending",
                     PurchaseManagerApproved = false,
-                    WorldCheckApproved=false 
+                    WorldCheckApproved=false ,
+                    TreasuryValidated=false
                 };
 
                 db.VendorMaster.AddObject(i);
@@ -112,6 +114,7 @@ namespace VendorMgmt.DataAccess
                 u.Status = "Validation Pending";
                 u.PurchaseManagerApproved = false;
                 u.WorldCheckApproved = false;
+                u.TreasuryValidated = false;
                 db.SaveChanges();
             }
         }
@@ -163,6 +166,21 @@ namespace VendorMgmt.DataAccess
         {
             var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
             objVendorMst.Status= Status;
+            db.SaveChanges();
+            return objVendorMst.Id;
+        }
+        public int UpdateTreasuryvlidated(string RegitrationCode, bool IsApprove)
+        {
+            var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
+            objVendorMst.TreasuryValidated = IsApprove;
+            db.SaveChanges();
+            return objVendorMst.Id;
+        }
+        public int AssignedBackToRequestor(string RegitrationCode)
+        {
+            var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
+            objVendorMst.PurchaseManagerApproved  = false;
+            objVendorMst.WorldCheckApproved = false;
             db.SaveChanges();
             return objVendorMst.Id;
         }
