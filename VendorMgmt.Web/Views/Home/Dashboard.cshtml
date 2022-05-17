@@ -48,18 +48,28 @@
         .dropdown-menu li {
             line-height: 15px;
         }
+
         .auth-split .auth-right {
             position: unset !important;
             width: 100%;
         }
+
             .auth-split .auth-right::after {
                 background: none;
             }
+
+
+        .customleftstylesheet {
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 50%;
+            flex: 0 0 0%;
+            max-width: 50%;
+        }
     </style>
     <div class="col-md-12 row">
-        <div class="col-md-6 no-padding">
-            <div class="auth-split">
-                <div class="auth-right" style="background-image: url('../../Theme/images/dashboard.jpg'); background-size: 100% 100%;">
+        <div class="col-md-6 no-padding customleftstylesheet" style="width: 533px !important;">
+            <div class="auth-split" style="width: 533px !important; height: 800px; padding-right: 0px !important; margin: 0px;">
+                <div class="auth-right" style="background-image: url('../../Theme/images/dashboard.jpg');">
                     <div class="auth-content">
                         <div>
                             <h1>Arcelor Mittal</h1>
@@ -69,12 +79,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5 ml-200">
             <div class="card card-hover card-gradient" style="margin-top:30vh;">
                 <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnReview" style="cursor:pointer;"><span class=""><i class="fs-20 fa fa-search mr-10"></i>Review Submission</span> </button>
+
             </div>
             <div class="card card-hover card-gradient">
                 <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnAddNew" style="cursor:pointer;" data-toggle="modal" data-target="#modal-lg"><span class=""><i class="fs-20 fa fa-plus mr-10"></i>Add New Vendor</span> </button>
+
             </div>
             <div class="card card-hover card-gradient">
                 <button type="button" class="btn btn-primary btn-block btn-lg fs-20" id="btnEmailTemplate" style="cursor:pointer;"><span class=""><i class="fs-20 fa fa-envelope mr-10"></i>Manage Email Template</span> </button>
@@ -142,7 +154,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-bold btn-pure btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-bold btn-pure btn-primary">Send Registration</button>
                     </div>
                 </div>
             </div>
@@ -228,6 +240,47 @@
                     $('[id*=BusinessName]').val(map[item].name);
                     $('[id*=RegistrationCode]').val(map[item].id);
 
+                    return item;
+                }
+            });
+
+            $("#DofascoEmail").typeahead({
+                minLength: 1,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Home/GetDofascoEmailList",
+                        data: {
+                            "name": request
+                        },
+                        type: "GET",
+                        contentType: "json",
+                        success: function (data) {
+                            items = [];
+                            map = {};
+                            $.each(data, function (i, item) {
+                                /*console.log(item);*/
+                                var id = item.DofascoEmail;
+                                var name = item.DofascoEmail;
+                                map[name] = {
+                                    id: id,
+                                    name: name
+                                };
+                                items.push(name);
+                            });
+                            response(items);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                updater: function (item) {
+                    //alert(map[item].id);
+                    //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
+                    $('[id*=DofascoEmail]').val(map[item].name);
                     return item;
                 }
             });

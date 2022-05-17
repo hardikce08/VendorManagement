@@ -189,6 +189,12 @@ namespace VendorMgmt.Web.Controllers
             var list = vs.VendorMasters.Where(x => x.BusinessName.StartsWith(name)).Take(10).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetDofascoEmailList(string name)
+        {
+            VendorService vs = new VendorService();
+            var list = vs.VendorMasters.Where(x => x.DofascoEmail.StartsWith(name)).Take(10).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult CallBack()
         {
             if (Request.Params["access_token"] != null)

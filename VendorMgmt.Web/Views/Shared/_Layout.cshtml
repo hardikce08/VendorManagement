@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link href="~/Theme/css/sweetalert2.min.css" rel="stylesheet" />
     @*@Styles.Render("~/Theme/css")*@
-<style type="text/css">
+    <style type="text/css">
         main .main-header .header-info {
             padding: 5px 30px;
         }
@@ -66,8 +66,13 @@
             z-index: 9999;
             background: url('@Url.Content("~/Theme/images/Loader.gif")') 50% 50% no-repeat #0020ff36;
         }
-
-</style>
+        .customdropdown {
+            border-radius: 3px;
+            border-color: #ebebeb;
+            color: #b1b0b0;
+            line-height: inherit;
+        }
+    </style>
 </head>
 <body>
     <div id='load' style="display:none;">
@@ -160,7 +165,9 @@
 
 
             </div>
-
+            <div class="header-left" style="margin-left:5%;font-size:25px;color:white;font-weight:bold;">
+                @ViewBag.Title
+            </div>
             <div class="header-right">
                 <!-- search -->
                 <div>
@@ -243,6 +250,7 @@
             });
             $('#tblGridData').DataTable({
                 responsive: true,
+                "iDisplayLength": 25,
                 language: {
                     searchPlaceholder: 'Search...',
                     sSearch: ''

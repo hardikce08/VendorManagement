@@ -42,20 +42,28 @@
         .dropdown-menu li {
             line-height: 15px;
         }
-
-
-
-
-        .dataTable thead {
+        .dataTable thead tr {
             background-color: #FF3700;
+            
+        }
+        .table thead tr th {
+            color: white !important;
+        }
+
+        .dataTables_length select {
+            padding: 7px 12px;
+            border-radius: 3px;
+            border-color: #ebebeb;
+            color: #b1b0b0;
+            line-height: inherit;
         }
     </style>
-   
+    <div>
+        <a id="btnBack" href="/" target="_self" class="btn btn-primary btn-shadow">Back to Home</a>
+    </div>
     <div class="col-md-12 row">
         <div class="col-md-2 row">
-            <a href=""><i class="fas fa-align-center fa-10x fa-filter" style="color:#ff3700"></i></a>
-        </div>
-        <div class="col-md-2 row">
+            <a href=""><i class="fas fa-align-center fa-5x fa-filter" style="color: #ff3700; margin-top: 50%;"></i></a>
         </div>
         <div class="col-md-8 row">
             <div class="col-md-12 row">
@@ -87,7 +95,7 @@
                         @Html.TextBoxFor(m => m.RequestorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label for="input-placeholder"><strong>Updated Date  </strong></label>
                         <div class="row" style="margin-left:0px;">
@@ -97,7 +105,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button type="submit" class="btn btn-bold btn-pure btn-primary">Search</button>
+                    <button type="submit" class="btn btn-bold btn-pure btn-primary">Reset</button>
                 </div>
                 <div class="col-lg-2">
                 </div>

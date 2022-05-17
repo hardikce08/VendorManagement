@@ -624,8 +624,11 @@ namespace VendorMgmt.DataAccess
         public void VendorAttachmentInfo_Remove(VendorAttachmentInfo v)
         {
             var e = db.VendorAttachmentInfo.Where(p => p.Id == v.Id).FirstOrDefault();
-            db.VendorAttachmentInfo.DeleteObject(e);
-            db.SaveChanges();
+            if (e != null)
+            {
+                db.VendorAttachmentInfo.DeleteObject(e);
+                db.SaveChanges();
+            }
         }
         #endregion
 

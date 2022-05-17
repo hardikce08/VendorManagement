@@ -99,6 +99,18 @@ namespace VendorMgmt.Web.Controllers
         }
         public async Task<ActionResult> GetDetails(string RegistrationCode)
         {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                //You get the user's first and last name below:
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             VendorFillInfo model = new VendorFillInfo();
             if (RegistrationCode == string.Empty)
             {
@@ -686,9 +698,14 @@ namespace VendorMgmt.Web.Controllers
                 //vs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);
                 vs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);
                 vs.VendorFinancialInfo_InsertOrUpdate(model.FinancialInfo);
-                return Json(new { BasicInfoId = model.BasicInfo.Id, FinancialInfoId = model.FinancialInfo.Id }, JsonRequestBehavior.AllowGet);
+                model.PrimarySalesInfo.VendorId = model.VendorId;
+                vs.VendorPrimarySalesInfo_InsertOrUpdate(model.PrimarySalesInfo);
+                model.SubmittedByInfo.VendorId = model.VendorId;
+                vs.VendorSubmittedByInfo_InsertOrUpdate(model.SubmittedByInfo);
+
+                return Json(new { PrimarySalesInfoId = model.PrimarySalesInfo.Id, SubmittedByInfoId = model.SubmittedByInfo.Id, BasicInfoId = model.BasicInfo.Id, FinancialInfoId = model.FinancialInfo.Id }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { id = 0 }, JsonRequestBehavior.AllowGet);
+            return Json(new { id = 0, PrimarySalesInfoId=0, SubmittedByInfoId=0 }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public JsonResult SaveTab2Admin(VendorFillInfo model)
@@ -704,12 +721,8 @@ namespace VendorMgmt.Web.Controllers
                 {
                     TempData["Error"] = "Invalid Registration Code";
                 }
-                model.PrimarySalesInfo.VendorId = model.VendorId;
-                vs.VendorPrimarySalesInfo_InsertOrUpdate(model.PrimarySalesInfo);
-                model.SubmittedByInfo.VendorId = model.VendorId;
-                vs.VendorSubmittedByInfo_InsertOrUpdate(model.SubmittedByInfo);
-                model.RemittanceInfo.VendorId = model.VendorId;
-                vs.VendorRemittanceInfo_InsertOrUpdate(model.RemittanceInfo);
+               
+               
                 return Json(new { PrimarySalesInfoId = model.PrimarySalesInfo.Id, SubmittedByInfoId = model.SubmittedByInfo.Id, RemittanceInfoId = model.RemittanceInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { PrimarySalesInfoId = 0, SubmittedByInfoId = 0, RemittanceInfoId = 0 }, JsonRequestBehavior.AllowGet);
@@ -730,9 +743,11 @@ namespace VendorMgmt.Web.Controllers
                 }
                 model.BankingInfo.VendorId = model.VendorId;
                 vs.VendorBankingInfo_InsertOrUpdate(model.BankingInfo);
-                return Json(new { BankingInfoId = model.BankingInfo.Id }, JsonRequestBehavior.AllowGet);
+                model.RemittanceInfo.VendorId = model.VendorId;
+                vs.VendorRemittanceInfo_InsertOrUpdate(model.RemittanceInfo);
+                return Json(new { RemittanceInfoId = model.RemittanceInfo.Id, BankingInfoId = model.BankingInfo.Id }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { BankingInfoId = 0 }, JsonRequestBehavior.AllowGet);
+            return Json(new { BankingInfoId = 0, RemittanceInfoId=0 }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
