@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VendorMgmt.Helper", "Vendor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VendorMgmt.Model", "VendorMgmt.Model\VendorMgmt.Model.csproj", "{4CCDA9F4-D84F-40A5-A4BF-B849749C2721}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerPortal", "CustomerPortal\CustomerPortal.csproj", "{7AC9914F-1FAA-4A38-89F9-86E99309A503}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4CCDA9F4-D84F-40A5-A4BF-B849749C2721}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CCDA9F4-D84F-40A5-A4BF-B849749C2721}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CCDA9F4-D84F-40A5-A4BF-B849749C2721}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AC9914F-1FAA-4A38-89F9-86E99309A503}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AC9914F-1FAA-4A38-89F9-86E99309A503}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AC9914F-1FAA-4A38-89F9-86E99309A503}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AC9914F-1FAA-4A38-89F9-86E99309A503}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

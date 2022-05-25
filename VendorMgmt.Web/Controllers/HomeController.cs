@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using VendorMgmt.DataAccess;
 using VendorMgmt.DataAccess.Model;
@@ -91,7 +94,7 @@ namespace VendorMgmt.Web.Controllers
                 {
                     model.LinkGuid = Guid.NewGuid().ToString();
                 }
-                Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/FillInfo/" + model.LinkGuid);
+                Emailbody = Emailbody.Replace("{ShortUrl}", CustomerPortalURL + "/FillInfo?id=" + model.LinkGuid);
                 Emailbody = Emailbody.Replace("{CompanyName}", model.BusinessName);
                 Emailbody = Emailbody.Replace("{RegCode}", model.RegistrationCode);
                 Emailbody = Emailbody.Replace("{DofascoContact}", model.DofascoEmail);
@@ -244,6 +247,71 @@ namespace VendorMgmt.Web.Controllers
 
             return string.Join("&", list);
         }
+        [HttpPost]
+        public HttpResponseMessage SaveFile()
+        {
+            foreach (string file in Request.Files)
+            {
+                var FileDataContent = Request.Files[file];
+                if (FileDataContent != null && FileDataContent.ContentLength > 0)
+                {
+                    // take the input stream, and save it to a temp folder using  
+                    // the original file.part name posted  
+                    var stream = FileDataContent.InputStream;
+                    var fileName = Path.GetFileName(FileDataContent.FileName);
+                    var UploadPath = Server.MapPath("~/Attachments/");
+                    string path = Path.Combine(UploadPath, fileName);
+                    try
+                    {
+                        if (System.IO.File.Exists(path))
+                            System.IO.File.Delete(path);
+                        using (var fileStream = System.IO.File.Create(path))
+                        {
+                            stream.CopyTo(fileStream);
+                        }
+                    }
+                    catch (IOException ex)
+                    {
+                        // handle  
+                    }
+                }
+            }
+            return new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Content = new StringContent("File uploaded.")
+            };
+        }
+        [HttpPost]
+        public bool SaveFileOld()
+        {
+            var httpContext = System.Web.HttpContext.Current;
+            try
+            {
+                // Check for any uploaded file  
+                if (httpContext.Request.Files.Count > 0)
+                {
+                    //Loop through uploaded files  
+                    for (int i = 0; i < httpContext.Request.Files.Count; i++)
+                    {
+                        HttpPostedFile httpPostedFile = httpContext.Request.Files[i];
+                        if (httpPostedFile != null)
+                        {
+                            // Construct file save path  
+                            var fileSavePath = Path.Combine(Server.MapPath("~/Attachments/"), httpPostedFile.FileName);
+
+                            // Save the uploaded file  
+                            httpPostedFile.SaveAs(fileSavePath);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public static string SiteUrl
         {
             get
@@ -253,6 +321,13 @@ namespace VendorMgmt.Web.Controllers
 
                 var request = System.Web.HttpContext.Current.Request;
                 return request.Url.Scheme + "://" + request.Url.DnsSafeHost + (request.Url.IsDefaultPort ? "" : ":" + request.Url.Port.ToString());
+            }
+        }
+        public static string CustomerPortalURL
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["CustomerPortalURL"];
             }
         }
     }

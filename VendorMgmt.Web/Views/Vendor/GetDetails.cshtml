@@ -542,14 +542,14 @@
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label for="input-placeholder"><strong>Bank Institution #</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.InstitutionNo, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                <label for="input-placeholder" class="require"><strong>Bank Institution #</strong></label>
+                                                @Html.TextBoxFor(m => m.BankingInfo.InstitutionNo, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label for="input-placeholder"><strong>Bank Transit #</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.TransitNo, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                                                <label for="input-placeholder" class="require"><strong>Bank Transit #</strong></label>
+                                                @Html.TextBoxFor(m => m.BankingInfo.TransitNo, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                             </div>
                                         </div>
                                     </div>

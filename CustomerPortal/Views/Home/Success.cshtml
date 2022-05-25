@@ -1,0 +1,124 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vendor Management</title>
+
+    <!-- favicons -->
+    <link rel="icon" type="image/png" href="~/Theme/images/favicon.png">
+    <link rel="apple-touch-icon" href="~/Theme/images/apple-touch-icon.png">
+
+
+    <link href="~/Theme/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/Theme/css/font-awesome.min.css" rel="stylesheet" />
+
+    @*<link href="~/Theme/css/simplebar.min.css" rel="stylesheet" />*@
+    @*=========================================================
+        This Page Styles
+        =========================================================*@
+    @*morris chart
+        <link rel="stylesheet" href="./assets/vendor/morris/css/morris.min.css">*@
+    <!-- toastr -->
+    <link href="~/Theme/css/jquery.toast.min.css" rel="stylesheet" />
+    <!-- data table -->
+    <link href="~/Theme/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <!-- summernote editor -->
+    <link href="~/Theme/css/summernote-bs4.css" rel="stylesheet" />
+    @*Main Styles*@
+    <link href="~/Theme/css/main.css?v=1.0" rel="stylesheet" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link href="~/Theme/css/sweetalert2.min.css" rel="stylesheet" />
+    @*@Styles.Render("~/Theme/css")*@
+    <style type="text/css">
+        main .main-header .header-info {
+            padding: 5px 30px;
+        }
+
+        main .content {
+            margin-top: 15px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        header {
+            width: 100% !important;
+            background: #FF3700;
+        }
+
+        main {
+            margin-left: 0px;
+        }
+
+        .header-right {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="header-left">
+                <!-- navigation-toggle  -->
+                <a href="" class="header-btn side-nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </a>
+                <div class="header">
+                    <div class="logo">
+
+                        <img src="~/Theme/images/Companylogo.png" style="height:65px;margin-right:10px;margin-top:5px;" />
+
+                    </div>
+                </div>
+                <!-- window full screen -->
+                @*<a href="" id="fullScreen" class="header-btn hide-md"><i class="fa fa-expand"></i></a>*@
+
+
+            </div>
+        <div style="text-align: center; color: white !important; vertical-align: middle; margin-top: 1%;">
+            <h3 style="color:white !important;">VENDOR MANAGEMENT</h3>
+        </div>
+            <div class="header-right">
+               
+            </div>
+        </header><!-- header //. -->
+        <main>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <div class="panel-body" style="margin-top: 15%;">
+                            @using (Html.BeginForm("Success", "Home", FormMethod.Post, new { @class = "form-horizontal form-bordered", onsubmit = "showLoader(this);" }))
+                            {
+
+                                <div class="panel-body">
+                                    <div class="col-md-12" style="text-align:center;">
+                                        <h1>Thank you for submitting your vendor information</h1>
+                                    </div>
+                                    <div class="col-md-12" style="text-align:center;">
+                                        <h3>You will receive an email confirmation shortly.</h3>
+                                    </div>
+                                </div>
+                                @*<footer class="panel-footer"></footer>*@
+                            }
+                        </div>
+                    </section>
+
+
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+@section scripts{
+
+}
+
