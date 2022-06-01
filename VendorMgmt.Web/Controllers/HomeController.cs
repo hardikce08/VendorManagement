@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using VendorMgmt.DataAccess;
@@ -97,7 +98,7 @@ namespace VendorMgmt.Web.Controllers
                 Emailbody = Emailbody.Replace("{ShortUrl}", CustomerPortalURL + "/FillInfo?id=" + model.LinkGuid);
                 Emailbody = Emailbody.Replace("{CompanyName}", model.BusinessName);
                 Emailbody = Emailbody.Replace("{RegCode}", model.RegistrationCode);
-                Emailbody = Emailbody.Replace("{DofascoContact}", model.DofascoEmail);
+                Emailbody = Emailbody.Replace("{DofascoContact}", model.VendorEmail);
                 Functions.SendEmail(model.VendorEmail, "Fill Information", Emailbody, model.nsKnox);
 
                 vs.VendorMaster_InsertOrUpdate(model);
@@ -108,7 +109,7 @@ namespace VendorMgmt.Web.Controllers
             model.RegistrationCode = CommonHelper.GetRegistrationCode();
             return View(model);
         }
-        public ActionResult Vendors()
+        public async Task<ActionResult> Vendors()
         {
             if (Request.Cookies["UserToken"] != null)
             {
@@ -127,10 +128,21 @@ namespace VendorMgmt.Web.Controllers
             model.lstVendors = vs.GetVendorGridData();
             model.FromDate = DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd");
             model.ToDate = DateTime.Now.ToString("yyyy-MM-dd");
+            var lstUSers = new List<AzureUserList>();
+            if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+            {
+                lstUSers = await MicrosoftGraphClient.GetAllUsers();
+                System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            }
+            else
+            {
+                lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+            }
+            model.lstUsers = lstUSers;
             return View(model);
         }
         [HttpPost]
-        public ActionResult Vendors(VendorListView model)
+        public async Task<ActionResult> Vendors(VendorListView model)
         {
             if (Request.Cookies["UserToken"] != null)
             {
@@ -163,6 +175,19 @@ namespace VendorMgmt.Web.Controllers
             {
                 model.lstVendors = model.lstVendors.Where(p => p.UpdatedDate >= Convert.ToDateTime(model.FromDate) && p.UpdatedDate <= Convert.ToDateTime(model.ToDate)).ToList();
             }
+
+            var lstUSers = new List<AzureUserList>();
+            if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+            {
+                lstUSers = await MicrosoftGraphClient.GetAllUsers();
+                System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            }
+            else
+            {
+                lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+            }
+            model.lstUsers = lstUSers;
+
             return View(model);
         }
         [HttpPost]

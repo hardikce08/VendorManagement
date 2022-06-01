@@ -59,6 +59,7 @@
             min-height: 75vh;
             background-color: #f7f7f7;
             border-radius: 3px;
+            overflow-y: scroll;
         }
 
             .wizard > .content > .body {
@@ -174,14 +175,14 @@
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder"><strong>Alternate Vendor Name</strong></label>
-                                                        @Html.TextBoxFor(m => m.BasicInfo.AlternateName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                        @Html.TextBoxFor(m => m.BasicInfo.AlternateName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
 
                                                     <div class="form-group">
                                                         <label for="input-placeholder"><strong>SCAC (Carriers Only)</strong></label>
-                                                        @Html.TextBoxFor(m => m.BasicInfo.SCAC, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                        @Html.TextBoxFor(m => m.BasicInfo.SCAC, new { @class = "form-control form-control-sm", @style = "width:100%;" })
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
@@ -217,7 +218,9 @@
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Vendor Country</strong></label>
-                                                        @Html.TextBoxFor(m => m.BasicInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                        @*@Html.TextBoxFor(m => m.BasicInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                                                        @Html.DropDownList("BasicInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.BasicInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -280,6 +283,35 @@
                                                 </div>
                                             </div>
                                             <div class="row">
+                                                <div class="alert subheader col-lg-12"><strong>Primary Sales Details</strong> </div>
+                                            </div>
+                                            <div class="row">
+                                                @Html.HiddenFor(m => m.PrimarySalesInfo.Id)
+                                                @Html.HiddenFor(m => m.VendorId)
+                                                @Html.HiddenFor(m => m.RegistrationCode)
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
+                                                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
+                                                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactPhone, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
+                                                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
                                                 <div class="alert subheader col-lg-12"><strong>Financial Details</strong> </div>
 
                                             </div>
@@ -311,60 +343,7 @@
                                     <h3></h3>
                                     <div class="section">
                                         <form id="step2" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
-                                            <div class="row">
-                                                <div class="alert subheader col-lg-12"><strong>Primary Sales Details</strong> </div>
-                                            </div>
-                                            <div class="row">
-                                                @Html.HiddenFor(m => m.PrimarySalesInfo.Id)
-                                                @Html.HiddenFor(m => m.VendorId)
-                                                @Html.HiddenFor(m => m.RegistrationCode)
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
-                                                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
 
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
-                                                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactPhone, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
-                                                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="alert subheader col-lg-12"><strong>Submitted By Details</strong> </div>
-                                            </div>
-                                            <div class="row">
-                                                @Html.HiddenFor(m => m.SubmittedByInfo.Id)
-
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
-                                                        @Html.TextBoxFor(m => m.SubmittedByInfo.SubmittedByName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
-                                                        @Html.TextBoxFor(m => m.SubmittedByInfo.Email, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
-                                                        @Html.TextBoxFor(m => m.SubmittedByInfo.DofascoEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div class="row">
                                                 <div class="alert subheader col-lg-12"><strong>Vendor Remittance Info</strong> </div>
                                             </div>
@@ -401,7 +380,8 @@
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Remittance Country</strong></label>
-                                                        @Html.TextBoxFor(m => m.RemittanceInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                        @*@Html.TextBoxFor(m => m.RemittanceInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                                                        @Html.DropDownList("RemittanceInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.RemittanceInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
                                                     </div>
                                                 </div>
 
@@ -418,12 +398,32 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="alert subheader col-lg-12"><strong>Submitted By Details</strong> </div>
+                                            </div>
+                                            <div class="row">
+                                                @Html.HiddenFor(m => m.SubmittedByInfo.Id)
 
-                                        </form>
-                                    </div>
-                                    <h3></h3>
-                                    <div class="section">
-                                        <form id="step3" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
+                                                        @Html.TextBoxFor(m => m.SubmittedByInfo.SubmittedByName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
+                                                        @Html.TextBoxFor(m => m.SubmittedByInfo.Email, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
+                                                        @Html.TextBoxFor(m => m.SubmittedByInfo.DofascoEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <div class="alert subheader col-lg-12"><strong>Banking Info</strong> </div>
                                             </div>
@@ -470,7 +470,9 @@
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Bank Country</strong></label>
-                                                        @Html.TextBoxFor(m => m.BankingInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                        @*@Html.TextBoxFor(m => m.BankingInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                                                        @Html.DropDownList("BankingInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.BankingInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
+
                                                     </div>
                                                 </div>
 
@@ -509,13 +511,21 @@
                                                 </div>
 
                                             </div>
+
+
                                             <div class="row">
                                                 <div class="alert subheader col-lg-12"><strong>Add Your Attachments</strong> </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-6">
                                                     <input id="fileInput" type="file" multiple>
                                                     <div style="color:red;display:none;" id="fileinputerr"> Please select atleast one file</div>
+                                                    <div style="margin-top:5px;padding: 5px; border: 1px solid; border-color: #FF3700;" id="fileinputerr">
+                                                        Please attach the following attachments:<br />
+                                                        1. Documents with your company letterhead<br />
+                                                        2. Bank Letter / Void Cheque<br />
+                                                        3. Diversity Certificate (if applicable)
+                                                    </div>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <table class="table" id="FilesList" style="visibility:hidden">
@@ -550,6 +560,7 @@
                                             <div class="row" id="ProcessText" style="display:none;">
                                                 <div class="alert error col-lg-12"><strong>Please Wait Submitting Info</strong> </div>
                                             </div>
+
                                         </form>
                                     </div>
                                 </div>
@@ -560,7 +571,7 @@
                     <div class="document" id="notvalidated" style=" width: 50%; margin-left: 25%; margin-top: 10%;">
                         <div class="card">
                             <div class="card-title" style="background-color:#ff3700;">
-                                <h4 style="font-size:17px;">Vendor Authentication</h4>
+                                <h4 style="font-size:17px;color:white;">Vendor Authentication</h4>
                             </div>
                             <div class="card-body">
                                 <form id="ValidateForm" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
@@ -597,7 +608,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label for="input-placeholder"><strong>Email</strong></label>
+                                                <label for="input-placeholder"><strong>Vendor Email</strong></label>
                                                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
                                             </div>
                                         </div>
@@ -733,7 +744,7 @@
                                         else {
                                             $("#BasicInfo_Id").val(data.BasicInfoId);
                                             $("#FinancialInfo_Id").val(data.FinancialInfoId);
-
+                                            $("#PrimarySalesInfo_Id").val(data.PrimarySalesInfoId);
                                         }
                                     },
                                     error: function (xhr, ajaxOptions, thrownError) {
@@ -744,7 +755,7 @@
                             }
                             else { return false; }
                         }
-                        else if (currentIndex == 1) {
+                        @*else if (currentIndex == 1) {
 
                             var Isvalidated = $("#step2").parsley().validate();
                             if (Isvalidated) {
@@ -775,7 +786,7 @@
                                 });
                             }
                             else { return false; }
-                        }
+                        }*@
 
                     }
                     if (HasError) { return false; }
@@ -784,7 +795,7 @@
                 onFinished: function (event, currentIndex) {
 
                     var HasError = false;
-                    var Isvalidated = $("#step3").parsley().validate();
+                    var Isvalidated = $("#step2").parsley().validate();
                     if ($('#FilesList tr').length == 1) {
                         Isvalidated = false;
                         $("#fileinputerr").show();
@@ -795,8 +806,8 @@
                                     cache: false,
                                     async: false,
                                     type: "POST",
-                                    url: "@(Url.Action("SaveTab3"))",
-                                    data: $("#step3").serializeArray(),
+                                    url: "@(Url.Action("SaveTab2"))",
+                                    data: $("#step2").serializeArray(),
                                     success: function (data) {
                                         if (data.BankingInfoId == undefined || data.BankingInfoId == 0) {
                                             HasError = true;

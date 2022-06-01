@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="VendorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="EmailTemplate">
           <Key>
             <PropertyRef Name="Id" />
@@ -337,6 +344,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="VendorModelStoreContainer">
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailTemplate" EntityType="Self.EmailTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SpanTreeLevel" EntityType="Self.SpanTreeLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorAttachmentInfo" EntityType="Self.VendorAttachmentInfo" Schema="dbo" store:Type="Tables" />
@@ -449,6 +457,7 @@
           </AssociationSet>
           <EntitySet Name="EmailTemplate" EntityType="VendorModel.EmailTemplate" />
           <EntitySet Name="SpanTreeLevel" EntityType="VendorModel.SpanTreeLevel" />
+          <EntitySet Name="Country" EntityType="VendorModel.Country" />
         </EntityContainer>
         <EntityType Name="VendorBankingInfo">
           <Key>
@@ -781,6 +790,13 @@
           <Property Name="LevelId" Type="Int32" Nullable="false" />
           <Property Name="ParentLevelText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -991,6 +1007,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Country">
+            <EntityTypeMapping TypeName="VendorModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1037,6 +1061,7 @@
         <AssociationConnector Association="VendorModel.FK_VendorWorkFlowInfo_VendorMaster" />
         <EntityTypeShape EntityType="VendorModel.EmailTemplate" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="VendorModel.SpanTreeLevel" Width="1.5" PointX="5.375" PointY="4.75" />
+        <EntityTypeShape EntityType="VendorModel.Country" Width="1.5" PointX="7.375" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

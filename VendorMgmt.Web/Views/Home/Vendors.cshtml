@@ -42,10 +42,11 @@
         .dropdown-menu li {
             line-height: 15px;
         }
+
         .dataTable thead tr {
             background-color: #FF3700;
-            
         }
+
         .table thead tr th {
             color: white !important;
         }
@@ -65,50 +66,61 @@
         <div class="col-md-2 row">
             <a href=""><i class="fas fa-align-center fa-5x fa-filter" style="color: #ff3700; margin-top: 50%;"></i></a>
         </div>
-        <div class="col-md-8 row">
+        <div class="col-md-10 row">
             <div class="col-md-12 row">
 
-                <div class="col-lg-4">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="input-placeholder"><strong>Vendor Name</strong></label>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
                         @Html.TextBoxFor(m => m.VendorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
                     </div>
                 </div>
-
-                <div class="col-lg-4">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="input-placeholder"><strong>Application Status</strong></label>
+
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
                         @Html.SelectList_ApplicationStatus(m => m.ApplicationStatus, new { @class = "form-control form-control-sm" })
                     </div>
                 </div>
-                <div class="col-lg-2">
-
-                </div>
-                <div class="col-lg-2">
-
-                </div>
             </div>
             <div class="col-md-12 row">
-                <div class="col-lg-4">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="input-placeholder"><strong>Requestor Name</strong></label>
-                        @Html.TextBoxFor(m => m.RequestorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                        @*@Html.TextBoxFor(m => m.RequestorName, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        @Html.DropDownList("RequestorName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.RequestorName), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="input-placeholder"><strong>Updated Date  </strong></label>
-                        <div class="row" style="margin-left:0px;">
-                            @Html.TextBox("FromDate", Model.FromDate, new { @class = "form-control form-control-sm col-md-4", @style = "width:100%;" })
-                            &nbsp;&nbsp;@Html.TextBox("ToDate", Model.ToDate, new { @class = "form-control form-control-sm col-md-4", @style = "width:100%;" })
-                        </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <button type="submit" class="btn btn-bold btn-pure btn-primary">Reset</button>
+                <div class="col-lg-4">
+                    <div class="form-group row" style="margin-left: 1PX;">
+                        @Html.TextBox("FromDate", Model.FromDate, new { @class = "form-control ", @style = "width:46%;" })
+                        &nbsp;&nbsp;@Html.TextBox("ToDate", Model.ToDate, new { @class = "form-control ", @style = "width:46%;" })
+                    </div>
                 </div>
-                <div class="col-lg-2">
-                </div>
+
+            </div>
+            <div class="col-md-12 row" style="margin-left:50%;">
+
+                <button type="submit" class="btn btn-bold btn-pure btn-primary">Reset</button>
+
             </div>
         </div>
     </div>

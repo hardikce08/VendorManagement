@@ -242,14 +242,14 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label for="input-placeholder"><strong>Alternate Vendor Name</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.AlternateName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                @Html.TextBoxFor(m => m.BasicInfo.AlternateName, new { @class = "form-control form-control-sm", @style = "width:100%;"  })
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
 
                                             <div class="form-group">
                                                 <label for="input-placeholder"><strong>SCAC (Carriers Only)</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.SCAC, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                @Html.TextBoxFor(m => m.BasicInfo.SCAC, new { @class = "form-control form-control-sm", @style = "width:100%;" })
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -285,7 +285,9 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label for="input-placeholder" class="require"><strong>Vendor Country</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                @*@Html.TextBoxFor(m => m.BasicInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                                                @Html.DropDownList("BasicInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.BasicInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
+
                                             </div>
                                         </div>
                                     </div>
@@ -475,7 +477,9 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label for="input-placeholder" class="require"><strong>Remittance Country</strong></label>
-                                                @Html.TextBoxFor(m => m.RemittanceInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                @*@Html.TextBoxFor(m => m.RemittanceInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                                                @Html.DropDownList("RemittanceInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.RemittanceInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
+
                                             </div>
                                         </div>
 
@@ -536,7 +540,9 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label for="input-placeholder" class="require"><strong>Bank Country</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                @*@Html.TextBoxFor(m => m.BankingInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                                                @Html.DropDownList("BankingInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.BankingInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
+
                                             </div>
                                         </div>
 

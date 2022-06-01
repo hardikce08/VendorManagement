@@ -218,9 +218,13 @@
                                 /*console.log(item);*/
                                 var id = item.RegistrationCode;
                                 var name = item.BusinessName;
+                                var vemail = item.VendorEmail;
+                                var demail = item.DofascoEmail;
                                 map[name] = {
                                     id: id,
-                                    name: name
+                                    name: name,
+                                    vemail: vemail,
+                                    demail: demail
                                 };
                                 items.push(name);
                             });
@@ -239,7 +243,8 @@
                     //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
                     $('[id*=BusinessName]').val(map[item].name);
                     $('[id*=RegistrationCode]').val(map[item].id);
-
+                    $('[id*=VendorEmail]').val(map[item].vemail);
+                    $('[id*=DofascoEmail]').val(map[item].demail);
                     return item;
                 }
             });

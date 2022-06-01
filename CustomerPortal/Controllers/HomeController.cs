@@ -80,7 +80,7 @@ namespace CustomerPortal.Controllers
                 model.TreasuryInfo = TreasuryInfo == null ? new VendorTreasuryInfo() : TreasuryInfo;
 
                 model.VendorId = VendorMst.Id;
-
+                model.lstCountries = vs.GetAllCountry();
                 ViewData["SpanTreeLevel1"] = new SelectList(Customervs.SpanTreeLevels.Where(p => p.LevelId == 1).ToList(), "LevelCode", "LevelDescription");
                 vs.SetLinkExpired(VendorMst.Id);
                 Customervs.VendorMasterCustomer_InsertOrUpdate(VendorMst);
@@ -123,9 +123,12 @@ namespace CustomerPortal.Controllers
                 model.FinancialInfo.VendorId = model.VendorId;
                 //TryUpdateModel<VendorBasicInfo>(model.BasicInfo, new string[] { "VendorName", "AlternateName", "Name", "Signee_Name", "Signee_Phone", "Signee_Email", "OperationsContact", "OperationsPhone", "OperationsEmail", "GlobalAddressBook", "DisplayUserHubProfile", "AccountGroup" });
                 //vs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);
+                model.PrimarySalesInfo.VendorId = model.VendorId;
+                model.BasicInfo.Country = Request["BasicInfo_Country"];
+                Customervs.VendorPrimarySalesInfo_InsertOrUpdate(model.PrimarySalesInfo);
                 Customervs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);
                 Customervs.VendorFinancialInfo_InsertOrUpdate(model.FinancialInfo);
-                return Json(new { BasicInfoId = model.BasicInfo.Id, FinancialInfoId = model.FinancialInfo.Id }, JsonRequestBehavior.AllowGet);
+                return Json(new { PrimarySalesInfoId = model.PrimarySalesInfo.Id, BasicInfoId = model.BasicInfo.Id, FinancialInfoId = model.FinancialInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { id = 0 }, JsonRequestBehavior.AllowGet);
         }
@@ -143,31 +146,14 @@ namespace CustomerPortal.Controllers
                 {
                     TempData["Error"] = "Invalid Registration Code";
                 }
-                model.PrimarySalesInfo.VendorId = model.VendorId;
-                Customervs.VendorPrimarySalesInfo_InsertOrUpdate(model.PrimarySalesInfo);
                 model.SubmittedByInfo.VendorId = model.VendorId;
                 Customervs.VendorSubmittedByInfo_InsertOrUpdate(model.SubmittedByInfo);
                 model.RemittanceInfo.VendorId = model.VendorId;
+                model.RemittanceInfo.Country = Request["RemittanceInfo_Country"];
                 Customervs.VendorRemittanceInfo_InsertOrUpdate(model.RemittanceInfo);
-                return Json(new { PrimarySalesInfoId = model.PrimarySalesInfo.Id, SubmittedByInfoId = model.SubmittedByInfo.Id, RemittanceInfoId = model.RemittanceInfo.Id }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { PrimarySalesInfoId = 0, SubmittedByInfoId = 0, RemittanceInfoId = 0 }, JsonRequestBehavior.AllowGet);
-        }
-        [HttpPost]
-        public JsonResult SaveTab3(VendorFillInfo model)
-        {
-            if (model.RegistrationCode == string.Empty)
-            {
-                TempData["Error"] = "No Registration Code Provided";
-            }
-            else
-            {
-                var VendorMst = vs.VendorMasters.Where(p => p.RegistrationCode == model.RegistrationCode).FirstOrDefault();
-                if (VendorMst == null)
-                {
-                    TempData["Error"] = "Invalid Registration Code";
-                }
+
                 model.BankingInfo.VendorId = model.VendorId;
+                model.BankingInfo.Country = Request["BankingInfo_Country"];
                 Customervs.VendorBankingInfo_InsertOrUpdate(model.BankingInfo);
 
                 //send Email to Vendor for Notification about Complete Form 
@@ -186,11 +172,10 @@ namespace CustomerPortal.Controllers
                 vs.UpdateStatus(model.RegistrationCode, "Submitted by Vendor");
 
 
-                return Json(new { BankingInfoId = model.BankingInfo.Id }, JsonRequestBehavior.AllowGet);
+                return Json(new { BankingInfoId = model.BankingInfo.Id,  SubmittedByInfoId = model.SubmittedByInfo.Id, RemittanceInfoId = model.RemittanceInfo.Id }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { BankingInfoId = 0 }, JsonRequestBehavior.AllowGet);
+            return Json(new { BankingInfoId = 0, PrimarySalesInfoId = 0, SubmittedByInfoId = 0, RemittanceInfoId = 0 }, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult UploadFiles()
         {
             string VendorId = Request["VendorId"];

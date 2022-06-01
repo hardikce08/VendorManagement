@@ -134,6 +134,22 @@ namespace VendorMgmt.Helper
             return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
         }
 
-       
+        //public static async Task<MvcHtmlString> SelectList_Country<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
+        //{
+        //    ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+        //    return await htmlHelper.SelectList_Country(ExpressionHelper.GetExpressionText(expression), metadata.Model == null ? "True" : metadata.Model.ToString(), htmlAttributes);
+        //}
+        //public static async Task<MvcHtmlString> SelectList_Country(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
+        //{
+        //    Dictionary<string, string> data = new Dictionary<string, string>();
+        //    VendorService
+        //    var lstusers = await vs.GetAllUsers();
+        //    foreach (var user in lstusers)
+        //    {
+        //        data.Add(user.EmailAddress, user.DisplayName);
+        //    }
+
+        //    return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
+        //}
     }
 }

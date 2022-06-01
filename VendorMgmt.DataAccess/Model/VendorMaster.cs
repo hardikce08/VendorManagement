@@ -64,6 +64,7 @@ namespace VendorMgmt.DataAccess.Model
         public bool IsWorldCheckApproved { get; set; }
         public bool IsTreasuryValidated { get; set; }
         public List<AzureUserList> lstUsers { get; set; }
+        public List<Country> lstCountries { get; set; }
     }
 
     public class VendorBasicInfo
@@ -302,6 +303,7 @@ namespace VendorMgmt.DataAccess.Model
         public string ToDate { get; set; }
 
         public List<VendorGridData> lstVendors { get; set; }
+        public List<AzureUserList> lstUsers { get; set; }
     }
     public class VendorGridData
     { 
@@ -328,6 +330,12 @@ namespace VendorMgmt.DataAccess.Model
 
         public string ParentLevelText { get; set; }
     }
-    
 
+    public class Country
+    {
+
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+    }
 }

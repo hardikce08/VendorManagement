@@ -14,7 +14,7 @@ namespace VendorMgmt.DataAccess
         EF.VendorEntities db = null;
         public VendorService()
         {
-                db = new EF.VendorEntities(EntityConnectionString);
+            db = new EF.VendorEntities(EntityConnectionString);
         }
         public VendorService(string s)
         {
@@ -47,11 +47,11 @@ namespace VendorMgmt.DataAccess
                            nsKnox = v.nsKnox,
                            EmailSent = v.EmailSent,
                            CreatedDate = v.CreatedDate,
-                           LinkExpired=v.LinkExpired ,
-                           LinkGuid=v.LinkGuid ,
-                           PurchaseManagerApproved=v.PurchaseManagerApproved,
-                           WorldCheckApproved=v.WorldCheckApproved ,
-                           TreasuryValidated=v.TreasuryValidated
+                           LinkExpired = v.LinkExpired,
+                           LinkGuid = v.LinkGuid,
+                           PurchaseManagerApproved = v.PurchaseManagerApproved,
+                           WorldCheckApproved = v.WorldCheckApproved,
+                           TreasuryValidated = v.TreasuryValidated
                        };
             }
         }
@@ -88,8 +88,8 @@ namespace VendorMgmt.DataAccess
                     LinkGuid = v.LinkGuid,
                     Status = "Validation Pending",
                     PurchaseManagerApproved = false,
-                    WorldCheckApproved=false ,
-                    TreasuryValidated=false
+                    WorldCheckApproved = false,
+                    TreasuryValidated = false
                 };
 
                 db.VendorMaster.AddObject(i);
@@ -107,7 +107,7 @@ namespace VendorMgmt.DataAccess
                 u.DofascoEmail = v.DofascoEmail;
                 u.nsKnox = v.nsKnox;
                 u.EmailSent = v.EmailSent;
-                u.CreatedDate = v.CreatedDate;
+                //u.CreatedDate = v.CreatedDate;
                 u.UpdatedDate = DateTime.Now;
                 u.LinkGuid = v.LinkGuid;
                 u.Status = v.Status;
@@ -134,7 +134,7 @@ namespace VendorMgmt.DataAccess
                        new SqlParameter("@LinkExpired",v.LinkExpired),
               };
 
-            ds.ExecuteStoredProcedure("proc_InsertVendorMaster", para,System.Data.CommandType.StoredProcedure ,ConnectionType.Customer);
+            ds.ExecuteStoredProcedure("proc_InsertVendorMaster", para, System.Data.CommandType.StoredProcedure, ConnectionType.Customer);
         }
         public void DeleteVendorFromCustomer(int VendorId)
         {
@@ -148,10 +148,10 @@ namespace VendorMgmt.DataAccess
             ds.ExecuteStoredProcedure("proc_DeleteVendorData", para, System.Data.CommandType.StoredProcedure, ConnectionType.Customer);
 
         }
-        public int UpdatePurchaseApproval(string RegitrationCode,bool IsApprove)
+        public int UpdatePurchaseApproval(string RegitrationCode, bool IsApprove)
         {
             var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
-            objVendorMst.PurchaseManagerApproved = IsApprove; 
+            objVendorMst.PurchaseManagerApproved = IsApprove;
             db.SaveChanges();
             return objVendorMst.Id;
         }
@@ -165,7 +165,7 @@ namespace VendorMgmt.DataAccess
         public int UpdateStatus(string RegitrationCode, string Status)
         {
             var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
-            objVendorMst.Status= Status;
+            objVendorMst.Status = Status;
             db.SaveChanges();
             return objVendorMst.Id;
         }
@@ -179,7 +179,7 @@ namespace VendorMgmt.DataAccess
         public int AssignedBackToRequestor(string RegitrationCode)
         {
             var objVendorMst = db.VendorMaster.Where(p => p.RegistrationCode == RegitrationCode).FirstOrDefault();
-            objVendorMst.PurchaseManagerApproved  = false;
+            objVendorMst.PurchaseManagerApproved = false;
             objVendorMst.WorldCheckApproved = false;
             db.SaveChanges();
             return objVendorMst.Id;
@@ -188,7 +188,20 @@ namespace VendorMgmt.DataAccess
         {
             DataHelper ds = new DataHelper();
             var lst = ds.ExecuteStoredProcedure<VendorGridData>("proc_GetVendorGridData", null);
-                return lst;
+            return lst;
+        }
+
+        public List<Country> GetAllCountry()
+        {
+            var lst = from c in db.Country
+                      select new Country
+                      {
+                          Id = c.Id,
+                          Name = c.Name,
+                      };
+            var res = lst.ToList();
+            res.Insert(0, new Country { Id = 0, Name = "" });
+            return res;
         }
         public void SetLinkExpired(int Id)
         {
@@ -258,7 +271,7 @@ namespace VendorMgmt.DataAccess
                     CreatedBy = "",
                     CreatedDate = DateTime.Now,
                 };
-                 
+
                 db.VendorBasicInfo.AddObject(i);
                 db.SaveChanges();
                 v.Id = i.Id;
@@ -268,6 +281,62 @@ namespace VendorMgmt.DataAccess
             else
             {
                 var u = db.VendorBasicInfo.Where(p => p.Id == v.Id).Single();
+                u.VendorId = v.VendorId;
+                u.VendorName = v.VendorName;
+                u.AlternateName = v.AlternateName;
+                u.SCAC = v.SCAC;
+                u.BusinessAddress = v.BusinessAddress;
+                u.BusinessCity = v.BusinessCity;
+                u.BusinessState = v.BusinessState;
+                u.BusinessZip = v.BusinessZip;
+                u.Country = v.Country;
+                u.Phonenumber = v.Phonenumber;
+                u.Website = v.Website;
+                u.PaymentCurrency = v.PaymentCurrency;
+                u.GSTApplicable = v.GSTApplicable;
+                u.GSTNumber = v.GSTNumber;
+                u.DiversityBusinessCertification = v.DiversityBusinessCertification;
+                u.IsCouncilMember = v.IsCouncilMember;
+                u.CouncilName = v.CouncilName;
+                db.SaveChanges();
+            }
+        }
+        public void VendorBasicInfo_TransferData(VendorBasicInfo v)
+        {
+            var u = db.VendorBasicInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u == null)
+            {
+                var i = new EF.VendorBasicInfo
+                {
+                    VendorId = v.VendorId,
+                    VendorName = v.VendorName,
+                    AlternateName = v.AlternateName,
+                    SCAC = v.SCAC,
+                    BusinessAddress = v.BusinessAddress,
+                    BusinessCity = v.BusinessCity,
+                    BusinessState = v.BusinessState,
+                    BusinessZip = v.BusinessZip,
+                    Country = v.Country,
+                    Phonenumber = v.Phonenumber,
+                    Website = v.Website,
+                    PaymentCurrency = v.PaymentCurrency,
+                    GSTApplicable = v.GSTApplicable,
+                    GSTNumber = v.GSTNumber,
+                    DiversityBusinessCertification = v.DiversityBusinessCertification,
+                    IsCouncilMember = v.IsCouncilMember,
+                    CouncilName = v.CouncilName,
+                    CreatedBy = "",
+                    CreatedDate = DateTime.Now,
+                };
+
+                db.VendorBasicInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
                 u.VendorId = v.VendorId;
                 u.VendorName = v.VendorName;
                 u.AlternateName = v.AlternateName;
@@ -337,6 +406,36 @@ namespace VendorMgmt.DataAccess
                 db.SaveChanges();
             }
         }
+        public void VendorFinancialInfo_TransferData(VendorFinancialInfo v)
+        {
+            var u = db.VendorFinancialInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u==null)
+            {
+                var i = new EF.VendorFinancialInfo
+                {
+                    VendorId = v.VendorId,
+                    ContactName = v.ContactName,
+                    ContactEmail = v.ContactEmail,
+                    ContactPhone = v.ContactPhone,
+                    CreatedDate = DateTime.Now,
+                };
+
+                db.VendorFinancialInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
+                
+                u.VendorId = v.VendorId;
+                u.ContactName = v.ContactName;
+                u.ContactEmail = v.ContactEmail;
+                u.ContactPhone = v.ContactPhone;
+                db.SaveChanges();
+            }
+        }
         #endregion
 
         #region VendorPRimarySalesInfo
@@ -387,6 +486,35 @@ namespace VendorMgmt.DataAccess
                 db.SaveChanges();
             }
         }
+        public void VendorPrimarySalesInfo_TransferData(VendorPrimarySalesInfo v)
+        {
+            var u = db.VendorPrimarySalesInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u==null)
+            {
+                var i = new EF.VendorPrimarySalesInfo
+                {
+                    VendorId = v.VendorId,
+                    ContactName = v.ContactName,
+                    ContactEmail = v.ContactEmail,
+                    ContactPhone = v.ContactPhone,
+                    CreatedDate = DateTime.Now,
+                };
+
+                db.VendorPrimarySalesInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
+                u.VendorId = v.VendorId;
+                u.ContactName = v.ContactName;
+                u.ContactEmail = v.ContactEmail;
+                u.ContactPhone = v.ContactPhone;
+                db.SaveChanges();
+            }
+        }
         #endregion
 
         #region VendorSubmittedbyInfo
@@ -429,6 +557,35 @@ namespace VendorMgmt.DataAccess
             else
             {
                 var u = db.VendorSubmittedByInfo.Where(p => p.Id == v.Id).Single();
+                u.VendorId = v.VendorId;
+                u.SubmittedByName = v.SubmittedByName;
+                u.Email = v.Email;
+                u.DofascoEmail = v.DofascoEmail;
+                db.SaveChanges();
+            }
+        }
+        public void VendorSubmittedByInfo_TransferData(VendorSubmittedByInfo v)
+        {
+            var u = db.VendorSubmittedByInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u==null)
+            {
+                var i = new EF.VendorSubmittedByInfo
+                {
+                    VendorId = v.VendorId,
+                    SubmittedByName = v.SubmittedByName,
+                    Email = v.Email,
+                    DofascoEmail = v.DofascoEmail,
+                    CreatedDate = DateTime.Now,
+                };
+
+                db.VendorSubmittedByInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
                 u.VendorId = v.VendorId;
                 u.SubmittedByName = v.SubmittedByName;
                 u.Email = v.Email;
@@ -498,7 +655,44 @@ namespace VendorMgmt.DataAccess
                 db.SaveChanges();
             }
         }
+        public void VendorRemittanceInfo_TransferData(VendorRemittanceInfo v)
+        {
+            var u = db.VendorRemittanceInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u==null)
+            {
+                var i = new EF.VendorRemittanceInfo
+                {
+                    VendorId = v.VendorId,
+                    MailingAddress = v.MailingAddress,
+                    MailingCity = v.MailingCity,
+                    State = v.State,
+                    Zip = v.Zip,
+                    Country = v.Country,
+                    Email = v.Email,
+                    SpecialPayment = v.SpecialPayment,
+                    CreatedDate = DateTime.Now,
+                };
 
+                db.VendorRemittanceInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
+                u.VendorId = v.VendorId;
+                u.MailingAddress = v.MailingAddress;
+                u.MailingCity = v.MailingCity;
+                u.State = v.State;
+                u.Zip = v.Zip;
+                u.Country = v.Country;
+                u.Email = v.Email;
+                u.SpecialPayment = v.SpecialPayment;
+
+                db.SaveChanges();
+            }
+        }
         #endregion
 
         #region VendorBankingInfo
@@ -573,7 +767,52 @@ namespace VendorMgmt.DataAccess
                 db.SaveChanges();
             }
         }
+        public void VendorBankingInfo_TransferData(VendorBankingInfo v)
+        {
+            var u = db.VendorBankingInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u==null)
+            {
+                var i = new EF.VendorBankingInfo
+                {
+                    VendorId = v.VendorId,
+                    Name = v.Name,
+                    Address = v.Address,
+                    City = v.City,
+                    State = v.State,
+                    Zip = v.Zip,
+                    Country = v.Country,
+                    InstitutionNo = v.InstitutionNo,
+                    TransitNo = v.TransitNo,
+                    BankAccountNo = v.BankAccountNo,
+                    ABA_RoutingNumber = v.ABA_RoutingNumber,
+                    Swift_BICCode = v.Swift_BICCode,
+                    CreatedDate = DateTime.Now,
+                };
 
+                db.VendorBankingInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
+                u.VendorId = v.VendorId;
+                u.Name = v.Name;
+                u.Address = v.Address;
+                u.City = v.City;
+                u.State = v.State;
+                u.Zip = v.Zip;
+                u.Country = v.Country;
+                u.InstitutionNo = v.InstitutionNo;
+                u.TransitNo = v.TransitNo;
+                u.BankAccountNo = v.BankAccountNo;
+                u.ABA_RoutingNumber = v.ABA_RoutingNumber;
+                u.Swift_BICCode = v.Swift_BICCode;
+
+                db.SaveChanges();
+            }
+        }
         #endregion
 
         #region VendorAttachmentInfo
@@ -628,6 +867,18 @@ namespace VendorMgmt.DataAccess
             {
                 db.VendorAttachmentInfo.DeleteObject(e);
                 db.SaveChanges();
+            }
+        }
+        public void VendorAttachmentInfo_TransferData(int VendorId)
+        {
+            var e = db.VendorAttachmentInfo.Where(p => p.VendorId == VendorId).ToList();
+            if (e != null)
+            {
+                foreach (var a in e)
+                {
+                    db.VendorAttachmentInfo.DeleteObject(a);
+                    db.SaveChanges();
+                }
             }
         }
         #endregion
@@ -700,6 +951,49 @@ namespace VendorMgmt.DataAccess
                 db.SaveChanges();
             }
         }
+        public void VendorPurchasingInfo_TransferData(VendorPurchasingInfo v)
+        {
+            var u = db.VendorPurchasingInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u==null)
+            {
+                var i = new EF.VendorPurchasingInfo
+                {
+                    VendorId = v.VendorId,
+                    TradingPartner = v.TradingPartner,
+                    AccountGroupName = v.AccountGroupName,
+                    TypeofVendorRequest = v.TypeofVendorRequest,
+                    ConflictOfInterest = v.ConflictOfInterest,
+                    PaymentTerms = v.PaymentTerms,
+                    SpendTreelevel1 = v.SpendTreelevel1,
+                    SpendTreeLevel2 = v.SpendTreeLevel2,
+                    SpendTreeLevel3 = v.SpendTreeLevel3,
+                    SpendTreeLevel4 = v.SpendTreeLevel4,
+                    SAPBusType = v.SAPBusType,
+                    CreatedDate = DateTime.Now,
+                };
+
+                db.VendorPurchasingInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
+                u.VendorId = v.VendorId;
+                u.TradingPartner = v.TradingPartner;
+                u.AccountGroupName = v.AccountGroupName;
+                u.TypeofVendorRequest = v.TypeofVendorRequest;
+                u.ConflictOfInterest = v.ConflictOfInterest;
+                u.PaymentTerms = v.PaymentTerms;
+                u.SpendTreelevel1 = v.SpendTreelevel1;
+                u.SpendTreeLevel2 = v.SpendTreeLevel2;
+                u.SpendTreeLevel3 = v.SpendTreeLevel3;
+                u.SpendTreeLevel4 = v.SpendTreeLevel4;
+                u.SAPBusType = v.SAPBusType;
+                db.SaveChanges();
+            }
+        }
         #endregion
         #region VendorWorkflowInfo
         public IQueryable<VendorWorkFlowInfo> VendorWorkFlowInfos
@@ -716,7 +1010,7 @@ namespace VendorMgmt.DataAccess
                            VendorNumber = v.VendorNumber,
                            PurchaseComments = v.PurchaseComments,
                            CreatedDate = v.CreatedDate,
-                           WorldCheckApprover=v.WorldCheckApprover 
+                           WorldCheckApprover = v.WorldCheckApprover
                        };
             }
         }
@@ -733,7 +1027,7 @@ namespace VendorMgmt.DataAccess
                     VendorNumber = v.VendorNumber,
                     PurchaseComments = v.PurchaseComments,
                     CreatedDate = DateTime.Now,
-                    WorldCheckApprover=v.WorldCheckApprover
+                    WorldCheckApprover = v.WorldCheckApprover
                 };
 
                 db.VendorWorkFlowInfo.AddObject(i);
@@ -754,7 +1048,40 @@ namespace VendorMgmt.DataAccess
                 db.SaveChanges();
             }
         }
+        public void VendorWorkFlowInfo_TransferData(VendorWorkFlowInfo v)
+        {
+            var u = db.VendorWorkFlowInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u==null)
+            {
+                var i = new EF.VendorWorkFlowInfo
+                {
+                    VendorId = v.VendorId,
+                    RequestorName = v.RequestorName,
+                    PurchasingManager = v.PurchasingManager,
+                    VendorNumber = v.VendorNumber,
+                    PurchaseComments = v.PurchaseComments,
+                    CreatedDate = DateTime.Now,
+                    WorldCheckApprover = v.WorldCheckApprover
+                };
 
+                db.VendorWorkFlowInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+
+
+            else
+            {
+               
+                u.VendorId = v.VendorId;
+                u.RequestorName = v.RequestorName;
+                u.PurchasingManager = v.PurchasingManager;
+                u.VendorNumber = v.VendorNumber;
+                u.PurchaseComments = v.PurchaseComments;
+                u.WorldCheckApprover = v.WorldCheckApprover;
+                db.SaveChanges();
+            }
+        }
         #endregion
 
         #region VendorTreasuryInformation
@@ -805,6 +1132,42 @@ namespace VendorMgmt.DataAccess
             else
             {
                 var u = db.VendorTreasuryInfo.Where(p => p.Id == v.Id).Single();
+                u.VendorId = v.VendorId;
+                u.ActionerName = v.ActionerName;
+                u.VendorNumber = v.VendorNumber;
+                u.Validated = v.Validated;
+                u.ChecklistInfo1 = v.ChecklistInfo1;
+                u.ChecklistInfo2 = v.ChecklistInfo2;
+                u.Level2ApproverName = v.Level2ApproverName;
+                u.Level2ChecklistInfo = v.Level2ChecklistInfo;
+                u.Level2Comments = v.Level2Comments;
+                db.SaveChanges();
+            }
+        }
+        public void VendorTreasuryInfo_TransferData(VendorTreasuryInfo v)
+        {
+            var u = db.VendorTreasuryInfo.Where(p => p.VendorId == v.VendorId).FirstOrDefault();
+            if (u==null)
+            {
+                var i = new EF.VendorTreasuryInfo
+                {
+                    VendorId = v.VendorId,
+                    ActionerName = v.ActionerName,
+                    VendorNumber = v.VendorNumber,
+                    Validated = v.Validated,
+                    ChecklistInfo1 = v.ChecklistInfo1,
+                    ChecklistInfo2 = v.ChecklistInfo2,
+                    Level2ApproverName = v.Level2ApproverName,
+                    Level2ChecklistInfo = v.Level2ChecklistInfo,
+                    Level2Comments = v.Level2Comments,
+                    CreatedDate = DateTime.Now,
+                };
+                db.VendorTreasuryInfo.AddObject(i);
+                db.SaveChanges();
+                v.Id = i.Id;
+            }
+            else
+            {
                 u.VendorId = v.VendorId;
                 u.ActionerName = v.ActionerName;
                 u.VendorNumber = v.VendorNumber;

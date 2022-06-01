@@ -179,7 +179,7 @@ namespace VendorMgmt.Web.Controllers
                     ViewData["SpanTreeLevel4"] = new SelectList(vs.SpanTreeLevels.Where(p => p.LevelId == 4 && p.ParentLevelText == model.PurchaseInfo.SpendTreeLevel3).ToList(), "LevelCode", "LevelDescription", model.PurchaseInfo != null ? model.PurchaseInfo.SpendTreeLevel4 : "");
 
                 }
-
+                model.lstCountries = vs.GetAllCountry();
             }
             return View(model);
         }
@@ -463,6 +463,7 @@ namespace VendorMgmt.Web.Controllers
                 //model.BasicInfo = Basicinfo == null ? new VendorBasicInfo() : Basicinfo;
                 model.BasicInfo.VendorId = model.VendorId;
                 model.FinancialInfo.VendorId = model.VendorId;
+                model.BasicInfo.Country = Request["BasicInfo_Country"];
                 //TryUpdateModel<VendorBasicInfo>(model.BasicInfo, new string[] { "VendorName", "AlternateName", "Name", "Signee_Name", "Signee_Phone", "Signee_Email", "OperationsContact", "OperationsPhone", "OperationsEmail", "GlobalAddressBook", "DisplayUserHubProfile", "AccountGroup" });
                 //vs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);
                 Customervs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);
@@ -490,6 +491,7 @@ namespace VendorMgmt.Web.Controllers
                 model.SubmittedByInfo.VendorId = model.VendorId;
                 Customervs.VendorSubmittedByInfo_InsertOrUpdate(model.SubmittedByInfo);
                 model.RemittanceInfo.VendorId = model.VendorId;
+                model.RemittanceInfo.Country = Request["RemittanceInfo_Country"];
                 Customervs.VendorRemittanceInfo_InsertOrUpdate(model.RemittanceInfo);
                 return Json(new { PrimarySalesInfoId = model.PrimarySalesInfo.Id, SubmittedByInfoId = model.SubmittedByInfo.Id, RemittanceInfoId = model.RemittanceInfo.Id }, JsonRequestBehavior.AllowGet);
             }
@@ -510,6 +512,7 @@ namespace VendorMgmt.Web.Controllers
                     TempData["Error"] = "Invalid Registration Code";
                 }
                 model.BankingInfo.VendorId = model.VendorId;
+                model.BankingInfo.Country = Request["BankingInfo_Country"];
                 Customervs.VendorBankingInfo_InsertOrUpdate(model.BankingInfo);
 
                 //send Email to Vendor for Notification about Complete Form 

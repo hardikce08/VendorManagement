@@ -287,6 +287,22 @@ namespace VendorMgmt.Model
             }
         }
         private ObjectSet<SpanTreeLevel> _SpanTreeLevel;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Country> Country
+        {
+            get
+            {
+                if ((_Country == null))
+                {
+                    _Country = base.CreateObjectSet<Country>("Country");
+                }
+                return _Country;
+            }
+        }
+        private ObjectSet<Country> _Country;
 
         #endregion
 
@@ -395,6 +411,14 @@ namespace VendorMgmt.Model
         {
             base.AddObject("SpanTreeLevel", spanTreeLevel);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Country EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToCountry(Country country)
+        {
+            base.AddObject("Country", country);
+        }
 
         #endregion
 
@@ -403,6 +427,88 @@ namespace VendorMgmt.Model
     #endregion
 
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="VendorModel", Name="Country")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Country : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Country object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="name">Initial value of the Name property.</param>
+        public static Country CreateCountry(global::System.Int32 id, global::System.String name)
+        {
+            Country country = new Country();
+            country.Id = id;
+            country.Name = name;
+            return country;
+        }
+
+        #endregion
+
+        #region Simple Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value, "Id");
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, false, "Name");
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
