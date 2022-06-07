@@ -131,13 +131,14 @@ namespace VendorMgmt.Web.Controllers
             var lstUSers = new List<AzureUserList>();
             if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
             {
-                lstUSers = await MicrosoftGraphClient.GetAllUsers();
+                lstUSers = await MicrosoftGraphClient.GetAllUsers(true);
                 System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
             }
             else
             {
                 lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
             }
+            
             model.lstUsers = lstUSers;
             return View(model);
         }
@@ -156,16 +157,32 @@ namespace VendorMgmt.Web.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            var lstUSers = new List<AzureUserList>();
+            if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+            {
+                lstUSers = await MicrosoftGraphClient.GetAllUsers(true);
+                System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            }
+            else
+            {
+                lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+            }
+          
+            model.lstUsers = lstUSers;
             VendorService vs = new VendorService();
             model.lstVendors = vs.GetVendorGridData();
+            //foreach (var item in model.lstVendors)
+            //{
+            //    item.RequestorName = model.lstUsers.Where(p => p.DisplayName == model.RequestorName).FirstOrDefault().EmailAddress;
+            //}
+
             if (!string.IsNullOrEmpty(model.ApplicationStatus))
             {
                 model.lstVendors = model.lstVendors.Where(p => p.Status == model.ApplicationStatus).ToList();
             }
             if (!string.IsNullOrEmpty(model.RequestorName))
             {
-                model.lstVendors = model.lstVendors.Where(p => p.VendorName == model.RequestorName).ToList();
+                model.lstVendors = model.lstVendors.Where(p => p.RequestorName == model.RequestorName).ToList();
             }
             if (!string.IsNullOrEmpty(model.VendorName))
             {
@@ -176,17 +193,7 @@ namespace VendorMgmt.Web.Controllers
                 model.lstVendors = model.lstVendors.Where(p => p.UpdatedDate >= Convert.ToDateTime(model.FromDate) && p.UpdatedDate <= Convert.ToDateTime(model.ToDate)).ToList();
             }
 
-            var lstUSers = new List<AzureUserList>();
-            if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
-            {
-                lstUSers = await MicrosoftGraphClient.GetAllUsers();
-                System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
-            }
-            else
-            {
-                lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
-            }
-            model.lstUsers = lstUSers;
+
 
             return View(model);
         }
@@ -215,6 +222,24 @@ namespace VendorMgmt.Web.Controllers
         {
             VendorService vs = new VendorService();
             var list = vs.VendorMasters.Where(x => x.BusinessName.StartsWith(name)).Take(10).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetAzureUser(string name)
+        {
+            //VendorService vs = new VendorService();
+            //var list = vs.VendorMasters.Where(x => x.BusinessName.StartsWith(name)).Take(10).ToList();
+            var lstUSers = new List<AzureUserList>();
+            if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
+            {
+                lstUSers = await MicrosoftGraphClient.GetAllUsers();
+                System.Web.HttpContext.Current.Cache.Add("lstAzureUsers", lstUSers, null, DateTime.Now.AddMinutes(120), Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            }
+            else
+            {
+                lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
+            }
+            var list = lstUSers.Where(p => p.DisplayName.StartsWith(name)).Take(10).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetDofascoEmailList(string name)

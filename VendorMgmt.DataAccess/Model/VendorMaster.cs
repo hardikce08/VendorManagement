@@ -312,7 +312,8 @@ namespace VendorMgmt.DataAccess.Model
         public string VendorEmail { get; set; }
         public int Id { get; set; }
         public string Status { get; set; }
-
+        public string RequestorName { get; set; }
+        public string ActionerName { get; set; }
         public DateTime UpdatedDate { get; set; }
     }
     #endregion

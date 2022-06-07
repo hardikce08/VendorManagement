@@ -438,7 +438,7 @@ namespace VendorMgmt.Web.Controllers
                 //Treasury Rejection Email to Requestor
                 Emailbody = es.EmailTemplateByName("TreasuryRejectionToRequestor").EmailBody;
                 Functions.SendEmail(RequestorEmail, es.EmailTemplateByName("TreasuryRejectionToRequestor").EmailSubject, Emailbody, false);
-                
+
 
             }
             return Content("Sucess");
@@ -698,7 +698,8 @@ namespace VendorMgmt.Web.Controllers
                 model.BasicInfo.VendorId = model.VendorId;
                 model.FinancialInfo.VendorId = model.VendorId;
                 //TryUpdateModel<VendorBasicInfo>(model.BasicInfo, new string[] { "VendorName", "AlternateName", "Name", "Signee_Name", "Signee_Phone", "Signee_Email", "OperationsContact", "OperationsPhone", "OperationsEmail", "GlobalAddressBook", "DisplayUserHubProfile", "AccountGroup" });
-                //vs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);
+                //vs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);\
+                model.BasicInfo.Country = Request["BasicInfo_Country"];
                 vs.VendorBasicInfo_InsertOrUpdate(model.BasicInfo);
                 vs.VendorFinancialInfo_InsertOrUpdate(model.FinancialInfo);
                 model.PrimarySalesInfo.VendorId = model.VendorId;
@@ -708,7 +709,7 @@ namespace VendorMgmt.Web.Controllers
 
                 return Json(new { PrimarySalesInfoId = model.PrimarySalesInfo.Id, SubmittedByInfoId = model.SubmittedByInfo.Id, BasicInfoId = model.BasicInfo.Id, FinancialInfoId = model.FinancialInfo.Id }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { id = 0, PrimarySalesInfoId=0, SubmittedByInfoId=0 }, JsonRequestBehavior.AllowGet);
+            return Json(new { id = 0, PrimarySalesInfoId = 0, SubmittedByInfoId = 0 }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public JsonResult SaveTab2Admin(VendorFillInfo model)
@@ -724,8 +725,8 @@ namespace VendorMgmt.Web.Controllers
                 {
                     TempData["Error"] = "Invalid Registration Code";
                 }
-               
-               
+
+
                 return Json(new { PrimarySalesInfoId = model.PrimarySalesInfo.Id, SubmittedByInfoId = model.SubmittedByInfo.Id, RemittanceInfoId = model.RemittanceInfo.Id }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { PrimarySalesInfoId = 0, SubmittedByInfoId = 0, RemittanceInfoId = 0 }, JsonRequestBehavior.AllowGet);
@@ -745,12 +746,15 @@ namespace VendorMgmt.Web.Controllers
                     TempData["Error"] = "Invalid Registration Code";
                 }
                 model.BankingInfo.VendorId = model.VendorId;
+
+                model.BankingInfo.Country = Request["BankingInfo_Country"];
                 vs.VendorBankingInfo_InsertOrUpdate(model.BankingInfo);
                 model.RemittanceInfo.VendorId = model.VendorId;
+                model.RemittanceInfo.Country = Request["RemittanceInfo_Country"];
                 vs.VendorRemittanceInfo_InsertOrUpdate(model.RemittanceInfo);
                 return Json(new { RemittanceInfoId = model.RemittanceInfo.Id, BankingInfoId = model.BankingInfo.Id }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { BankingInfoId = 0, RemittanceInfoId=0 }, JsonRequestBehavior.AllowGet);
+            return Json(new { BankingInfoId = 0, RemittanceInfoId = 0 }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -770,9 +774,9 @@ namespace VendorMgmt.Web.Controllers
                 model.PurchaseInfo.VendorId = model.VendorId;
                 vs.VendorPurchasingInfo_InsertOrUpdate(model.PurchaseInfo);
                 model.WorkFlowInfo.VendorId = model.VendorId;
-                model.WorkFlowInfo.PurchasingManager = Request.Form["WorkFlowInfo_PurchasingManager"];
-                model.WorkFlowInfo.RequestorName = Request.Form["WorkFlowInfo_RequestorName"];
-                model.WorkFlowInfo.WorldCheckApprover = Request.Form["WorkFlowInfo_WorldCheckApprover"];
+                //model.WorkFlowInfo.PurchasingManager = Request.Form["WorkFlowInfo_PurchasingManager"];
+                //model.WorkFlowInfo.RequestorName = Request.Form["WorkFlowInfo_RequestorName"];
+                //model.WorkFlowInfo.WorldCheckApprover = Request.Form["WorkFlowInfo_WorldCheckApprover"];
                 vs.VendorWorkFlowInfo_InsertOrUpdate(model.WorkFlowInfo);
                 if (System.Web.HttpContext.Current.Cache["lstAzureUsers"] == null)
                 {
@@ -819,7 +823,7 @@ namespace VendorMgmt.Web.Controllers
                 model.TreasuryInfo.ActionerName = Request.Form["TreasuryInfo_ActionerName"];
                 model.TreasuryInfo.ChecklistInfo1 = Convert.ToBoolean(Request.Form["TreasuryInfo_ChecklistInfo1"]);
                 model.TreasuryInfo.ChecklistInfo2 = Convert.ToBoolean(Request.Form["TreasuryInfo_ChecklistInfo2"]);
-                model.TreasuryInfo.Level2ApproverName= Request.Form["TreasuryInfo_Level2ApproverName"];
+                model.TreasuryInfo.Level2ApproverName = Request.Form["TreasuryInfo_Level2ApproverName"];
                 model.TreasuryInfo.Level2ChecklistInfo = Convert.ToBoolean(Request.Form["TreasuryInfo_Level2ChecklistInfo"]);
                 EmailTemplateService es = new EmailTemplateService();
                 var lstUSers = new List<AzureUserList>();
@@ -885,27 +889,28 @@ namespace VendorMgmt.Web.Controllers
             }
             return Json(new { TreasuryInfoId = 0 }, JsonRequestBehavior.AllowGet);
         }
- 
-            public ActionResult UploadFilesAdmin()
+
+        public ActionResult UploadFilesAdmin()
         {
             string VendorId = Request["VendorId"];
             //Save Files if its Exist 
             HttpFileCollectionBase files = Request.Files;
+            string fids = "";
             for (int i = 0; i < files.Count; i++)
             {
                 int VendorID = Convert.ToInt32(VendorId);
-                // Remove Existing files 
-                List<VendorAttachmentInfo> LstAttachment = vs.VendorAttachmentInfos.Where(p => p.VendorId == VendorID).ToList();
-                foreach (var item in LstAttachment)
-                {
-                    var obj = vs.VendorAttachmentInfos.Where(p => p.Id == item.Id).FirstOrDefault();
-                    string FilePath = Path.Combine(Server.MapPath("~/Attachments/"), VendorID.ToString() + "_" + obj.FileName);
-                    if (System.IO.File.Exists(FilePath))
-                    {
-                        System.IO.File.Delete(FilePath);
-                    }
-                    Customervs.VendorAttachmentInfo_Remove(obj);
-                }
+                //// Remove Existing files 
+                //List<VendorAttachmentInfo> LstAttachment = vs.VendorAttachmentInfos.Where(p => p.VendorId == VendorID).ToList();
+                //foreach (var item in LstAttachment)
+                //{
+                //    var obj = vs.VendorAttachmentInfos.Where(p => p.Id == item.Id).FirstOrDefault();
+                //    string FilePath = Path.Combine(Server.MapPath("~/Attachments/"), VendorID.ToString() + "_" + obj.FileName);
+                //    if (System.IO.File.Exists(FilePath))
+                //    {
+                //        System.IO.File.Delete(FilePath);
+                //    }
+                //    Customervs.VendorAttachmentInfo_Remove(obj);
+                //}
 
 
                 HttpPostedFileBase file = files[i];
@@ -931,8 +936,9 @@ namespace VendorMgmt.Web.Controllers
                 // Get the complete folder path and store the file inside it.      
                 fname = Path.Combine(Server.MapPath("~/Attachments/"), t.Id.ToString() + "_" + t.FileName);
                 file.SaveAs(fname);
+                fids += t.Id + ",";
             }
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(fids, JsonRequestBehavior.AllowGet);
         }
         public ActionResult RemoveFilesAdmin(string Id)
         {

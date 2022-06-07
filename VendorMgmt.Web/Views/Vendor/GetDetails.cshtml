@@ -37,8 +37,9 @@
     @*Main Styles*@
     <link href="~/Theme/css/main.css?v=1.0" rel="stylesheet" />
 
+    
     @*@Styles.Render("~/Theme/css")*@
-    <style type="text/css">
+<style type="text/css">
         main .main-header .header-info {
             padding: 5px 30px;
         }
@@ -57,9 +58,11 @@
         main {
             margin-left: 0px;
         }
+
         .form-group {
             margin-bottom: 8px;
         }
+
         .header-right {
             color: #fff;
         }
@@ -74,8 +77,9 @@
             border-radius: 3px;
             overflow-y: scroll;
         }
+
         ::-webkit-scrollbar-thumb {
-            background: #FF3700; 
+            background: #FF3700;
             border-radius: 2px;
         }
 
@@ -83,9 +87,10 @@
             ::-webkit-scrollbar-thumb:hover {
                 background: #FF3700;
             }
-            .wizard > .content > .body {
-                padding-top: 1% !important;
-            }
+
+        .wizard > .content > .body {
+            padding-top: 1% !important;
+        }
 
         .error {
             width: 100%;
@@ -100,14 +105,15 @@
             font-size: 15px !important;
         }
 
-       /* .card-body {
+        /* .card-body {
             padding-top: 15px !important;
         }*/
         .card-title {
             border-bottom: none;
-            padding:0px 30px;
-            padding-top:5px;
+            padding: 0px 30px;
+            padding-top: 5px;
         }
+
         .card-body {
             padding-top: 10px;
             padding-right: 22px;
@@ -115,7 +121,7 @@
             padding-left: 22px;
         }
 
-            select .form-control:not([size]):not([multiple]) {
+        select .form-control:not([size]):not([multiple]) {
             height: 32px;
         }
 
@@ -124,16 +130,20 @@
             color: black !important;
         }
 
-        .wizard > .steps .number {
-            width: 20px;
-            height: none;
-            border: none;
-            font-size: unset;
-            border-radius: unset;
-            margin-right: 0px;
-            font-weight: 600;
-            line-height: 20px;
+        .wizard > .steps {
+            display: none !important;
         }
+
+            .wizard > .steps .number {
+                width: 20px;
+                height: none;
+                border: none;
+                font-size: unset;
+                border-radius: unset;
+                margin-right: 0px;
+                font-weight: 600;
+                line-height: 20px;
+            }
 
         .table th, .table td {
             padding: 5px 15px;
@@ -146,7 +156,17 @@
             padding-right: 15px;
             font-size: 17px;
         }
-    </style>
+        #load {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background: #0020ff36;
+            z-index: 9999;
+            background: url('@Url.Content("~/Theme/images/Loader.gif")') 50% 50% no-repeat #0020ff36;
+        }
+</style>
 </head>
 <body>
     @*<form id="form_id" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);">*@
@@ -198,12 +218,12 @@
         </header><!-- header //. -->
         <main>
             @*<div class="main-header">
-                <div class="header-info">
-                    <h1 class="title">
-                        @ViewBag.Title
-                    </h1>
-                </div>
-            </div>*@
+                    <div class="header-info">
+                        <h1 class="title">
+                            @ViewBag.Title
+                        </h1>
+                    </div>
+                </div>*@
             <div class="content">
                 <div class="document">
                     <!-- wizard basic -->
@@ -216,221 +236,220 @@
 
                             @if (TempData["Error"] != null)
                             {
-                                <div class="alert alert-dismissible alert-danger">
-                                    <strong>@TempData["Error"]</strong>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                </div>
-                            }
-                            else
-                            {
-                        <div class="wizard-basic">
-                            <h3></h3>
-                            <div class="section" id="vendorinfo">
-                                <form id="step1" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
-                                    <div class="row">
-                                        @Html.HiddenFor(m => m.BasicInfo.Id)
-                                        @Html.HiddenFor(m => m.VendorId)
-                                        @Html.HiddenFor(m => m.RegistrationCode)
-                                        @Html.HiddenFor(m => m.PrimarySalesInfo.Id)
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Vendor Name</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.VendorName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
+                <div class="alert alert-dismissible alert-danger">
+                    <strong>@TempData["Error"]</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div> }
+            else
+            {
+<div class="wizard-basic">
+    <h3></h3>
+    <div class="section" id="vendorinfo">
+        <form id="step1" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+            <div class="row">
+                @Html.HiddenFor(m => m.BasicInfo.Id)
+                @Html.HiddenFor(m => m.VendorId)
+                @Html.HiddenFor(m => m.RegistrationCode)
+                @Html.HiddenFor(m => m.PrimarySalesInfo.Id)
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Vendor Name</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.VendorName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Alternate Vendor Name</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.AlternateName, new { @class = "form-control form-control-sm", @style = "width:100%;"  })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Alternate Vendor Name</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.AlternateName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
 
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>SCAC (Carriers Only)</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.SCAC, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Vendor Business Address</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.BusinessAddress, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>SCAC (Carriers Only)</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.SCAC, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Vendor Business Address</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.BusinessAddress, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
 
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Business City</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.BusinessCity, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Business City</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.BusinessCity, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
 
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Business Province/State</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.BusinessState, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Business Postal Code / Zip Code</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.BusinessZip, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Business Province/State</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.BusinessState, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Business Postal Code / Zip Code</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.BusinessZip, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Vendor Country</strong></label>
-                                                @*@Html.TextBoxFor(m => m.BasicInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
-                                                @Html.DropDownList("BasicInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.BasicInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Vendor Country</strong></label>
+                        @*@Html.TextBoxFor(m => m.BasicInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                        @Html.DropDownList("BasicInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.BasicInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
 
-                                        <div class="col-lg-3">
+                <div class="col-lg-3">
 
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Phone Number</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.Phonenumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Website Address</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.Website, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Phone Number</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.Phonenumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Website Address</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.Website, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Payment Currency</strong></label>
-                                                @Html.SelectList_PaymentCurrency(model => model.BasicInfo.PaymentCurrency, new { @class = "form-control form-control-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Payment Currency</strong></label>
+                        @Html.SelectList_PaymentCurrency(model => model.BasicInfo.PaymentCurrency, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
 
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>GST Applicable?</strong></label>
-                                                @Html.SelectList_YesNoFor(model => model.BasicInfo.GSTApplicable, new { @class = "form-control form-control-sm" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>GST Number</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.GSTNumber, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>GST Applicable?</strong></label>
+                        @Html.SelectList_YesNoFor(model => model.BasicInfo.GSTApplicable, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>GST Number</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.GSTNumber, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Diversity Business Certification</strong></label>
-                                                @Html.SelectList_DiversityBusinessCertification(model => model.BasicInfo.DiversityBusinessCertification, new { @class = "form-control form-control-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Diversity Business Certification</strong></label>
+                        @Html.SelectList_DiversityBusinessCertification(model => model.BasicInfo.DiversityBusinessCertification, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
 
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Member of Council?</strong></label>
-                                                @Html.SelectList_YesNoFor(model => model.BasicInfo.IsCouncilMember, new { @class = "form-control form-control-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Council Name</strong></label>
-                                                @Html.TextBoxFor(m => m.BasicInfo.CouncilName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Financial Details</strong> </div>
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Member of Council?</strong></label>
+                        @Html.SelectList_YesNoFor(model => model.BasicInfo.IsCouncilMember, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Council Name</strong></label>
+                        @Html.TextBoxFor(m => m.BasicInfo.CouncilName, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Financial Details</strong> </div>
 
-                                    </div>
-                                    <div class="row">
-                                        @Html.HiddenFor(m => m.FinancialInfo.Id)
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
-                                                @Html.TextBoxFor(m => m.FinancialInfo.ContactName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
+            </div>
+            <div class="row">
+                @Html.HiddenFor(m => m.FinancialInfo.Id)
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
+                        @Html.TextBoxFor(m => m.FinancialInfo.ContactName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
-                                                @Html.TextBoxFor(m => m.FinancialInfo.ContactPhone, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
+                        @Html.TextBoxFor(m => m.FinancialInfo.ContactPhone, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
 
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
-                                                @Html.TextBoxFor(m => m.FinancialInfo.ContactEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Primary Sales Details</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                       
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
-                                                @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
+                        @Html.TextBoxFor(m => m.FinancialInfo.ContactEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Primary Sales Details</strong> </div>
+            </div>
+            <div class="row">
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
-                                                @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactPhone, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
+                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
 
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
-                                                @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Submitted By Details</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        @Html.HiddenFor(m => m.SubmittedByInfo.Id)
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
+                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactPhone, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
-                                                @Html.TextBoxFor(m => m.SubmittedByInfo.SubmittedByName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
+                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Submitted By Details</strong> </div>
+            </div>
+            <div class="row">
+                @Html.HiddenFor(m => m.SubmittedByInfo.Id)
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
-                                                @Html.TextBoxFor(m => m.SubmittedByInfo.Email, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
-                                                @Html.TextBoxFor(m => m.SubmittedByInfo.DofascoEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            @*<h3></h3>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Name</strong></label>
+                        @Html.TextBoxFor(m => m.SubmittedByInfo.SubmittedByName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Phone Number</strong></label>
+                        @Html.TextBoxFor(m => m.SubmittedByInfo.Email, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
+                        @Html.TextBoxFor(m => m.SubmittedByInfo.DofascoEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    @*<h3></h3>
         <div class="section">
             <form id="step2" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
 
@@ -438,419 +457,420 @@
 
             </form>
         </div>*@
-                            <h3></h3>
-                            <div class="section">
-                                <form id="step3" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Vendor Remittance Info</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        @Html.HiddenFor(m => m.RemittanceInfo.Id)
+    <h3></h3>
+    <div class="section">
+        <form id="step3" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Vendor Remittance Info</strong> </div>
+            </div>
+            <div class="row">
+                @Html.HiddenFor(m => m.RemittanceInfo.Id)
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Remittance Mailing Address</strong></label>
-                                                @Html.TextBoxFor(m => m.RemittanceInfo.MailingAddress, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Remittance Mailing Address</strong></label>
+                        @Html.TextBoxFor(m => m.RemittanceInfo.MailingAddress, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Remittance Mailing City</strong></label>
-                                                @Html.TextBoxFor(m => m.RemittanceInfo.MailingCity, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Remittance Province/State</strong></label>
-                                                @Html.TextBoxFor(m => m.RemittanceInfo.State, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Remittance Postal / Zip Code</strong></label>
-                                                @Html.TextBoxFor(m => m.RemittanceInfo.Zip, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Remittance Country</strong></label>
-                                                @*@Html.TextBoxFor(m => m.RemittanceInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
-                                                @Html.DropDownList("RemittanceInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.RemittanceInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Remittance Mailing City</strong></label>
+                        @Html.TextBoxFor(m => m.RemittanceInfo.MailingCity, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Remittance Province/State</strong></label>
+                        @Html.TextBoxFor(m => m.RemittanceInfo.State, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Remittance Postal / Zip Code</strong></label>
+                        @Html.TextBoxFor(m => m.RemittanceInfo.Zip, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Remittance Country</strong></label>
+                        @*@Html.TextBoxFor(m => m.RemittanceInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                        @Html.DropDownList("RemittanceInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.RemittanceInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
 
-                                            </div>
-                                        </div>
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Remittance Email Address</strong></label>
-                                                @Html.TextBoxFor(m => m.RemittanceInfo.Email, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Special Payment</strong></label>
-                                                @Html.TextBoxFor(m => m.RemittanceInfo.SpecialPayment, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
-                                    </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Remittance Email Address</strong></label>
+                        @Html.TextBoxFor(m => m.RemittanceInfo.Email, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Special Payment</strong></label>
+                        @Html.TextBoxFor(m => m.RemittanceInfo.SpecialPayment, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
+            </div>
 
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Banking Info</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        @Html.HiddenFor(m => m.BankingInfo.Id)
-                                        @Html.HiddenFor(m => m.VendorId)
-                                        @Html.HiddenFor(m => m.RegistrationCode)
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank Name</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.Name, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank Address</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.Address, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Banking Info</strong> </div>
+            </div>
+            <div class="row">
+                @Html.HiddenFor(m => m.BankingInfo.Id)
+                @Html.HiddenFor(m => m.VendorId)
+                @Html.HiddenFor(m => m.RegistrationCode)
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank Name</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.Name, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank Address</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.Address, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank City</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.City, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank Province/State</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.State, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank Postal Code / Zip Code</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.Zip, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank Country</strong></label>
-                                                @*@Html.TextBoxFor(m => m.BankingInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
-                                                @Html.DropDownList("BankingInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.BankingInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank City</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.City, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank Province/State</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.State, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank Postal Code / Zip Code</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.Zip, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank Country</strong></label>
+                        @*@Html.TextBoxFor(m => m.BankingInfo.Country, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                        @Html.DropDownList("BankingInfo_Country", new SelectList(Model.lstCountries, "Name", "Name", Model.BankingInfo.Country), new { @class = "form-control form-control-sm", @required = "required" })
 
-                                            </div>
-                                        </div>
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank Institution #</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.InstitutionNo, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank Transit #</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.TransitNo, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Bank Account #</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.BankAccountNo, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Bank ABA/Routing Number</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.ABA_RoutingNumber, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank Institution #</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.InstitutionNo, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank Transit #</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.TransitNo, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Bank Account #</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.BankAccountNo, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Bank ABA/Routing Number</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.ABA_RoutingNumber, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
 
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Bank SWIFT/BIC Code</strong></label>
-                                                @Html.TextBoxFor(m => m.BankingInfo.Swift_BICCode, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Bank SWIFT/BIC Code</strong></label>
+                        @Html.TextBoxFor(m => m.BankingInfo.Swift_BICCode, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Add Your Attachments</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <input id="fileInput" type="file" multiple>
-                                            <div style="color:red;display:none;" id="fileinputerr"> Please select atleast one file</div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <table class="table" id="FilesList" style="visibility:hidden">
-                                                <tr>
-                                                    <th>
-                                                        Attachment(s)
-                                                    </th>
-                                                    <th>
-                                                        Action
-                                                    </th>
-                                                </tr>
-                                                @if (Model.AttachmentInfo.Count > 0)
-                                                {
-                                                    foreach (var item in Model.AttachmentInfo)
-                                                    {
-                                                        <tr id='@item.Id'>
-                                                            <td>
-                                                                @item.FileName
-                                                            </td>
-                                                            <td>
-                                                                <a href='#' onclick="DeleteServerFile('@item.Id');"><span class='red'><i class="fs-20 fa fa-trash mr-10"></i></span></a>
-                                                            </td>
-                                                        </tr>
-                                                    }
-                                                }
-                                            </table>
-                                            @*<input type="button" id="btnupload" value="Upload" style="float:right" />*@
+            </div>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Add Your Attachments</strong> </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <input id="fileInput" type="file" multiple>
+                    <div style="color:red;display:none;" id="fileinputerr"> Please select atleast one file</div>
+                </div>
+                <div class="col-lg-6">
+                    <table class="table" id="FilesList" style="visibility:hidden">
+                        <tr>
+                            <th>
+                                Attachment(s)
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                        @if (Model.AttachmentInfo.Count > 0)
+                        {
+                            foreach (var item in Model.AttachmentInfo)
+                            {
+        <tr id='@item.Id'>
+            <td>
+                @item.FileName
+            </td>
+            <td>
+                <a href='#' onclick="DeleteServerFile('@item.Id');"><span class='red'><i class="fs-20 fa fa-trash mr-10"></i></span></a>
+            </td>
+        </tr>
+}
+}
+                    </table>
+                    @*<input type="button" id="btnupload" value="Upload" style="float:right" />*@
 
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <h3></h3>
-                            <div class="section">
-                                <form id="step4" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Purchasing Information</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        @Html.HiddenFor(m => m.PurchaseInfo.Id)
-                                        @Html.HiddenFor(m => m.VendorId)
-                                        @Html.HiddenFor(m => m.RegistrationCode)
-                                        @Html.HiddenFor(m => m.BusinessName)
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Trading Partner</strong></label>
-                                                @Html.SelectList_YesNoFor(model => model.PurchaseInfo.TradingPartner, new { @class = "form-control form-control-sm", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Account Group Name</strong></label>
-                                                @Html.SelectList_AccountGroupName(m => m.PurchaseInfo.AccountGroupName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Type of Vendor Request</strong></label>
-                                                @Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.TypeofVendorRequest, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <h3></h3>
+    <div class="section">
+        <form id="step4" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Purchasing Information</strong> </div>
+            </div>
+            <div class="row">
+                @Html.HiddenFor(m => m.PurchaseInfo.Id)
+                @Html.HiddenFor(m => m.VendorId)
+                @Html.HiddenFor(m => m.RegistrationCode)
+                @Html.HiddenFor(m => m.BusinessName)
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Trading Partner</strong></label>
+                        @Html.SelectList_YesNoFor(model => model.PurchaseInfo.TradingPartner, new { @class = "form-control form-control-sm", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Account Group Name</strong></label>
+                        @Html.SelectList_AccountGroupName(m => m.PurchaseInfo.AccountGroupName, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Type of Vendor Request</strong></label>
+                        @Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.TypeofVendorRequest, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Conflict of Interest</strong></label>
-                                                @Html.SelectList_YesNoFor(m => m.PurchaseInfo.ConflictOfInterest, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Payment Terms</strong></label>
-                                                @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.PaymentTerms, new { @class = "form-control form-control-sm", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Spend Tree Level 1</strong></label>
-                                                @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreelevel1, new { @class = "form-control form-control-sm" })*@
-                                                @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreelevel1, (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel1"], new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,2);", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Spend Tree Level 2</strong></label>
-                                                @*@Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.SpendTreeLevel2, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel2, (ViewData["SpanTreeLevel2"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel2"]), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,3);", @required = "required" })
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Conflict of Interest</strong></label>
+                        @Html.SelectList_YesNoFor(m => m.PurchaseInfo.ConflictOfInterest, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Payment Terms</strong></label>
+                        @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.PaymentTerms, new { @class = "form-control form-control-sm", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Spend Tree Level 1</strong></label>
+                        @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreelevel1, new { @class = "form-control form-control-sm" })*@
+                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreelevel1, (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel1"], new { @class = "form-control form-control-sm chosen-select", @onchange = "FillSpanTree(this,2);", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Spend Tree Level 2</strong></label>
+                        @*@Html.SelectList_TypeofVendorRequest(m => m.PurchaseInfo.SpendTreeLevel2, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel2, (ViewData["SpanTreeLevel2"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel2"]), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,3);", @required = "required" })
 
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Spend Tree Level 3</strong></label>
-                                                @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreeLevel3, new { @class = "form-control form-control-sm" })*@
-                                                @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel3, (ViewData["SpanTreeLevel3"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel3"]), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,4);", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Spend Tree Level 3</strong></label>
+                        @*@Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.SpendTreeLevel3, new { @class = "form-control form-control-sm" })*@
+                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel3, (ViewData["SpanTreeLevel3"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel3"]), new { @class = "form-control form-control-sm", @onchange = "FillSpanTree(this,4);", @required = "required" })
 
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Spend Tree Level 4</strong></label>
-                                                @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel4, (ViewData["SpanTreeLevel4"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel4"]), new { @class = "form-control form-control-sm", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Workflow Details</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        @Html.HiddenFor(m => m.WorkFlowInfo.Id)
-                                        @Html.HiddenFor(m => m.VendorId)
-                                        @Html.HiddenFor(m => m.RegistrationCode)
-                                        @Html.HiddenFor(m => m.PurchaseApproverEmail)
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Requestor Name</strong></label>
-                                                @*@Html.SelectList_AzureAdUsers(model => model.WorkFlowInfo.RequestorName, new { @class = "form-control form-control-sm", @required = "required" })*@
-                                                @Html.DropDownList("WorkFlowInfo_RequestorName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.RequestorName), new { @class = "form-control form-control-sm", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Purchasing Manager</strong></label>
-                                                @*@Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
-                                                @Html.DropDownList("WorkFlowInfo_PurchasingManager", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.PurchasingManager), new { @class = "form-control form-control-sm", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Spend Tree Level 4</strong></label>
+                        @Html.DropDownListFor(model => model.PurchaseInfo.SpendTreeLevel4, (ViewData["SpanTreeLevel4"] == null ? new SelectList(Enumerable.Empty<SelectListItem>()) : (IEnumerable<SelectListItem>)ViewData["SpanTreeLevel4"]), new { @class = "form-control form-control-sm", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Workflow Details</strong> </div>
+            </div>
+            <div class="row">
+                @Html.HiddenFor(m => m.WorkFlowInfo.Id)
+                @Html.HiddenFor(m => m.VendorId)
+                @Html.HiddenFor(m => m.RegistrationCode)
+                @Html.HiddenFor(m => m.PurchaseApproverEmail)
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Requestor Name</strong></label>
+                        @*@Html.SelectList_AzureAdUsers(model => model.WorkFlowInfo.RequestorName, new { @class = "form-control form-control-sm", @required = "required" })*@
+                        @*@Html.DropDownList("WorkFlowInfo_RequestorName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.RequestorName), new { @class = "form-control form-control-sm chosen-select", @required = "required" })*@
+                        @Html.TextBoxFor(m => m.WorkFlowInfo.RequestorName, new { @class = "form-control", @style = "width:100%;", @required = "required" })
 
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>World Check Approver</strong></label>
-                                                @*@Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.WorldCheckApprover, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
-                                                @Html.DropDownList("WorkFlowInfo_WorldCheckApprover", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.WorldCheckApprover), new { @class = "form-control form-control-sm", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Purchasing Manager</strong></label>
+                        @*@Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                        @*@Html.DropDownList("WorkFlowInfo_PurchasingManager", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.PurchasingManager), new { @class = "form-control form-control-sm", @required = "required" })*@
+                        @Html.TextBoxFor(m => m.WorkFlowInfo.PurchasingManager, new { @class = "form-control", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>World Check Approver</strong></label>
+                        @*@Html.SelectList_AccountGroupName(m => m.WorkFlowInfo.WorldCheckApprover, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })*@
+                        @*@Html.DropDownList("WorkFlowInfo_WorldCheckApprover", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.WorkFlowInfo.WorldCheckApprover), new { @class = "form-control form-control-sm", @required = "required" })*@
+                        @Html.TextBoxFor(m => m.WorkFlowInfo.WorldCheckApprover, new { @class = "form-control", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Vendor Number</strong></label>
+                        @Html.TextBoxFor(m => m.WorkFlowInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @Disabled = "Disabled" })
+                    </div>
+                </div>
 
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Vendor Number</strong></label>
-                                                @Html.TextBoxFor(m => m.WorkFlowInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @Disabled = "Disabled" })
-                                            </div>
-                                        </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Purchasing Comments</strong></label>
+                        @Html.TextAreaFor(m => m.WorkFlowInfo.PurchaseComments, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <h3></h3>
+    <div class="section">
+        <form id="step5" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Treasury Information</strong> </div>
+            </div>
+            <div class="row">
+                @Html.HiddenFor(m => m.TreasuryInfo.Id)
+                @Html.HiddenFor(m => m.VendorId)
+                @Html.HiddenFor(m => m.RegistrationCode)
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>
+                        @*@Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm", @required = "required" })*@
+                        @Html.DropDownList("TreasuryInfo_ActionerName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.ActionerName), new { @class = "form-control form-control-sm", @required = "required" })
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Purchasing Comments</strong></label>
-                                                @Html.TextAreaFor(m => m.WorkFlowInfo.PurchaseComments, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <h3></h3>
-                            <div class="section">
-                                <form id="step5" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" onsubmit="showLoader(this);" data-parsley-validate>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Treasury Information</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        @Html.HiddenFor(m => m.TreasuryInfo.Id)
-                                        @Html.HiddenFor(m => m.VendorId)
-                                        @Html.HiddenFor(m => m.RegistrationCode)
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>
-                                                @*@Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm", @required = "required" })*@
-                                                @Html.DropDownList("TreasuryInfo_ActionerName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.ActionerName), new { @class = "form-control form-control-sm", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Vendor Number</strong></label>
+                        @Html.TextBoxFor(m => m.TreasuryInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-lg-4">
 
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Vendor Number</strong></label>
-                                                @Html.TextBoxFor(m => m.TreasuryInfo.VendorNumber, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Treasury Checklist Information</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-10">
-                                            <div class="form-group">
-                                                @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
-                                                1. Appropriate documentation was provided to support the change
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <div class="form-group row">
-                                                @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                @Html.RadioButton("TreasuryInfo_ChecklistInfo1", "true", Model.TreasuryInfo.ChecklistInfo1 == true ? true : false) <label class="customradiotext"> Yes</label>
-                                                @Html.RadioButton("TreasuryInfo_ChecklistInfo1", "false", Model.TreasuryInfo.ChecklistInfo1 == true ? false : true)  <label class="customradiotext"> No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-10">
-                                            <div class="form-group">
-                                                @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
-                                                2. If the vendor refused to be validated through nsKnox a Teams video call was initiated to the financial contact to validate the business context and banking instruction that was previously received from the requestor. Otherwise the Vendor was validated through nsKnox.
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <div class="form-group row">
-                                                @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                @Html.RadioButton("TreasuryInfo_ChecklistInfo2", "true", Model.TreasuryInfo.ChecklistInfo2 == true ? true : false) <label class="customradiotext"> Yes</label>
-                                                @Html.RadioButton("TreasuryInfo_ChecklistInfo2", "false", Model.TreasuryInfo.ChecklistInfo2 == true ? false : true)  <label class="customradiotext"> No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row" style="margin-left:50%;">
-                                        <input type="button" id="btnValidate" onclick="btnValidateClick();" value="Validate" class="btn btn-behance btn-shadow" />
-                                    </div>
-                                    <div class="row">
-                                        <div class="alert subheader col-lg-12"><strong>Treasury 2nd Level Approver Details</strong> </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label for="input-placeholder" class="require"><strong>Treasury Second Level Approver</strong></label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                @Html.DropDownList("TreasuryInfo_Level2ApproverName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.Level2ApproverName), new { @class = "form-control form-control-sm", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-10">
-                                            <div class="form-group">
-                                                @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
-                                                The vendor information and/or banking instructions have been entered into SAP accurately
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <div class="form-group row">
-                                                @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
-                                                @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", "true", Model.TreasuryInfo.Level2ChecklistInfo == true ? true : false) <label class="customradiotext"> Yes</label>
-                                                @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", "false", Model.TreasuryInfo.Level2ChecklistInfo == true ? false : true)  <label class="customradiotext"> No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="input-placeholder"><strong>Treasury Comments</strong></label>
-                                                @Html.TextAreaFor(m => m.TreasuryInfo.Level2Comments, new { @class = "form-control form-control-sm", @style = "width:100%;" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                            }
+                </div>
+            </div>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Treasury Checklist Information</strong> </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="form-group">
+                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
+                        1. Appropriate documentation was provided to support the change
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group row">
+                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", "true", Model.TreasuryInfo.ChecklistInfo1 == true ? true : false) <label class="customradiotext"> Yes</label>
+                        @Html.RadioButton("TreasuryInfo_ChecklistInfo1", "false", Model.TreasuryInfo.ChecklistInfo1 == true ? false : true)  <label class="customradiotext"> No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="form-group">
+                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
+                        2. If the vendor refused to be validated through nsKnox a Teams video call was initiated to the financial contact to validate the business context and banking instruction that was previously received from the requestor. Otherwise the Vendor was validated through nsKnox.
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group row">
+                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+                        @Html.RadioButton("TreasuryInfo_ChecklistInfo2", "true", Model.TreasuryInfo.ChecklistInfo2 == true ? true : false) <label class="customradiotext"> Yes</label>
+                        @Html.RadioButton("TreasuryInfo_ChecklistInfo2", "false", Model.TreasuryInfo.ChecklistInfo2 == true ? false : true)  <label class="customradiotext"> No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-left:50%;">
+                <input type="button" id="btnValidate" onclick="btnValidateClick();" value="Validate" class="btn btn-behance btn-shadow" />
+            </div>
+            <div class="row">
+                <div class="alert subheader col-lg-12"><strong>Treasury 2nd Level Approver Details</strong> </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="input-placeholder" class="require"><strong>Treasury Second Level Approver</strong></label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        @Html.DropDownList("TreasuryInfo_Level2ApproverName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.Level2ApproverName), new { @class = "form-control form-control-sm", @required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="form-group">
+                        @*<label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>*@
+                        The vendor information and/or banking instructions have been entered into SAP accurately
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group row">
+                        @*@Html.SelectList_YesNoFor(m => m.TreasuryInfo.ChecklistInfo1, new { @class = "form-control form-control-sm", @style = "width:100%;" })*@
+                        @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", "true", Model.TreasuryInfo.Level2ChecklistInfo == true ? true : false) <label class="customradiotext"> Yes</label>
+                        @Html.RadioButton("TreasuryInfo_Level2ChecklistInfo", "false", Model.TreasuryInfo.Level2ChecklistInfo == true ? false : true)  <label class="customradiotext"> No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="input-placeholder"><strong>Treasury Comments</strong></label>
+                        @Html.TextAreaFor(m => m.TreasuryInfo.Level2Comments, new { @class = "form-control form-control-sm", @style = "width:100%;" })
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>}
                         </div>
                     </div>
                 </div>
@@ -878,6 +898,7 @@
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")*@
     @Scripts.Render("~/bundles/CustomTheme")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
     <!-- jquery steps -->
     <script src="~/Theme/scripts/jquery.steps.min.js"></script>
     <!-- parsley form validator -->
@@ -907,18 +928,21 @@
                 position: 'top-right'
             });
         };
+
+       
     </script>
     <script>
         var formdata = new FormData(); //FormData object
         $(function () {
             chkatchtbl();
+
             $(".wizard-basic").steps({
                 headerTag: "h3",
                 bodyTag: ".section",
                 transitionEffect: "slideLeft",
                 autoFocus: true,
                 labels: {
-                    next: "Save & Next",
+                    next: "Next",
                     loading: "Loading ..."
                 },
                 titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>',
@@ -950,6 +974,7 @@
                                 Isvalidated = false;
                                 $("#fileinputerr").show();
                             }
+                            alert(Isvalidated);
                             if (Isvalidated) {
                                 SaveStep3();
                             }
@@ -1008,20 +1033,26 @@
                     SaveStep1();
                 }
                 else if ($(".wizard-basic").steps("getCurrentIndex") == 1) {
-                    SaveStep2();
-                }
-                else if ($(".wizard-basic").steps("getCurrentIndex") == 2) {
                     if ($('#FilesList tr').length == 1) {
                         Isvalidated = false;
                         $("#fileinputerr").show();
                     }
-                    SaveStep3();
+                    if (Isvalidated) {
+                        SaveStep3();
+                    }
                 }
-                else if ($(".wizard-basic").steps("getCurrentIndex") == 3) {
-                    $("#load").show();
-                    SaveStep4();
-                    $("#load").hide();
+                else if ($(".wizard-basic").steps("getCurrentIndex") == 2) {
+                    var Isvalidated = $("#step4").parsley().validate();
+                    if (Isvalidated) {
+
+                        SaveStep4();
+                    }
                 }
+                //else if ($(".wizard-basic").steps("getCurrentIndex") == 3) {
+                //    $("#load").show();
+                //    SaveStep4();
+                //    $("#load").hide();
+                //}
                 else if ($(".wizard-basic").steps("getCurrentIndex") == 3) {
                     SaveStep5();
                 }
@@ -1037,7 +1068,7 @@
                 //alert(formdata);
                 formdata.append(sfilename, fileInput.files[i]);
 
-                var markup = "<tr id='" + srandomid + "'><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                var markup = "<tr id='" + srandomid + "'><td>" + sfilename + "</td><td id='actionlink'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                     "\")'><span class='red'><i class=\"fs-20 fa fa-trash mr-10\"></i></span></a></td></tr>"; // Binding the file name
                 $("#FilesList tbody").append(markup);
 
@@ -1112,9 +1143,9 @@
 
         function SaveStep3() {
             var Isvalidated = $("#step3").parsley().validate();
-            
+
             if (Isvalidated) {
-               
+
                 $.ajax({
                     cache: false,
                     async: false,
@@ -1147,7 +1178,20 @@
                     async: false,
                     success: function (result) {
                         if (result != "") {
-                            alert(result);
+                           //alert(result);
+                            var myArray = result.split(",");
+                            console.log(myArray);
+                            for (var i = 0; i < myArray.length; i++)
+                            {
+                                if (myArray[i] != "") {
+                                    $("#actionlink a")[i].removeAttribute("onclick");
+                                    $("#actionlink a")[i].setAttribute('onclick', 'DeleteServerFile(' + myArray[i] + ')');
+                                    $("#actionlink")[i].closest("tr").removeAttribute("id");
+                                    $("#actionlink")[i].closest("tr").setAttribute("id",myArray[i]);
+
+                                    //$("a").prop("onclick", null);
+                                }
+                            }
                         }
                     },
                     error: function (err) {
@@ -1157,15 +1201,24 @@
             }
             else { return false; }
         }
+
+
+
         function SaveStep4() {
             var Isvalidated = $("#step4").parsley().validate();
+
             if (Isvalidated) {
                 $.ajax({
                     cache: false,
-                    async: false,
                     type: "POST",
                     url: "@(Url.Action("SaveTab4Admin"))",
                     data: $("#step4").serializeArray(),
+                    beforeSend: function () {
+                        $("#load").show();
+                    },
+                    complete: function () {
+                        $("#load").hide();
+                    },
                     success: function (data) {
 
                         if (data.PurchaseInfoId == undefined || data.PurchaseInfoId == 0) {
@@ -1191,10 +1244,15 @@
             if (Isvalidated) {
                 $.ajax({
                     cache: false,
-                    async: false,
                     type: "POST",
                     url: "@(Url.Action("SaveTab5Admin"))",
                     data: $("#step5").serializeArray(),
+                    beforeSend: function () {
+                        $("#load").show();
+                    },
+                    complete: function () {
+                        $("#load").hide();
+                    },
                     success: function (data) {
 
                         if (data.TreasuryInfoId == undefined || data.TreasuryInfoId == 0) {
@@ -1305,6 +1363,138 @@
 
         }
 
+    </script>
+    <script>
+        $(document).ready(function () {
+            
+            $("#WorkFlowInfo_RequestorName").typeahead({
+                minLength: 1,
+                source: function (request, response) {
+                    
+                    $.ajax({
+                        url: "/Home/GetAzureUser",
+                        data: {
+                            "name": request
+                        },
+                        type: "GET",
+                        contentType: "json",
+                        success: function (data) {
+                            items = [];
+                            map = {};
+                            $.each(data, function (i, item) {
+                                /*console.log(item);*/
+                                var id = item.EmailAddress;
+                                var name = item.DisplayName;
+
+                                map[name] = {
+                                    id: id,
+                                    name: name
+                                };
+                                items.push(name);
+                            });
+                            response(items);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                updater: function (item) {
+                    //alert(map[item].id);
+                    //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
+                    $('[id*=WorkFlowInfo_RequestorName]').val(map[item].name);
+                    return item;
+                }
+            });
+            $("#WorkFlowInfo_PurchasingManager").typeahead({
+                minLength: 1,
+                source: function (request, response) {
+
+                    $.ajax({
+                        url: "/Home/GetAzureUser",
+                        data: {
+                            "name": request
+                        },
+                        type: "GET",
+                        contentType: "json",
+                        success: function (data) {
+                            items = [];
+                            map = {};
+                            $.each(data, function (i, item) {
+                                /*console.log(item);*/
+                                var id = item.EmailAddress;
+                                var name = item.DisplayName;
+
+                                map[name] = {
+                                    id: id,
+                                    name: name
+                                };
+                                items.push(name);
+                            });
+                            response(items);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                updater: function (item) {
+                    //alert(map[item].id);
+                    //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
+                    $('[id*=WorkFlowInfo_PurchasingManager]').val(map[item].name);
+                    return item;
+                }
+            });
+            $("#WorkFlowInfo_WorldCheckApprover").typeahead({
+                minLength: 1,
+                source: function (request, response) {
+
+                    $.ajax({
+                        url: "/Home/GetAzureUser",
+                        data: {
+                            "name": request
+                        },
+                        type: "GET",
+                        contentType: "json",
+                        success: function (data) {
+                            items = [];
+                            map = {};
+                            $.each(data, function (i, item) {
+                                /*console.log(item);*/
+                                var id = item.EmailAddress;
+                                var name = item.DisplayName;
+
+                                map[name] = {
+                                    id: id,
+                                    name: name
+                                };
+                                items.push(name);
+                            });
+                            response(items);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                updater: function (item) {
+                    //alert(map[item].id);
+                    //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
+                    $('[id*=WorkFlowInfo_WorldCheckApprover]').val(map[item].name);
+                    return item;
+                }
+            });
+
+        });
     </script>
 </body>
 </html>

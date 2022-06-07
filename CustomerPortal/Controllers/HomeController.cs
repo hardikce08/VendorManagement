@@ -166,7 +166,7 @@ namespace CustomerPortal.Controllers
                 //Send Notification to Dofasco email that User filled form
                 Emailbody = es.EmailTemplateByName("DofascoConfirmation").EmailBody;
                 Emailbody = Emailbody.Replace("@VendorName", model.BusinessName);
-                Emailbody = Emailbody.Replace("{ShortUrl}", AdminPortalURL + "/Vendor/GetDetails?RegistrationCode=" + model.RegistrationCode);
+                Emailbody = Emailbody.Replace("{ShortUrl}", AdminPortalURL.Replace("https//","https://") + "/Vendor/GetDetails?RegistrationCode=" + model.RegistrationCode);
                 Functions.SendEmail(model.DofascoEmail, "Confirmation", Emailbody, false);
                 //update Application Status
                 vs.UpdateStatus(model.RegistrationCode, "Submitted by Vendor");
@@ -184,18 +184,18 @@ namespace CustomerPortal.Controllers
             for (int i = 0; i < files.Count; i++)
             {
                 int VendorID = Convert.ToInt32(VendorId);
-                // Remove Existing files 
-                List<VendorAttachmentInfo> LstAttachment = Customervs.VendorAttachmentInfos.Where(p => p.VendorId == VendorID).ToList();
-                foreach (var item in LstAttachment)
-                {
-                    var obj = Customervs.VendorAttachmentInfos.Where(p => p.Id == item.Id).FirstOrDefault();
-                    string FilePath = Path.Combine(Server.MapPath("~/Attachments/"), VendorID.ToString() + "_" + obj.FileName);
-                    if (System.IO.File.Exists(FilePath))
-                    {
-                        System.IO.File.Delete(FilePath);
-                    }
-                    Customervs.VendorAttachmentInfo_Remove(obj);
-                }
+                //// Remove Existing files 
+                //List<VendorAttachmentInfo> LstAttachment = Customervs.VendorAttachmentInfos.Where(p => p.VendorId == VendorID).ToList();
+                //foreach (var item in LstAttachment)
+                //{
+                //    var obj = Customervs.VendorAttachmentInfos.Where(p => p.Id == item.Id).FirstOrDefault();
+                //    string FilePath = Path.Combine(Server.MapPath("~/Attachments/"), VendorID.ToString() + "_" + obj.FileName);
+                //    if (System.IO.File.Exists(FilePath))
+                //    {
+                //        System.IO.File.Delete(FilePath);
+                //    }
+                //    Customervs.VendorAttachmentInfo_Remove(obj);
+                //}
 
 
                 HttpPostedFileBase file = files[i];
@@ -214,44 +214,45 @@ namespace CustomerPortal.Controllers
                 fname = Path.Combine(Server.MapPath("~/Attachments/"), fname);
 
                 VendorAttachmentInfo t = new VendorAttachmentInfo();
-                t.FileName = Path.GetFileName(fname);
+                string ModifiedFileName =  DateTime.Now.ToString("ddMMyyyyhhmmss") +"_"+Path.GetFileName(fname) ;
+                t.FileName = ModifiedFileName;
                 t.FileType = Path.GetExtension(fname);
                 t.VendorId = Convert.ToInt32(VendorId);
                 Customervs.VendorAttachmentInfo_InsertOrUpdate(t);
                 // Get the complete folder path and store the file inside it.      
-                fname = Path.Combine(Server.MapPath("~/Attachments/"), t.VendorId.ToString() + "_" + t.FileName);
+                fname = Path.Combine(Server.MapPath("~/Attachments/"), t.FileName);
                 file.SaveAs(fname);
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult TransferData()
+        public async Task<ActionResult> TransferData()
         {
             string VendorId = Request["VendorId"];
+            await TransferFiles();
             //Transfer Data from Customer to Admin Portal DB
             HostingEnvironment.QueueBackgroundWorkItem(cancellationToken => new Worker().StartProcessing(Convert.ToInt32(VendorId), cancellationToken));
             //Transfer Data from Customer to Admin Portal DB
-            TransferFiles();
+            
+
             return Json("", JsonRequestBehavior.AllowGet);
         }
         public ActionResult Success()
         {
             return View();
         }
-        public void TransferFiles()
+        public async Task TransferFiles()
         {
-            using (var client = new HttpClient())
-            {
-                using (var formData = new MultipartFormDataContent())
-                {
-                    string[] AllfileNames = Directory.GetFiles(Server.MapPath("~/Attachments/"));
+                  string[] AllfileNames = Directory.GetFiles(Server.MapPath("~/Attachments/"));
                     foreach (var file in AllfileNames)
                     {
+                var client = new HttpClient();
                         var fileContent = new ByteArrayContent(System.IO.File.ReadAllBytes(file));
                         fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                         {
                             FileName = Path.GetFileName(file)
                         };
+                        var formData = new MultipartFormDataContent();
                         formData.Add(fileContent);
 
                         try
@@ -266,8 +267,8 @@ namespace CustomerPortal.Controllers
                         {
                             // log error  
                         }
-                    }
-                }
+                   
+               
             }
         }
 
@@ -326,6 +327,16 @@ namespace CustomerPortal.Controllers
                 return System.Configuration.ConfigurationManager.AppSettings["AdminPortalURL"];
             }
         }
+        public static string SiteUrl
+        {
+            get
+            {
+                if (System.Web.HttpContext.Current == null || System.Web.HttpContext.Current.Request == null)
+                    return string.Empty;
 
+                var request = System.Web.HttpContext.Current.Request;
+                return request.Url.Scheme + "://" + request.Url.DnsSafeHost + (request.Url.IsDefaultPort ? "" : ":" + request.Url.Port.ToString());
+            }
+        }
     }
 }

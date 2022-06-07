@@ -104,7 +104,9 @@
             border-color: none;
             color: black !important;
         }
-
+        .wizard > .steps {
+            display: none !important;
+        }
         .wizard > .steps .number {
             width: 20px;
             height: none;
@@ -343,7 +345,7 @@
 
                                                     <div class="form-group">
                                                         <label for="input-placeholder" class="require"><strong>Contact Email</strong></label>
-                                                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactEmail, new { @class = "form-control form-control-sm", @style = "width:100%;", @required = "required" })
+                                                        @Html.TextBoxFor(m => m.PrimarySalesInfo.ContactEmail, new { @class = "form-control form-control-sm",  @style = "width:100%;", @required = "required" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -837,14 +839,24 @@
                         Isvalidated = false;
                         $("#fileinputerr").show();
                     }
+                    if ($('#FilesList tr').length > 4) {
+                        Isvalidated = false;
+                        alert('No more than 3 files allowed');
+                    }
                     if (Isvalidated) {
                         $("#ProcessText").show();
                                 $.ajax({
                                     cache: false,
-                                    async: false,
+                                     
                                     type: "POST",
                                     url: "@(Url.Action("SaveTab2"))",
                                     data: $("#step2").serializeArray(),
+                                    beforeSend: function () {
+                                        $("#load").show();
+                                    },
+                                    complete: function () {
+                                        $("#load").hide();
+                                    },
                                     success: function (data) {
                                         if (data.BankingInfoId == undefined || data.BankingInfoId == 0) {
                                             HasError = true;
@@ -883,7 +895,13 @@
                                     contentType: false, // Not to set any content header
                                     processData: false, // Not to process data
                                     data: formdata,
-                                    async: false,
+                                     
+                                    beforeSend: function () {
+                                        $("#load").show();
+                                    },
+                                    complete: function () {
+                                        $("#load").hide();
+                                    },
                                     success: function (result) {
                                         if (result != "") {
                                             alert(result);
@@ -895,7 +913,12 @@
                                                 contentType: false, // Not to set any content header
                                                 processData: false, // Not to process data
                                                 data: formdata,
-                                                async: false,
+                                                beforeSend: function () {
+                                                    $("#load").show();
+                                                },
+                                                complete: function () {
+                                                    $("#load").hide();
+                                                },
                                                 success: function (result) {
                                                     if (result != "") {
                                                         alert(result);

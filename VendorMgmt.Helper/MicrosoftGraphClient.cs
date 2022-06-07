@@ -3,6 +3,7 @@ using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,9 @@ namespace VendorMgmt.Helper
         static MicrosoftGraphClient()
         {
             IConfidentialClientApplication confidentialClientApplication = ConfidentialClientApplicationBuilder
-             .Create("d72e3a81-37ce-4b5c-b08e-5e28cc1d66c8")
-             .WithTenantId("d121b713-6356-41c5-b535-57ca3629c005")
-             .WithClientSecret("dfR7Q~hn0Ddv~RN5qeCYypW1hhn5tAvv9pXGS")
+             .Create(ConfigurationManager.AppSettings["ClientId"])
+             .WithTenantId(ConfigurationManager.AppSettings["TenantId"])
+             .WithClientSecret(ConfigurationManager.AppSettings["ClientSecret"])
              .Build();
             authProvider = new ClientCredentialProvider(confidentialClientApplication);
         }
@@ -28,7 +29,7 @@ namespace VendorMgmt.Helper
             return graphClient;
         }
 
-        public static async Task<List<AzureUserList>> GetAllUsers()
+        public static async Task<List<AzureUserList>> GetAllUsers(bool IncludeDefault=false)
         {
             List<AzureUserList> lstuser = new List<AzureUserList>();
             graphClient = new GraphServiceClient(authProvider);
@@ -40,6 +41,10 @@ namespace VendorMgmt.Helper
                 lstuser.Add(new AzureUserList { AzureGroupId = "", DisplayName = objuser.DisplayName, AzureObjectId = objuser.Id, FirstName = objuser.GivenName, EmailAddress = objuser.UserPrincipalName });
                 // Only output the custom attributes...
                 //Console.WriteLine(JsonConvert.SerializeObject(user.AdditionalData));
+            }
+            if (IncludeDefault)
+            {
+                lstuser.Insert(0, new AzureUserList { DisplayName = "" });
             }
             return lstuser;
         }

@@ -119,8 +119,8 @@
             </div>
             <div class="col-md-12 row" style="margin-left:50%;">
 
-                <button type="submit" class="btn btn-bold btn-pure btn-primary">Reset</button>
-
+                <button type="submit" class="btn btn-bold btn-pure btn-cyan">Apply</button>
+                <a href="~/Home/Vendors" class="btn btn-bold btn-pure btn-primary">Reset</a>
             </div>
         </div>
     </div>
@@ -146,8 +146,8 @@
 
                         <tr style="" class="showdetail" data-id="@item.Id">
                             <td>@item.VendorName</td>
-                            <td>Gravelle, Corey</td>
-                            <td>Lageman , Janice</td>
+                            <td>@item.RequestorName</td>
+                            <td>@item.ActionerName</td>
                             <td>@item.UpdatedDate.ToString("MM/dd/yyyy")</td>
                             <td>@item.Status</td>
                             <td><a id="a_@item.Id" href="/Vendor/GetDetails?RegistrationCode=@item.RegistrationCode" target="_self" class="btn btn-primary btn-shadow">Get Details</a></td>
