@@ -170,7 +170,7 @@ namespace VendorMgmt.Web.Controllers
           
             model.lstUsers = lstUSers;
             VendorService vs = new VendorService();
-            model.lstVendors = vs.GetVendorGridData();
+            var lst = vs.GetVendorGridData();
             //foreach (var item in model.lstVendors)
             //{
             //    item.RequestorName = model.lstUsers.Where(p => p.DisplayName == model.RequestorName).FirstOrDefault().EmailAddress;
@@ -178,22 +178,24 @@ namespace VendorMgmt.Web.Controllers
 
             if (!string.IsNullOrEmpty(model.ApplicationStatus))
             {
-                model.lstVendors = model.lstVendors.Where(p => p.Status == model.ApplicationStatus).ToList();
+                lst = lst.Where(p => p.Status == model.ApplicationStatus).ToList();
             }
             if (!string.IsNullOrEmpty(model.RequestorName))
             {
-                model.lstVendors = model.lstVendors.Where(p => p.RequestorName == model.RequestorName).ToList();
+                string t = model.RequestorName;
+                lst = lst.Where(p => p.RequestorName.Contains(t)).ToList();
             }
             if (!string.IsNullOrEmpty(model.VendorName))
             {
-                model.lstVendors = model.lstVendors.Where(p => p.VendorName == model.VendorName).ToList();
+                string s = model.VendorName;
+                lst = lst.Where(p => p.VendorName.ToLower().Contains(s.ToLower())).ToList();
             }
             if (!string.IsNullOrEmpty(model.FromDate) && !string.IsNullOrEmpty(model.ToDate))
             {
-                model.lstVendors = model.lstVendors.Where(p => p.UpdatedDate >= Convert.ToDateTime(model.FromDate) && p.UpdatedDate <= Convert.ToDateTime(model.ToDate)).ToList();
+                lst = lst.Where(p => p.UpdatedDate >= Convert.ToDateTime(model.FromDate) && p.UpdatedDate <= Convert.ToDateTime(model.ToDate)).ToList();
             }
 
-
+            model.lstVendors = lst;
 
             return View(model);
         }
@@ -239,7 +241,7 @@ namespace VendorMgmt.Web.Controllers
             {
                 lstUSers = System.Web.HttpContext.Current.Cache["lstAzureUsers"] as List<AzureUserList>;
             }
-            var list = lstUSers.Where(p => p.DisplayName.StartsWith(name)).Take(10).ToList();
+            var list = lstUSers.Where(p => p.DisplayName.ToLower().StartsWith(name.ToLower())).Take(10).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetDofascoEmailList(string name)
@@ -277,7 +279,7 @@ namespace VendorMgmt.Web.Controllers
                 HttpContext.Response.Cookies.Add(UserGuid);
                 return RedirectToAction("Dashboard", "Home");
             }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
         protected string EndPointUrl
         {
@@ -379,6 +381,45 @@ namespace VendorMgmt.Web.Controllers
             {
                 return System.Configuration.ConfigurationManager.AppSettings["CustomerPortalURL"];
             }
+        }
+
+        /// <summary>
+        /// Send an OpenID Connect sign-out request.
+        /// </summary>
+        public void SignOut()
+        {
+            Response.Cookies.Clear();
+            HttpCookie myCookie = Request.Cookies["UserGuid"];
+            if (myCookie != null)
+            {
+                myCookie.Expires = DateTime.Now;
+                Response.Cookies.Add(myCookie);
+            }
+            HttpCookie UserName = Request.Cookies["UserEmail"];
+            if (UserName != null)
+            {
+                UserName.Expires = DateTime.Now;
+                Response.Cookies.Add(UserName);
+            }
+            HttpCookie UsernameCookie = Request.Cookies["UserName"];
+            if (UsernameCookie != null)
+            {
+                UsernameCookie.Expires = DateTime.Now;
+                Response.Cookies.Add(UsernameCookie);
+            }
+            HttpCookie UserTokenCookie = Request.Cookies["UserToken"];
+            if (UserTokenCookie != null)
+            {
+                UserTokenCookie.Expires = DateTime.Now;
+                Response.Cookies.Add(UserTokenCookie);
+            }
+            var parameters = new Dictionary<string, string>
+                {
+                    { "post_logout_redirect_uri", System.Configuration.ConfigurationManager.AppSettings["redirectUri"] }
+                };
+            var requestUrl = string.Format("{0}/logout?{1}", EndPointUrl, BuildQueryString(parameters));
+
+            Response.Redirect(requestUrl);
         }
     }
 }

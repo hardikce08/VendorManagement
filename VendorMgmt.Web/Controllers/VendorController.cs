@@ -796,6 +796,7 @@ namespace VendorMgmt.Web.Controllers
                     Emailbody = Emailbody.Replace("@VendorName", model.BusinessName);
                     Emailbody = Emailbody.Replace("@PurchaseComments", model.WorkFlowInfo.PurchaseComments);
                     Emailbody = Emailbody.Replace("@RequestorName", model.WorkFlowInfo.RequestorName);
+                    Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + model.RegistrationCode);
                     Emailbody = Emailbody.Replace("@ApproveLink", SiteUrl + "/Vendor/PurchaseApproverConfirmation?Action=" + Functions.Base64Encode(model.RegistrationCode + "|Approve"));
                     Emailbody = Emailbody.Replace("@DenyLink", SiteUrl + "/Vendor/PurchaseApproverConfirmation?Action=" + Functions.Base64Encode(model.RegistrationCode + "|Deny"));
                     Functions.SendEmail(string.IsNullOrEmpty(model.PurchaseApproverEmail) ? "hardikce.08@gmail.com" : model.PurchaseApproverEmail, "Approval", Emailbody, false);
@@ -854,6 +855,8 @@ namespace VendorMgmt.Web.Controllers
                     Emailbody = Emailbody.Replace("@TypeofVendorReq", PurchaseInfoDetails.TypeofVendorRequest);
                     Emailbody = Emailbody.Replace("@VendorName", VendorMst.BusinessName);
                     Emailbody = Emailbody.Replace("@VendorNo", model.TreasuryInfo.VendorNumber);
+                    Emailbody = Emailbody.Replace("{ShortUrl}", SiteUrl + "/Vendor/GetDetails?RegistrationCode=" + VendorMst.RegistrationCode);
+
                     Functions.SendEmail(RequestorEmail, es.EmailTemplateByName("pendingvalidationnotification").EmailSubject, Emailbody, false);
                     // send email to Treasury Actioner for Pending notification
                     Emailbody = es.EmailTemplateByName("PendingTreasuryActionerNotification").EmailBody;

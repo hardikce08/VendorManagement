@@ -4500,8 +4500,8 @@ blockquote.blockquote-shadow,
 .form-control {
   padding: 7px 12px;
   border-radius: 3px;
-  border-color: #ebebeb;
-  color: #b1b0b0;
+  border-color: darkgrey;
+  color: black;
   line-height: inherit;
 }
 .form-control:focus {
