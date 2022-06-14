@@ -229,7 +229,7 @@ namespace VendorMgmt.Web.Controllers
             EmailTemplateService es = new EmailTemplateService();
             if (action.Split('|')[1] == "Approve")
             {
-
+                ViewBag.ApprovedStatus = "Approved";
                 //Send Approved Email to Requestor
                 Emailbody = es.EmailTemplateByName("Managementapproval").EmailBody;
                 Emailbody = Emailbody.Replace("@ApprovedBy", WorkflowDetails.PurchasingManager);
@@ -300,6 +300,7 @@ namespace VendorMgmt.Web.Controllers
             }
             else
             {
+                ViewBag.ApprovedStatus = "Rejected";
                 vs.UpdateStatus(VendorMst.RegistrationCode, "Rejected by Purchasing Manager");
                 //Send notification to Requestor in case of Rejection by Purchasing Manager
                 Emailbody = es.EmailTemplateByName("PurchaseRejection").EmailBody;
@@ -310,7 +311,7 @@ namespace VendorMgmt.Web.Controllers
 
 
             }
-            return Content("Sucess");
+            return View("Success");
         }
         public async Task<ActionResult> WorldCheckApproverConfirmation()
         {
@@ -333,9 +334,10 @@ namespace VendorMgmt.Web.Controllers
             var RequestorEmail = lstUSers.Where(p => p.DisplayName == WorkflowDetails.RequestorName).FirstOrDefault().EmailAddress;
             var VendorMst = vs.VendorMasters.Where(p => p.Id == VendorId).FirstOrDefault();
             var PurchaseInfoDetails = vs.VendorPurchasingInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
-            var BasicInfo = vs.VendorBasicInfos.Where(p => p.Id == VendorId).FirstOrDefault();
+            var BasicInfo = vs.VendorBasicInfos.Where(p => p.VendorId == VendorId).FirstOrDefault();
             if (action.Split('|')[1] == "Approve")
             {
+                ViewBag.ApprovedStatus = "Approved";
                 vs.UpdateStatus(RegistrationCode, "Submitted to Treasury");
                 //Send Legal Approved Email to Requestor
                 Emailbody = es.EmailTemplateByName("Managementapproval").EmailBody;
@@ -374,7 +376,7 @@ namespace VendorMgmt.Web.Controllers
             }
             else
             {
-
+                ViewBag.ApprovedStatus = "Rejected";
                 vs.UpdateStatus(RegistrationCode, "Rejected by Legal");
                 //Send notification to Requestor in case of Rejection 
                 Emailbody = es.EmailTemplateByName("WorldCheckRejection").EmailBody;
@@ -384,7 +386,7 @@ namespace VendorMgmt.Web.Controllers
                 Functions.SendEmail(RequestorEmail, es.EmailTemplateByName("WorldCheckRejection").EmailSubject, Emailbody, false);
                 vs.AssignedBackToRequestor(RegistrationCode);
             }
-            return Content("Sucess");
+            return View("Success");
         }
 
         public async Task<ActionResult> TreasuryActionerConfirmation()
@@ -417,6 +419,7 @@ namespace VendorMgmt.Web.Controllers
 
             if (action.Split('|')[1] == "Approve")
             {
+                ViewBag.ApprovedStatus = "Approved";
                 vs.UpdateStatus(RegistrationCode, "Submitted to 2nd Level Approver");
                 //Send notification email to TreasuryActioner
                 Emailbody = es.EmailTemplateByName("NotificationTreasuryActioner").EmailBody;
@@ -434,6 +437,7 @@ namespace VendorMgmt.Web.Controllers
             }
             else
             {
+                ViewBag.ApprovedStatus = "Rejected";
                 vs.UpdateStatus(RegistrationCode, "Rejected by Treasury");
                 //Treasury Rejection Email to Requestor
                 Emailbody = es.EmailTemplateByName("TreasuryRejectionToRequestor").EmailBody;
@@ -441,7 +445,7 @@ namespace VendorMgmt.Web.Controllers
 
 
             }
-            return Content("Sucess");
+            return View("Success");
         }
         #region Customer Fill Entry form Save requests
         [HttpPost]

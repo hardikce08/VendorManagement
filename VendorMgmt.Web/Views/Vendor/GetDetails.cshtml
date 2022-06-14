@@ -680,7 +680,7 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="input-placeholder" class="require"><strong>Payment Terms</strong></label>
-                        @Html.SelectList_TypeofVendorRequest(model => model.PurchaseInfo.PaymentTerms, new { @class = "form-control form-control-sm", @required = "required" })
+                        @Html.SelectList_PaymentTerms(model => model.PurchaseInfo.PaymentTerms, new { @class = "form-control form-control-sm", @required = "required" })
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -780,7 +780,8 @@
                     <div class="form-group">
                         <label for="input-placeholder" class="require"><strong>Treasury Actioner</strong></label>
                         @*@Html.SelectList_YesNoFor(model => model.TreasuryInfo.ActionerName, new { @class = "form-control form-control-sm", @required = "required" })*@
-                        @Html.DropDownList("TreasuryInfo_ActionerName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.ActionerName), new { @class = "form-control form-control-sm", @required = "required" })
+                        @*@Html.DropDownList("TreasuryInfo_ActionerName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.ActionerName), new { @class = "form-control form-control-sm", @required = "required" })*@
+                        @Html.TextBoxFor(m => m.TreasuryInfo.ActionerName, new { @class = "form-control", @style = "width:100%;", @required = "required" })
 
                     </div>
                 </div>
@@ -841,7 +842,9 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        @Html.DropDownList("TreasuryInfo_Level2ApproverName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.Level2ApproverName), new { @class = "form-control form-control-sm", @required = "required" })
+                        @*@Html.DropDownList("TreasuryInfo_Level2ApproverName", new SelectList(Model.lstUsers, "DisplayName", "DisplayName", Model.TreasuryInfo.Level2ApproverName), new { @class = "form-control form-control-sm", @required = "required" })*@
+                        @Html.TextBoxFor(m => m.TreasuryInfo.Level2ApproverName, new { @class = "form-control", @style = "width:100%;", @required = "required" })
+
                     </div>
                 </div>
             </div>
@@ -1275,6 +1278,16 @@
         }
 
         function btnValidateClick() {
+            var selvlue = $('input[name="TreasuryInfo_ChecklistInfo1"]:checked').val();
+            if (selvlue == "false") {
+                alert('Please check Appropriate documentation provided');
+                return false;
+            }
+            var selvlue2 = $('input[name="TreasuryInfo_ChecklistInfo2"]:checked').val();
+            if (selvlue2 == "false") {
+                alert('Please check banking instruction that was previously received from the requestor');
+                return false;
+            }
              var Isvalidated = $("#step5").parsley().validate();
             if (Isvalidated) {
                 $.ajax({
@@ -1493,7 +1506,90 @@
                     return item;
                 }
             });
+            $("#TreasuryInfo_ActionerName").typeahead({
+                minLength: 1,
+                source: function (request, response) {
 
+                    $.ajax({
+                        url: "/Home/GetAzureUser",
+                        data: {
+                            "name": request
+                        },
+                        type: "GET",
+                        contentType: "json",
+                        success: function (data) {
+                            items = [];
+                            map = {};
+                            $.each(data, function (i, item) {
+                                /*console.log(item);*/
+                                var id = item.EmailAddress;
+                                var name = item.DisplayName;
+
+                                map[name] = {
+                                    id: id,
+                                    name: name
+                                };
+                                items.push(name);
+                            });
+                            response(items);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                updater: function (item) {
+                    //alert(map[item].id);
+                    //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
+                    $('[id*=TreasuryInfo_ActionerName]').val(map[item].name);
+                    return item;
+                }
+            });
+            $("#TreasuryInfo_Level2ApproverName").typeahead({
+                minLength: 1,
+                source: function (request, response) {
+
+                    $.ajax({
+                        url: "/Home/GetAzureUser",
+                        data: {
+                            "name": request
+                        },
+                        type: "GET",
+                        contentType: "json",
+                        success: function (data) {
+                            items = [];
+                            map = {};
+                            $.each(data, function (i, item) {
+                                /*console.log(item);*/
+                                var id = item.EmailAddress;
+                                var name = item.DisplayName;
+
+                                map[name] = {
+                                    id: id,
+                                    name: name
+                                };
+                                items.push(name);
+                            });
+                            response(items);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                updater: function (item) {
+                    //alert(map[item].id);
+                    //If simultaneously want to update value somewhere else $("#update").val(map[item].id); return item; } });
+                    $('[id*=TreasuryInfo_Level2ApproverName]').val(map[item].name);
+                    return item;
+                }
+            });
         });
     </script>
 </body>

@@ -43,7 +43,7 @@ namespace VendorMgmt.Helper
             data.Add(4, "Dofasco-Pension and Benefits");
             data.Add(5, "Dofasco-Other Non-Purchasing");
             data.Add(6, "Dofasco-Freight");
-            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
+            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Value", "Value", selectedValue), htmlAttributes);
         }
         public static MvcHtmlString SelectList_TypeofVendorRequest<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
         {
@@ -60,7 +60,7 @@ namespace VendorMgmt.Helper
             data.Add(4, "Address Change");
             data.Add(5, "Vendor Name Change");
             data.Add(6, "Remittance Email Change");
-            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
+            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Value", "Value", selectedValue), htmlAttributes);
         }
         public static MvcHtmlString SelectList_ApplicationStatus<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
         {
@@ -133,7 +133,23 @@ namespace VendorMgmt.Helper
 
             return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Key", "Value", selectedValue), htmlAttributes);
         }
-
+        public static MvcHtmlString SelectList_PaymentTerms<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
+        {
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            return htmlHelper.SelectList_PaymentTerms(ExpressionHelper.GetExpressionText(expression), metadata.Model == null ? "" : metadata.Model.ToString(), htmlAttributes);
+        }
+        public static MvcHtmlString SelectList_PaymentTerms(this HtmlHelper html, string name, string selectedValue, object htmlAttributes = null)
+        {
+            Dictionary<int, string> data = new Dictionary<int, string>();
+            string Terms = ".5%3 N30,.5%5 N30,.5%10 N30,.5%15 N30,.5%15 N45,.5% 1Day N2,.5%ONRECN01,.5%3 N4,1%5 N30,1%7 N30,1%10 N45,1%10 N30,1% 10TH MF,1%15 N30,1%20 N30,1%25 N40,1%30 N31,1% ONRECN01,1.25% ONREC N30,1.5%15 N 30,1.5%10 N 30,15%5 N30,2%10 N15,2%10 N11,2%15 N30,2%15 N60,2% 15th MF,2% 1DAY N2,2%20 N30,2%25 N30,2%25 N45,2%30 N31,2%45 N60,2% ONREC N30,2% ONREC N01,2%10 N30,2.5%30 N31,2.5%10 N30,3&5 N30,3%10 N45,3%15 N30,3%30 N31,3%60 N31,3% ONRECN01,3%10 N30,4%15 N30,4% ONRECN01,4%10 N30,5%10 N30,5%5 N30,5%15 N16,5%15 N30,5%30 N31,5% ONRECN01,5%10 N45,6%15 N30,6%10 N30,6%10 N30,6%5 N30,7%15 N30,MONTH-END,NET 10 DAYS,NET 120 DAYS,NET 14 DAYS,NET 15 DAYS,NET 15TH CM,NET 15TH MF,NET 20 DAYS,NET 20TH MF,NET 25 DAYS,NET 25TH CM,NET 25TH MF,NET 26TH CM,NET 27TH CM,NET 3 DAYS,NET 30 DAYS,NET 30TH MF,NET 35 DAYS,NET 4 DAYS,NET 40 DAYS,NET 45 DAYS,NET 5 DAYS,NET 60 DAYS,NET 7 DAYS,NET 90 DAYS,ON RECEIPT,";
+            int cnt = 1;
+            foreach (var term in Terms.Split(','))
+            {
+                data.Add(cnt, term);
+                cnt = cnt + 1;
+            }
+            return System.Web.Mvc.Html.SelectExtensions.DropDownList(html, name, new SelectList(data, "Value", "Value", selectedValue), htmlAttributes);
+        }
         //public static async Task<MvcHtmlString> SelectList_Country<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null) where TModel : class
         //{
         //    ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);

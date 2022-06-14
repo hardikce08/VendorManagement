@@ -59,6 +59,19 @@
         .header-right {
             color: #fff;
         }
+        .success {
+            color: #ffffff;
+            font-size: 100px;
+            line-height: 200px;
+            margin-left: -15px;
+        }
+        .fail {
+            color: #ffffff;
+            font-size: 100px;
+            line-height: 200px;
+            margin-left: 3px;
+            font-style: normal !important;
+        }
     </style>
 </head>
 <body>
@@ -100,10 +113,21 @@
 
                                 <div class="panel-body">
                                     <div class="col-md-12" style="text-align:center;">
-                                        <h1>Thank you for submitting your vendor information</h1>
+                                        @if (ViewBag.ApprovedStatus ==null || ViewBag.ApprovedStatus == "Approved")
+                                        {
+                                            <div style="border-radius:200px; height:200px; width:200px; background: #ff3700; margin:0 auto;">
+                                                <i class="success">✓</i>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div style="border-radius:200px; height:200px; width:200px; background: #ff3700; margin:0 auto;">
+                                                <i class="fail">X</i>
+                                            </div>
+                                        }
                                     </div>
                                     <div class="col-md-12" style="text-align:center;">
-                                        <h3>You will receive an email confirmation shortly.</h3>
+                                        <h3>The Vendor Request has been <span style="font-weight:bold;">@ViewBag.ApprovedStatus</span></h3>
                                     </div>
                                 </div>
                                 @*<footer class="panel-footer"></footer>*@
